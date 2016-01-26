@@ -130,18 +130,17 @@ class MassScan(object):
                 f_in.write(sub('{}.*'.format(slha),
                                '{}{}'.format(slha, m_particle), line))
 
-    def _run_susyhit(self):
+    def _run_external(self, name, cmd):
 
-        """ Run SUSYHIT. """
+        """ Run external software, such as SUSYHIT or SModelS. """
 
-        cmd = 'cd {} && ./run'.format(self._dir_susyhit)
-        # If logging level is not set to debug, suppress output of SUSYHIT
-        LGR.debug('Output from SUSYHIT:')
+        # If logging level is not set to debug, suppress output
+        LGR.debug('Output from %s:', name)
         if LGR.getEffectiveLevel() > 10:
             cmd += ' &> /dev/null'
         # Logic inverted: bash success (0) is python failure
         if system(cmd):
-            raise RuntimeError('Could not run SUSYHIT.')
+            raise RuntimeError('Could not run %s.', name)
 
         return self._check_susyhit_output()
 
@@ -612,7 +611,8 @@ class MassScan(object):
                 plots.coordinate_y.append(mu_ewsb)
 
                 # Run SUSYHIT
-                if not self._run_susyhit():
+                if not self._run_external('SUSYHIT', 'cd {} && ./run'
+                                          .format(self._dir_susyhit)):
                     self._skip_point(m_3, mu_ewsb)
 
                 if not self._error:

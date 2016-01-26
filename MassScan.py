@@ -501,13 +501,31 @@ class MassScan(object):
 
         """ Get all cross-sections. """
 
+        LGR.debug('Get cross-sections:')
+
+        self._xs_total = self._get_xs_total()
         self._xs_gluinos = self._get_xs(self._id_gluino)
+
+    def _get_xs_total(self):
+
+        """ Get inclusive cross-section. """
+
+        xs = 0.
+        with open('{}/susyhit_slha.out'
+                  .format(self._dir_susyhit), 'r') as f_susyhit:
+            found_xsec = False
+            for line in f_susyhit:
+                if found_xsec:
+                    xs += float(line.split()[6])
+                    found_xsec = False
+                # If the xs matches, set bool, next line will have the xs
+                if search('XSECTION.*2212 2212', line):
+                    found_xsec = True
+        return xs
 
     def _get_xs(self, id_particle_1, id_particle_2=-1.):
 
         """ Get specific cross-section. """
-
-        LGR.debug('Find cross-section:')
 
         # If id_particle_2 is not defined, set it to id_particle_1
         if id_particle_2 < 0:

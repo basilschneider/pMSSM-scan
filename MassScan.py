@@ -35,6 +35,7 @@ class MassScan(object):
 
     # Cross-sections
     _xs_incl = -1.
+    _xs_strong = -1.
     _xs_gluinos = -1.
 
     # Directory where SUSYHIT is installed
@@ -71,6 +72,9 @@ class MassScan(object):
     # (999 is a dummy particle, if decay modes are not known)
     _l_unknown = [999]
     _l_final_states = _l_jets + _l_leptons + _l_met + _l_gamma + _l_unknown
+    _l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
+                 2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
+                 1000021]
 
     # Branching ratios below this threshold are skipped (to save time)
     _threshold = 0.05
@@ -477,6 +481,12 @@ class MassScan(object):
 
         return abs(id_particle) in self._l_unknown
 
+    def _is_strong(self, id_particle):
+
+        """ Returns if SUSY particle is colored. """
+
+        return abs(id_particle) in self._l_strong
+
     def _skip_point(self, coordinate_x,  # pylint: disable=no-self-use
                     coordinate_y):
 
@@ -503,7 +513,7 @@ class MassScan(object):
 
         LGR.debug('Get cross-sections:')
 
-        self._xs_incl = self._get_xs_incl()
+        self._xs_incl, self._xs_strong = self._get_xs_incl()
         self._xs_gluinos = self._get_xs(self._id_gluino)
 
     def _get_xs_incl(self):
@@ -511,17 +521,26 @@ class MassScan(object):
         """ Get inclusive cross-section. """
 
         xs = 0.
+        xs_strong = 0.
         with open('{}/susyhit_slha.out'
                   .format(self._dir_susyhit), 'r') as f_susyhit:
             found_xsec = False
+            strong_xsec = False
             for line in f_susyhit:
                 if found_xsec:
                     xs += float(line.split()[6])
                     found_xsec = False
+                    if strong_xsec:
+                        xs_strong += float(line.split()[6])
+                        strong_xsec = False
                 # If the xs matches, set bool, next line will have the xs
                 if search('XSECTION.*2212 2212', line):
                     found_xsec = True
-        return xs
+                    # Check if strong production
+                    if self._is_strong(float(line.split()[5])) and \
+                       self._is_strong(float(line.split()[6])):
+                        strong_xsec = True
+        return xs, xs_strong
 
     def _get_xs(self, id_particle_1, id_particle_2=-1.):
 
@@ -693,6 +712,7 @@ class MassScan(object):
                 # If there was an error, empty all values
                 if self._error:
                     self._xs_incl = 0
+                    self._xs_strong = 0
                     self._xs_gluinos = 0
                     self._m_gluino = 0
                     self._m_neutralino1 = 0
@@ -706,8 +726,10 @@ class MassScan(object):
                 plots.xs_incl.append(self._xs_incl)
                 try:
                     plots.xs_gluinos.append(self._xs_gluinos/self._xs_incl)
+                    plots.xs_strong.append(self._xs_strong/self._xs_incl)
                 except ZeroDivisionError:
                     plots.xs_gluinos.append(0.)
+                    plots.xs_strong.append(0.)
 
                 # Plots for masses
                 plots.m_gluino.append(self._m_gluino)

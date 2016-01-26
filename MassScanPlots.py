@@ -21,6 +21,7 @@ class MassScanPlots(object):
 
     # xs's
     xs_incl = []
+    xs_strong = []
     xs_gluinos = []
 
     # Masses
@@ -58,6 +59,10 @@ class MassScanPlots(object):
         name = 'xs_incl'
         title = '#sigma_{inclusive} [pb]'
         self._make_plot(name, title, self.xs_incl)
+
+        name = 'xs_strong'
+        title = '#sigma_{strong}/#sigma_{inclusive} [pb]'
+        self._make_plot(name, title, self.xs_strong, True)
 
         name = 'xs_gluino_gluino'
         title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive} [pb]'

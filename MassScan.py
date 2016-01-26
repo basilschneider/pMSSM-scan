@@ -681,8 +681,11 @@ class MassScan(object):
                         self._skip_point(m_3, mu_ewsb)
 
                 if not self._error:
-                    # Calculate branching ratios
-                    br_leptons, br_jets = self._get_brs(self._id_gluino)
+                    # Calculate branching ratios, if threshold is below 1
+                    if self._threshold >= 1.:
+                        br_leptons, br_jets = [0], [0]
+                    else:
+                        br_leptons, br_jets = self._get_brs(self._id_gluino)
 
                     if not br_leptons or not br_jets:
                         self._skip_point(m_3, mu_ewsb)

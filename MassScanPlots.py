@@ -34,6 +34,9 @@ class MassScanPlots(object):
     m_diff_g_c1 = []
     m_diff_c1_n1 = []
 
+    # Star to be plotted on all TH2's
+    _star = [0, 0]
+
     _toolbox = ToolboxH2()
 
     def plot(self):
@@ -55,6 +58,7 @@ class MassScanPlots(object):
             # Fill numbers
             self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                        self.br_leptons[no_leptons], 100.)
+            self._toolbox.plot_star(self._star)
             self._toolbox.save()
 
         # Branching ratios into jets
@@ -69,6 +73,7 @@ class MassScanPlots(object):
             # Fill numbers
             self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                        self.br_jets[no_jets], 100.)
+            self._toolbox.plot_star(self._star)
             self._toolbox.save()
 
         # total XS
@@ -79,6 +84,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_total)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.xs_total)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # gluino-gluino XS
@@ -89,6 +95,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_gluinos)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.xs_gluinos)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Gluino mass
@@ -99,6 +106,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_gluino)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_gluino)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Neutralino 1 mass
@@ -110,6 +118,7 @@ class MassScanPlots(object):
                                   max(self.m_neutralino1)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_neutralino1)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Neutralino 2 mass
@@ -121,6 +130,7 @@ class MassScanPlots(object):
                                   max(self.m_neutralino2)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_neutralino2)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Chargino 1 mass
@@ -131,6 +141,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_chargino1)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_chargino1)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # SM Higgs mass
@@ -141,6 +152,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_smhiggs)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_smhiggs)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Mass difference gluino - chargino 1
@@ -151,6 +163,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_diff_g_c1)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_diff_g_c1)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Mass difference gluino - chargino 1
@@ -161,6 +174,7 @@ class MassScanPlots(object):
         self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_diff_c1_n1)+1.)
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    self.m_diff_c1_n1)
+        self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
         # Close root file
@@ -178,3 +192,9 @@ class MassScanPlots(object):
         """ Set directory in which objects are stored. """
 
         self._toolbox.directory = s_directory
+
+    def set_star(self, coordinate_x, coordinate_y):
+
+        """ Set star to be plotted at coordinates (x/y). """
+
+        self._star = [coordinate_x, coordinate_y]

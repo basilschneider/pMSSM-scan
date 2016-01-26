@@ -43,143 +43,91 @@ class MassScanPlots(object):
 
         """ Root plotting """
 
-        axis_x = 'M_{3} [GeV]'
-        axis_y = '#mu [GeV]'
-
-        # Branching ratios into leptons
+        # Branching ratios
         for no_leptons in range(len(self.br_leptons)):
-            # Define TH2
             name = 'br_{}_leptons'.format(no_leptons)
             title = 'branching ratio into {} leptons'.format(no_leptons)
-            self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                           self.coordinate_y)
-            self._toolbox.modify_axes(axis_x, axis_y)
+            self._make_plot(name, title, self.br_leptons[no_leptons], True)
 
-            # Fill numbers
-            self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                       self.br_leptons[no_leptons], 100.)
-            self._toolbox.plot_star(self._star)
-            self._toolbox.save()
-
-        # Branching ratios into jets
         for no_jets in range(len(self.br_jets)):
-            # Define TH2
             name = 'br_{}_jets'.format(no_jets)
             title = 'branching ratio into {} jets'.format(no_jets)
-            self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                           self.coordinate_y)
-            self._toolbox.modify_axes(axis_x, axis_y)
+            self._make_plot(name, title, self.br_jets[no_jets], True)
 
-            # Fill numbers
-            self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                       self.br_jets[no_jets], 100.)
-            self._toolbox.plot_star(self._star)
-            self._toolbox.save()
-
-        # total XS
+        # Cross-sections
         name = 'xs_total'
         title = 'total XS [pb]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_total)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.xs_total)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.xs_total)
 
-        # gluino-gluino XS
         name = 'xs_gluino_gluino'
         title = 'XS(pp #rightarrow #tilde{g}#tilde{g}) [pb]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_gluinos)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.xs_gluinos)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.xs_gluinos)
 
-        # Gluino mass
+        # Masses
         name = 'm_gluino'
         title = 'm_{#tilde{g}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_gluino)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_gluino)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_gluino)
 
-        # Neutralino 1 mass
         name = 'm_neutralino1'
         title = 'm_{#chi_{1}^{0}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0.,
-                                  max(self.m_neutralino1)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_neutralino1)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_neutralino1)
 
-        # Neutralino 2 mass
         name = 'm_neutralino2'
         title = 'm_{#chi_{2}^{0}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0.,
-                                  max(self.m_neutralino2)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_neutralino2)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_neutralino2)
 
-        # Chargino 1 mass
         name = 'm_chargino1'
         title = 'm_{#chi_{1}^{#pm}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_chargino1)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_chargino1)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_chargino1)
 
-        # SM Higgs mass
         name = 'm_smhiggs'
         title = 'm_{h^{0}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_smhiggs)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_smhiggs)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_smhiggs)
 
-        # Mass difference gluino - chargino 1
+        # Mass differences
         name = 'm_gluino-m_chargino1'
         title = 'm_{#tilde{g}} - m_{#chi_{1}^{#pm}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_diff_g_c1)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_diff_g_c1)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_diff_g_c1)
 
-        # Mass difference gluino - chargino 1
         name = 'm_chargino1-m_neutralino1'
         title = 'm_{#chi_{1}^{#pm}} - m_{#chi_{1}^{0}} [GeV]'
-        self._toolbox.create_histogram(name, title, self.coordinate_x,
-                                       self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.m_diff_c1_n1)+1.)
-        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   self.m_diff_c1_n1)
-        self._toolbox.plot_star(self._star)
-        self._toolbox.save()
+        self._make_plot(name, title, self.m_diff_c1_n1)
 
         # Close root file
         if self._toolbox.rootfile.IsOpen():
             self._toolbox.rootfile.Close()
+
+    def _make_plot(self, name, title, coordinate_z, percentage=False):
+
+        """ Create specific plot. """
+
+        # Axes are predefined for now
+        axis_x = 'M_{3} [GeV]'
+        axis_y = '#mu [GeV]'
+
+        # Set z range
+        z_low = 0.
+        if percentage:
+            z_high = 100.
+        else:
+            z_high = max(coordinate_z)+1.
+
+        # Set scaling constant
+        if percentage:
+            scale = 100.
+        else:
+            scale = 1.
+
+        # Define TH2
+        self._toolbox.create_histogram(name, title, self.coordinate_x,
+                                       self.coordinate_y)
+        self._toolbox.modify_axes(axis_x, axis_y, z_low, z_high)
+
+        # Fill numbers
+        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
+                                   coordinate_z, scale)
+        self._toolbox.plot_star(self._star)
+        self._toolbox.save()
 
     def set_rootfile(self, s_rootfile_name):
 

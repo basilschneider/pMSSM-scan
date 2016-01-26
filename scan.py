@@ -10,8 +10,8 @@ if __name__ == "__main__":
     L_COORDINATES = [50*i for i in range(5, 8)]
     M_3 = [250*i for i in range(-7, 3)]
     MU_EWSB = [100*i for i in range(1, 10)]
-    MY_SCAN.l_m_3 = M_3
-    MY_SCAN.l_mu_ewsb = MU_EWSB
+    MY_SCAN.l_m_3 = [-1100, -1000]
+    MY_SCAN.l_mu_ewsb = [500, 600]
     PLOTS = MY_SCAN.do_scan()
     PLOTS.set_rootfile('histos.root')
     PLOTS.set_directory('test07')

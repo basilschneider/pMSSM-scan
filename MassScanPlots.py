@@ -20,7 +20,7 @@ class MassScanPlots(object):
     br_met = [[], [], [], [], []]
 
     # xs's
-    xs_total = []
+    xs_incl = []
     xs_gluinos = []
 
     # Masses
@@ -55,9 +55,9 @@ class MassScanPlots(object):
             self._make_plot(name, title, self.br_jets[no_jets], True)
 
         # Cross-sections
-        name = 'xs_total'
+        name = 'xs_incl'
         title = '#sigma_{inclusive} [pb]'
-        self._make_plot(name, title, self.xs_total)
+        self._make_plot(name, title, self.xs_incl)
 
         name = 'xs_gluino_gluino'
         title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive} [pb]'

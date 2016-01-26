@@ -34,7 +34,7 @@ class MassScan(object):
     _m_smhiggs = -1.
 
     # Cross-sections
-    _xs_total = -1.
+    _xs_incl = -1.
     _xs_gluinos = -1.
 
     # Directory where SUSYHIT is installed
@@ -503,10 +503,10 @@ class MassScan(object):
 
         LGR.debug('Get cross-sections:')
 
-        self._xs_total = self._get_xs_total()
+        self._xs_incl = self._get_xs_incl()
         self._xs_gluinos = self._get_xs(self._id_gluino)
 
-    def _get_xs_total(self):
+    def _get_xs_incl(self):
 
         """ Get inclusive cross-section. """
 
@@ -689,7 +689,7 @@ class MassScan(object):
 
                 # If there was an error, empty all values
                 if self._error:
-                    self._xs_total = 0
+                    self._xs_incl = 0
                     self._xs_gluinos = 0
                     self._m_gluino = 0
                     self._m_neutralino1 = 0
@@ -700,9 +700,9 @@ class MassScan(object):
                     br_jets = []
 
                 # Plots for xs's
-                plots.xs_total.append(self._xs_total)
+                plots.xs_incl.append(self._xs_incl)
                 try:
-                    plots.xs_gluinos.append(self._xs_gluinos/self._xs_total)
+                    plots.xs_gluinos.append(self._xs_gluinos/self._xs_incl)
                 except ZeroDivisionError:
                     plots.xs_gluinos.append(0.)
 

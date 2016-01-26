@@ -701,7 +701,10 @@ class MassScan(object):
 
                 # Plots for xs's
                 plots.xs_total.append(self._xs_total)
-                plots.xs_gluinos.append(self._xs_gluinos)
+                try:
+                    plots.xs_gluinos.append(self._xs_gluinos/self._xs_total)
+                except ZeroDivisionError:
+                    plots.xs_gluinos.append(0.)
 
                 # Plots for masses
                 plots.m_gluino.append(self._m_gluino)

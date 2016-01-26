@@ -56,12 +56,12 @@ class MassScanPlots(object):
 
         # Cross-sections
         name = 'xs_total'
-        title = 'total XS [pb]'
+        title = '#sigma_{inclusive} [pb]'
         self._make_plot(name, title, self.xs_total)
 
         name = 'xs_gluino_gluino'
-        title = 'XS(pp #rightarrow #tilde{g}#tilde{g}) [pb]'
-        self._make_plot(name, title, self.xs_gluinos)
+        title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive} [pb]'
+        self._make_plot(name, title, self.xs_gluinos, True)
 
         # Masses
         name = 'm_gluino'

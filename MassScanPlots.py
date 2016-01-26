@@ -19,6 +19,10 @@ class MassScanPlots(object):
     br_jets = [[], [], [], [], [], [], [], [], [], [], [], [], []]
     br_met = [[], [], [], [], []]
 
+    # xs's
+    xs_total = []
+    xs_gluinos = []
+
     # Masses
     m_gluino = []
     m_neutralino1 = []
@@ -64,6 +68,24 @@ class MassScanPlots(object):
             # Fill numbers
             self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                        self.br_jets[no_jets], 100.)
+
+        # total XS
+        name = 'xs_total'
+        title = 'total XS [pb]'
+        self._toolbox.create_histogram(name, title, self.coordinate_x,
+                                       self.coordinate_y)
+        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_total)+1.)
+        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
+                                   self.xs_total)
+
+        # gluino-gluino XS
+        name = 'xs_gluino_gluino'
+        title = 'XS(pp #rightarrow #tilde{g}#tilde{g}) [pb]'
+        self._toolbox.create_histogram(name, title, self.coordinate_x,
+                                       self.coordinate_y)
+        self._toolbox.modify_axes(axis_x, axis_y, 0., max(self.xs_gluinos)+1.)
+        self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
+                                   self.xs_gluinos)
 
         # Gluino mass
         name = 'm_gluino'

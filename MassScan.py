@@ -33,6 +33,10 @@ class MassScan(object):
     _m_chargino1 = -1.
     _m_smhiggs = -1.
 
+    # Cross-sections
+    _xs_total = -1.
+    _xs_gluinos = -1.
+
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/susyhit'
     # Define SUSYHIT option, this should be the same as in susyhit.in:
@@ -493,6 +497,38 @@ class MassScan(object):
         for idx, lst_out in enumerate(lst_outs):
             lst_out.append(get_lst_entry_default(lst_in, idx, default))
 
+    def _get_xs_all(self):
+
+        """ Get all cross-sections. """
+
+        self._xs_gluinos = self._get_xs(self._id_gluino)
+
+    def _get_xs(self, id_particle_1, id_particle_2=-1.):
+
+        """ Get specific cross-section. """
+
+        LGR.debug('Find cross-section:')
+
+        # If id_particle_2 is not defined, set it to id_particle_1
+        if id_particle_2 < 0:
+            id_particle_2 = id_particle_1
+
+        with open('{}/susyhit_slha.out'
+                  .format(self._dir_susyhit), 'r') as f_susyhit:
+            found_xsec = False
+            for line in f_susyhit:
+                if found_xsec:
+                    xs = float(line.split()[6])
+                    LGR.debug('Found XS %s for particles %s and %s from line '
+                              '%s.', xs, id_particle_1, id_particle_2,
+                              line.rstrip())
+                    return xs
+                # If the xs matches, set bool, next line will have the xs
+                if search('XSECTION.*2212 2212 2 {} {}'
+                          .format(id_particle_1, id_particle_2), line):
+                    LGR.debug(line.rstrip())
+                    found_xsec = True
+
     def _get_masses(self):
 
         """ Calculates masses of SUSY particles and performs some sanity
@@ -521,7 +557,6 @@ class MassScan(object):
             return False
 
         return True
-
 
     def _get_m(self, id_particle):
 
@@ -617,9 +652,10 @@ class MassScan(object):
 
                 # Calculate cross-section with SModelS
                 if not self._error:
-                    self._run_external('SModelS', 'runTools xseccomputer -p -f '
-                                       '{}/suspect2_lha.in'
+                    self._run_external('SModelS', 'runTools xseccomputer -p '
+                                       '-s 13 -f {}/susyhit_slha.out'
                                        .format(self._dir_susyhit))
+                    self._get_xs_all()
 
                 if not self._error:
                     # Get particle masses
@@ -635,6 +671,8 @@ class MassScan(object):
 
                 # If there was an error, empty all values
                 if self._error:
+                    self._xs_total = 0
+                    self._xs_gluinos = 0
                     self._m_gluino = 0
                     self._m_neutralino1 = 0
                     self._m_neutralino2 = 0
@@ -642,6 +680,10 @@ class MassScan(object):
                     self._m_smhiggs = 0
                     br_leptons = []
                     br_jets = []
+
+                # Plots for xs's
+                plots.xs_total.append(self._xs_total)
+                plots.xs_gluinos.append(self._xs_gluinos)
 
                 # Plots for masses
                 plots.m_gluino.append(self._m_gluino)

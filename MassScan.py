@@ -140,7 +140,7 @@ class MassScan(object):
             cmd += ' &> /dev/null'
         # Logic inverted: bash success (0) is python failure
         if system(cmd):
-            raise RuntimeError('Could not run %s.', name)
+            raise RuntimeError('Could not run {}.'.format(name))
 
         return self._check_susyhit_output()
 
@@ -614,6 +614,12 @@ class MassScan(object):
                 if not self._run_external('SUSYHIT', 'cd {} && ./run'
                                           .format(self._dir_susyhit)):
                     self._skip_point(m_3, mu_ewsb)
+
+                # Calculate cross-section with SModelS
+                if not self._error:
+                    self._run_external('SModelS', 'runTools xseccomputer -p -f '
+                                       '{}/suspect2_lha.in'
+                                       .format(self._dir_susyhit))
 
                 if not self._error:
                     # Get particle masses

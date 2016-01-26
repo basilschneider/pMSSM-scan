@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Run MassScan over all MasterCode templates
+
+for template in suspect2_input/suspect2_lha.mastercode.*; do
+    # Set output folder
+    folder=test01/${template##*.}
+    # Create folder (for logfile)
+    mkdir -p "${folder}"
+    # Copy template file
+    cp "${template}" suspect2_lha.template
+    # Replace output folder in scan.py
+    sed -i "s#.*test01.*#    PLOTS.set_directory(\"${folder}\")#" scan.py
+    ./run_scan 2>&1 | tee "${folder}/log.out"
+done

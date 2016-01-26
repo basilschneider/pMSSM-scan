@@ -1,0 +1,47 @@
+BLOCK DCINFO  # Decay Program information
+     1   SDECAY/HDECAY # decay calculator
+     2   1.3b  /3.4    # version number
+#
+BLOCK SPINFO  # Spectrum calculator information
+     1    SOFTSUSY    # spectrum calculator                
+     2    3.3.1       # version number                     
+#
+BLOCK MODSEL  # Model selection
+     1     0   #  nonUniversal                                     
+#
+BLOCK SMINPUTS  # Standard Model inputs
+         1     1.27908953E+02   # alpha_em^-1(M_Z)^MSbar
+         2     1.16637000E-05   # G_F [GeV^-2]
+         3     1.18760000E-01   # alpha_S(M_Z)^MSbar
+         4     9.11876000E+01   # M_Z pole mass
+         5     4.40300000E+00   # mb(mb)^MSbar
+         6     1.76342000E+02   # mt pole mass
+         7     1.77700000E+00   # mtau pole mass
+#
+BLOCK MINPAR  # Input parameters - minimal models
+         3     5.62600000E+01   # tanb                
+#
+BLOCK EXTPAR  # Input parameters - non-minimal models
+ 1 -1.76470000E+03   # M_1(MX)             
+ 2 1.62655000E+03   # M_2(MX)             
+ 3 1.03013000E+03   # M_3(MX)             
+ 11 1.41280000E+03   # At(MX)              
+ 12 -5.45945000E+03   # Ab(MX)              
+ 13 -9.93440000E+02   # Atau(MX)            
+ 23 4.69380000E+02   # mu(MX)              
+ 26 1.42106000E+03   # mA(pole)            
+ 31 1.87357000E+03   # meL(MX)             
+ 32 1.87357000E+03   # mmuL(MX)            
+ 33 2.85984000E+03   # mtauL(MX)           
+ 34 1.73124000E+03   # meR(MX)             
+ 35 1.73124000E+03   # mmuR(MX)            
+ 36 1.85353000E+03   # mtauR(MX)           
+ 41 1.000E+04   # mqL1(MX)            
+ 42 1.000E+04   # mqL2(MX)            
+ 43 5.000E+04   # mqL3(MX)            
+ 44 5.000E+03   # muR(MX)             
+ 45 5.000E+03  # mcR(MX)             
+ 46 5.000E+04   # mtR(MX)             
+ 47 5.00E+03  # mdR(MX)             
+ 48 5.000E+03   # msR(MX)             
+ 49 5.000E+04   # mbR(MX)             

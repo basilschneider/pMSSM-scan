@@ -159,8 +159,10 @@ class MassScan(object):
                   .format(self._dir_susyhit, 'r')) as f_suspect2:
             for line in f_suspect2:
                 if line_warning == 0:
-                    for err in line.split():
-                        if float(err) != 0:
+                    errorline = line.split('.')
+                    errorline.pop()
+                    for err in errorline:
+                        if err != '' and int(err) != 0:
                             LGR.warning('SUSYHIT reports an error.')
                             return False
                 if line_warning != 2:

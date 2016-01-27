@@ -580,6 +580,9 @@ class MassScan(object):
                     LGR.debug(line.rstrip())
                     found_xsec = True
 
+        # If no cross-section was found, return 0
+        return 0.
+
     def _get_masses(self):
 
         """ Calculates masses of SUSY particles and performs some sanity

@@ -551,7 +551,9 @@ class MassScan(object):
                     if self._is_strong(float(line.split()[5])) and \
                        self._is_strong(float(line.split()[6])):
                         strong_xsec = True
-        return xs, xs_strong
+
+        # Multiply by 1000. to get cross-section in fb
+        return 1000.*xs, 1000.*xs_strong
 
     def _get_xs(self, id_particle_1, id_particle_2=-1.):
 
@@ -570,7 +572,8 @@ class MassScan(object):
                     LGR.debug('Found XS %s for particles %s and %s from line '
                               '%s.', xs, id_particle_1, id_particle_2,
                               line.rstrip())
-                    return xs
+                    # Multiply by 1000. to return cross-section in fb
+                    return 1000.*xs
                 # If the xs matches, set bool, next line will have the xs
                 if search('XSECTION.*2212 2212 2 {} {}'
                           .format(id_particle_1, id_particle_2), line):

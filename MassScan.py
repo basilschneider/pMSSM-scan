@@ -150,8 +150,6 @@ class MassScan(object):
         if system(cmd):
             raise RuntimeError('Could not run {}.'.format(name))
 
-        return self._check_susyhit_output()
-
     def _check_susyhit_output(self):
 
         """ Check SUSYHIT output file for errors. """
@@ -683,8 +681,9 @@ class MassScan(object):
                 plots.coordinate_y.append(mu_ewsb)
 
                 # Run SUSYHIT
-                if not self._run_external('SUSYHIT', 'cd {} && ./run'
-                                          .format(self._dir_susyhit)):
+                self._run_external('SUSYHIT', 'cd {} && ./run'
+                                   .format(self._dir_susyhit))
+                if not self._check_susyhit_output():
                     self._skip_point(m_3, mu_ewsb)
 
                 # Calculate cross-section with SModelS

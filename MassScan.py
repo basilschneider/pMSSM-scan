@@ -587,8 +587,8 @@ class MassScan(object):
         self._m_smhiggs = self._get_m(self._id_smhiggs)
 
         # Helper lists for following checks
-        l_masses = [self._m_gluino, self._m_neutralino1, self._m_neutralino2,
-                    self._m_chargino1]
+        l_masses = [abs(self._m_gluino), abs(self._m_neutralino1),
+                    abs(self._m_neutralino2), abs(self._m_chargino1)]
         l_names = ['Gluino', 'Neutralino 1', 'Neutralino 2', 'Chargino 1']
 
         # Check that N1 is LSP
@@ -597,10 +597,10 @@ class MassScan(object):
             return False
 
         # Check that no mass is negative (is that needed?)
-        if min(l_masses) < 0.:
-            for val in filter(lambda l: l<0., l_masses):
-                LGR.warning('%s has negative mass.', l_names[l_masses.index(val)])
-            return False
+        # if min(l_masses) < 0.:
+        #     for val in filter(lambda l: l<0., l_masses):
+        #         LGR.warning('%s has negative mass.', l_names[l_masses.index(val)])
+        #     return False
 
         return True
 

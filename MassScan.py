@@ -154,14 +154,25 @@ class MassScan(object):
 
         """ Check SUSYHIT output file for errors. """
 
-        susyhit_success = True
+        line_warning = 2
         with open('{}/suspect2.out'
                   .format(self._dir_susyhit, 'r')) as f_suspect2:
             for line in f_suspect2:
+                if line_warning == 0:
+                    for err in line.split():
+                        if float(err) != 0:
+                            LGR.warning('SUSYHIT reports an error.')
+                            return False
+                if line_warning != 2:
+                    line_warning -= 1
                 if line.startswith('STOP'):
-                    susyhit_success = False
                     LGR.warning('SUSYHIT reports an error: %s', line.rstrip())
-        return susyhit_success
+                    return False
+                if line.startswith('Warning'):
+                    line_warning -= 1
+
+
+        return True
 
     def _fill_dict_sm(self):
 

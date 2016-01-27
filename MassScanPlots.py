@@ -2,7 +2,7 @@
 
 """ Plotting class for mass scan. """
 
-from Toolbox import ToolboxH2
+from ToolboxTH2 import ToolboxTH2
 from ROOT import TFile  # pylint: disable=import-error
 
 
@@ -38,7 +38,7 @@ class MassScanPlots(object):
     # Star to be plotted on all TH2's
     _star = [0, 0]
 
-    _toolbox = ToolboxH2()
+    _toolbox = ToolboxTH2()
 
     def plot(self):
 

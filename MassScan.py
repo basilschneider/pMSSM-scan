@@ -11,7 +11,7 @@ from functools import reduce
 from cmath import isnan
 from Logger import LGR
 from MassScanPlots import MassScanPlots
-from Toolbox import get_lst_entry_default
+from ToolboxHelper import get_lst_entry_default
 
 
 class MassScan(object):

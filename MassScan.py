@@ -600,7 +600,7 @@ class MassScan(object):
         l_names = ['Gluino', 'Neutralino 1', 'Neutralino 2', 'Chargino 1']
 
         # Check that N1 is LSP
-        if min(l_masses) != self._m_neutralino1:
+        if min(l_masses) != abs(self._m_neutralino1):
             LGR.warning('LSP is %s.', l_names[l_masses.index(min(l_masses))])
             return False
 

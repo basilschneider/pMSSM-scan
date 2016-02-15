@@ -545,7 +545,7 @@ class MassScan(object):
                         xs_strong += float(line.split()[6])
                         strong_xsec = False
                 # If the xs matches, set bool, next line will have the xs
-                if search('XSECTION.*2212 2212', line):
+                if search('XSECTION *1\.30E\+04 *2212 2212', line):
                     found_xsec = True
                     # Check if strong production
                     if self._is_strong(float(line.split()[5])) and \
@@ -575,13 +575,23 @@ class MassScan(object):
                     # Multiply by 1000. to return cross-section in fb
                     return 1000.*xs
                 # If the xs matches, set bool, next line will have the xs
-                if search('XSECTION.*2212 2212 2 {} {}'
+                if search('XSECTION *1\.30E\+04 *2212 2212 2 {} {}'
                           .format(id_particle_1, id_particle_2), line):
                     LGR.debug(line.rstrip())
                     found_xsec = True
 
         # If no cross-section was found, return 0
         return 0.
+
+    def _get_mu(self):
+
+        """ Get excluded observed signal strength from SModelS output file. """
+
+        with open('smodels_summary.txt', 'r') as f_smodels:
+            for line in f_smodels:
+                if line.startswith('The highest r value is'):
+                    LGR.critical(line)
+                    return float(line.rstrip().split()[-1])
 
     def _get_masses(self):
 
@@ -707,10 +717,23 @@ class MassScan(object):
 
                 # Calculate cross-section with SModelS
                 if not self._error:
-                    self._run_external('SModelS', 'runTools xseccomputer -p '
-                                       '-s 13 -f {}/susyhit_slha.out'
-                                       .format(self._dir_susyhit))
+                    # 8 TeV cross-sections to check if the model is already
+                    # excluded and 13 TeV cross-sections for cross-sections
+                    # itself
+                    for com in [8, 13]:
+                        self._run_external('SModelS', 'runTools xseccomputer -p '
+                                           '-s {} -f {}/susyhit_slha.out'
+                                           .format(com, self._dir_susyhit))
                     self._get_xs_all()
+
+                # Check if models are already excluded
+                #if not self._error:
+                #    self._run_external('SModelS', 'runSModelS '
+                #                       '-o smodels_summary.txt '
+                #                       '-f {}/susyhit_slha.out'
+                #                       .format(self._dir_susyhit))
+                #    mu = self._get_mu()
+                #    LGR.critical(mu)
 
                 if not self._error:
                     # Get particle masses

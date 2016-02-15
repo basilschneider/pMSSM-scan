@@ -14,6 +14,6 @@ if __name__ == "__main__":
     MY_SCAN.l_mu_ewsb = MU_EWSB
     PLOTS = MY_SCAN.do_scan()
     PLOTS.set_rootfile('histos.root')
-    PLOTS.set_directory("test12")
+    PLOTS.set_directory("test13")
     #PLOTS.set_star(-1071.46632, 534.761347)
     PLOTS.plot()

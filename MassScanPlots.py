@@ -17,6 +17,7 @@ class MassScanPlots(object):
     # Branching ratios
     br_leptons = [[], [], [], [], []]
     br_jets = [[], [], [], [], [], [], [], [], [], [], [], [], []]
+    br_photons = [[], [], [], []]
     br_met = [[], [], [], [], []]
 
     # xs's
@@ -54,6 +55,11 @@ class MassScanPlots(object):
             name = 'br_{}_jets'.format(no_jets)
             title = 'branching ratio into {} jets'.format(no_jets)
             self._make_plot(name, title, self.br_jets[no_jets], True)
+
+        for no_photons in range(len(self.br_photons)):
+            name = 'br_{}_photons'.format(no_photons)
+            title = 'branching ratio into {} photons'.format(no_photons)
+            self._make_plot(name, title, self.br_photons[no_photons], True)
 
         # Cross-sections
         name = 'xs_incl'

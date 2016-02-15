@@ -67,11 +67,11 @@ class MassScan(object):
     _l_jets = [1, 2, 3, 4, 5, 21, 111, 211]
     _l_leptons = [11, 13]
     _l_met = [12, 14, 16, 1000022]
-    _l_gamma = [22]
+    _l_photon = [22]
     # Unknown particles are ignored
     # (999 is a dummy particle, if decay modes are not known)
     _l_unknown = [999]
-    _l_final_states = _l_jets + _l_leptons + _l_met + _l_gamma + _l_unknown
+    _l_final_states = _l_jets + _l_leptons + _l_met + _l_photon + _l_unknown
     _l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
                  2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
                  1000021]
@@ -369,6 +369,7 @@ class MassScan(object):
 
         br_leptons_1leg = []
         br_jets_1leg = []
+        br_photons_1leg = []
 
         LGR.debug('Branching ratios for particle %s:', id_parent)
 
@@ -385,11 +386,13 @@ class MassScan(object):
             # Calculate number of particles for specific decay mode
             no_leptons = 0
             no_jets = 0
+            no_photons = 0
             for id_particle in list_decay[1]:
                 if self._is_unknown(id_particle):
                     has_unknowns = True
                 no_leptons += self._is_lepton(id_particle)
                 no_jets += self._is_jet(id_particle)
+                no_photons += self._is_photon(id_particle)
 
             # Calculate total branching ratio for consistency;
             # this number will not exactly add up to 1, since rare decay modes
@@ -400,19 +403,24 @@ class MassScan(object):
             # Make sure lists are long enough
             self._expand_list(br_leptons_1leg, no_leptons)
             self._expand_list(br_jets_1leg, no_jets)
+            self._expand_list(br_photons_1leg, no_photons)
 
             # Fill branching ratio
             br_leptons_1leg[no_leptons] += br_single
             br_jets_1leg[no_jets] += br_single
+            br_photons_1leg[no_photons] += br_single
 
         LGR.debug('Branching ratios into leptons: %s', br_leptons_1leg)
         LGR.debug('Branching ratios into jets: %s', br_jets_1leg)
+        LGR.debug('Branching ratios into photons: %s', br_photons_1leg)
         LGR.debug('Total branching ratio: %s', sum(br_leptons_1leg))
 
         # Create list with right length
         br_leptons_2leg = [0]*((2*len(br_leptons_1leg))-1)
         br_jets_2leg = [0]*((2*len(br_jets_1leg))-1)
+        br_photons_2leg = [0]*((2*len(br_jets_1leg))-1)
 
+        # Combinatorics going from one leg to two legs
         for idx_l1, br_l1 in enumerate(br_leptons_1leg):
             for idx_l2, br_l2 in enumerate(br_leptons_1leg):
                 br_leptons_2leg[idx_l1+idx_l2] += br_l1*br_l2
@@ -420,6 +428,10 @@ class MassScan(object):
         for idx_j1, br_j1 in enumerate(br_jets_1leg):
             for idx_j2, br_j2 in enumerate(br_jets_1leg):
                 br_jets_2leg[idx_j1+idx_j2] += br_j1*br_j2
+
+        for idx_l1, br_l1 in enumerate(br_photons_1leg):
+            for idx_l2, br_l2 in enumerate(br_photons_1leg):
+                br_photons_2leg[idx_l1+idx_l2] += br_l1*br_l2
 
         # If total branching ratio (for both legs) is under a certain
         # threshold, throw a warning; this can have many reasons, like unknown
@@ -435,7 +447,7 @@ class MassScan(object):
                   br_leptons_2leg)
         LGR.debug('Branching ratios into jets (one leg): %s', br_jets_1leg)
         LGR.debug('Branching ratios into jets (two legs): %s', br_jets_2leg)
-        return br_leptons_2leg, br_jets_2leg
+        return br_leptons_2leg, br_jets_2leg, br_photons_2leg
 
     def _expand_list(self, lst, idx, val=0.):  # pylint: disable=no-self-use
 
@@ -479,12 +491,12 @@ class MassScan(object):
         # All particles in this list need to be in the final state list as well
         return abs(id_particle) in self._l_met
 
-    def _is_gamma(self, id_particle):
+    def _is_photon(self, id_particle):
 
-        """ Return if id_particle is final state gamma or not. """
+        """ Return if id_particle is final state photon or not. """
 
         # All particles in this list need to be in the final state list as well
-        return abs(id_particle) in self._l_gamma
+        return abs(id_particle) in self._l_photon
 
     def _is_unknown(self, id_particle):
 
@@ -743,11 +755,11 @@ class MassScan(object):
                 if not self._error:
                     # Calculate branching ratios, if threshold is below 1
                     if self._threshold >= 1.:
-                        br_leptons, br_jets = [0], [0]
+                        br_leptons, br_jets, br_photons = [0], [0], [0]
                     else:
-                        br_leptons, br_jets = self._get_brs(self._id_gluino)
+                        br_leptons, br_jets, br_photons = self._get_brs(self._id_gluino)
 
-                    if not br_leptons or not br_jets:
+                    if not br_leptons or not br_jets or not br_photons:
                         self._skip_point(m_3, mu_ewsb)
 
                 # If there was an error, empty all values
@@ -762,6 +774,7 @@ class MassScan(object):
                     self._m_smhiggs = 0
                     br_leptons = []
                     br_jets = []
+                    br_photons = []
 
                 # Plots for xs's
                 plots.xs_incl.append(self._xs_incl)
@@ -784,11 +797,10 @@ class MassScan(object):
                 plots.m_diff_c1_n1.append(self._m_chargino1 -
                                           self._m_neutralino1)
 
-                # Fill lists per number of lepton
+                # Fill lists per number of object
                 self._fill_lists(br_leptons, plots.br_leptons)
-
-                # Fill lists per number of jet
                 self._fill_lists(br_jets, plots.br_jets)
+                self._fill_lists(br_photons, plots.br_photons)
 
         # Restore backup SUSYHIT input file
         system('mv {}/{}.in{{.orig,}}'.format(self._dir_susyhit,

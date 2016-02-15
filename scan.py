@@ -6,7 +6,7 @@ from MassScan import MassScan
 
 if __name__ == "__main__":
     MY_SCAN = MassScan()
-    MY_SCAN.set_threshold(1.)
+    MY_SCAN.set_threshold(.01)
     L_COORDINATES = [50*i for i in range(5, 8)]
     M_3 = [250*i for i in range(1, 4)]
     MU_EWSB = [250*i for i in range(1, 3)]

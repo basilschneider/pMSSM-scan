@@ -36,6 +36,9 @@ class MassScanPlots(object):
     m_diff_g_c1 = []
     m_diff_c1_n1 = []
 
+    # Signal strength
+    mu = []
+
     # Star to be plotted on all TH2's
     _star = [0, 0]
 
@@ -103,6 +106,11 @@ class MassScanPlots(object):
         name = 'm_chargino1-m_neutralino1'
         title = 'm_{#chi_{1}^{#pm}} - m_{#chi_{1}^{0}} [GeV]'
         self._make_plot(name, title, self.m_diff_c1_n1)
+
+        # Signal strength
+        name = 'mu'
+        title = '#mu'
+        self._make_plot(name, title, self.mu, True)
 
         # Close root file
         if self._toolbox.rootfile.IsOpen():

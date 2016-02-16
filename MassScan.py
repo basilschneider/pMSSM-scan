@@ -38,6 +38,9 @@ class MassScan(object):
     _xs_strong = -1.
     _xs_gluinos = -1.
 
+    # Signal strength
+    _mu = 0.
+
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/susyhit'
     # Define SUSYHIT option, this should be the same as in susyhit.in:
@@ -602,8 +605,8 @@ class MassScan(object):
         with open('smodels_summary.txt', 'r') as f_smodels:
             for line in f_smodels:
                 if line.startswith('The highest r value is'):
-                    LGR.critical(line)
                     return float(line.rstrip().split()[-1])
+        return 0.
 
     def _get_masses(self):
 
@@ -727,6 +730,11 @@ class MassScan(object):
                 if not self._check_susyhit_output():
                     self._skip_point(m_3, mu_ewsb)
 
+                if not self._error:
+                    # Get particle masses
+                    if not self._get_masses():
+                        self._skip_point(m_3, mu_ewsb)
+
                 # Calculate cross-section with SModelS
                 if not self._error:
                     # 8 TeV cross-sections to check if the model is already
@@ -739,18 +747,13 @@ class MassScan(object):
                     self._get_xs_all()
 
                 # Check if models are already excluded
-                #if not self._error:
-                #    self._run_external('SModelS', 'runSModelS '
-                #                       '-o smodels_summary.txt '
-                #                       '-f {}/susyhit_slha.out'
-                #                       .format(self._dir_susyhit))
-                #    mu = self._get_mu()
-                #    LGR.critical(mu)
-
                 if not self._error:
-                    # Get particle masses
-                    if not self._get_masses():
-                        self._skip_point(m_3, mu_ewsb)
+                    self._run_external('SModelS', 'runSModelS '
+                                       '-o smodels_summary.txt '
+                                       '-f {}/susyhit_slha.out'
+                                       .format(self._dir_susyhit))
+                    self._mu = self._get_mu()
+                    LGR.debug('Excluded signal strength: %s', self._mu)
 
                 if not self._error:
                     # Calculate branching ratios, if threshold is below 1
@@ -764,14 +767,15 @@ class MassScan(object):
 
                 # If there was an error, empty all values
                 if self._error:
-                    self._xs_incl = 0
-                    self._xs_strong = 0
-                    self._xs_gluinos = 0
-                    self._m_gluino = 0
-                    self._m_neutralino1 = 0
-                    self._m_neutralino2 = 0
-                    self._m_chargino1 = 0
-                    self._m_smhiggs = 0
+                    self._xs_incl = 0.
+                    self._xs_strong = 0.
+                    self._xs_gluinos = 0.
+                    self._m_gluino = 0.
+                    self._m_neutralino1 = 0.
+                    self._m_neutralino2 = 0.
+                    self._m_chargino1 = 0.
+                    self._m_smhiggs = 0.
+                    self._mu = 0.
                     br_leptons = []
                     br_jets = []
                     br_photons = []
@@ -796,6 +800,9 @@ class MassScan(object):
                 plots.m_diff_g_c1.append(self._m_gluino - self._m_chargino1)
                 plots.m_diff_c1_n1.append(self._m_chargino1 -
                                           self._m_neutralino1)
+
+                # Plots for signal strength
+                plots.mu.append(self._mu)
 
                 # Fill lists per number of object
                 self._fill_lists(br_leptons, plots.br_leptons)

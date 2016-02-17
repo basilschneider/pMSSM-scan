@@ -2,6 +2,7 @@
 
 """ Plotting class for mass scan. """
 
+from os import system
 from ToolboxTH2 import ToolboxTH2
 from ROOT import TFile  # pylint: disable=import-error
 
@@ -116,6 +117,12 @@ class MassScanPlots(object):
         if self._toolbox.rootfile.IsOpen():
             self._toolbox.rootfile.Close()
 
+        # Move used SLHA template to output folder
+        system('cp suspect2_lha.template {}'.format(self._toolbox.directory))
+
+        # Move SModelS output to output folder
+        system('mv smodels_summary_*.txt {}'.format(self._toolbox.directory))
+
     def _make_plot(self, name, title, coordinate_z, percentage=False):
 
         """ Create specific plot. """
@@ -153,6 +160,12 @@ class MassScanPlots(object):
         """ Set rootfile name in toolbox. """
 
         self._toolbox.rootfile = TFile(s_rootfile_name, 'UPDATE')
+
+    def get_directory(self):
+
+        """ Get directory in which objects are stored. """
+
+        return self._toolbox.directory
 
     def set_directory(self, s_directory):
 

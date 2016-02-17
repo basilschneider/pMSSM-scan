@@ -753,6 +753,11 @@ class MassScan(object):
                                        '-f {}/susyhit_slha.out'
                                        .format(self._dir_susyhit))
                     self._mu = self._get_mu()
+
+                    # Move SModelS output file
+                    system('mv smodels_summary.txt smodels_summary_{}_{}.txt'
+                           .format(m_3, mu_ewsb))
+
                     LGR.debug('Excluded signal strength: %s', self._mu)
 
                 if not self._error:

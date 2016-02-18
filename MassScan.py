@@ -719,6 +719,8 @@ class MassScan(object):
                 # _set_masses(id_neutralino1, m_neutralino1)
                 self._set_parameter(3, m_3)
                 self._set_parameter(23, mu_ewsb)
+                #self._set_parameter(1, mu_ewsb)
+                #self._set_parameter(2, mu_ewsb)
 
                 # Fill the coordinates
                 plots.coordinate_x.append(m_3)

@@ -78,6 +78,14 @@ class MassScanPlots(object):
         title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive}'
         self._make_plot(name, title, self.xs_gluinos, True)
 
+        # Cross-sections times branching ratio
+        for no_leptons in range(len(self.br_leptons)):
+            name = 'xs_x_br_{}_leptons'.format(no_leptons)
+            title = '#sigma #times BR into {} leptons [fb]'.format(no_leptons)
+            self._make_plot(name, title,
+                            [a*b for a, b in
+                             zip(self.br_leptons[no_leptons], self.xs_incl)])
+
         # Masses
         name = 'm_gluino'
         title = 'm_{#tilde{g}} [GeV]'

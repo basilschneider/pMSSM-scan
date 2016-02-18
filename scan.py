@@ -8,8 +8,8 @@ if __name__ == "__main__":
     MY_SCAN = MassScan()
     MY_SCAN.set_threshold(.01)
     L_COORDINATES = [50*i for i in range(5, 8)]
-    M_3 = [100*i for i in range(1, 16)]
-    MU_EWSB = [100*i for i in range(1, 16)]
+    M_3 = [100*i for i in range(1, 10)]
+    MU_EWSB = [100*i for i in range(1, 10)]
     MY_SCAN.l_m_3 = M_3
     MY_SCAN.l_mu_ewsb = MU_EWSB
     PLOTS = MY_SCAN.do_scan()

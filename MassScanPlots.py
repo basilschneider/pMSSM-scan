@@ -38,7 +38,7 @@ class MassScanPlots(object):
     m_diff_c1_n1 = []
 
     # Signal strength
-    mu = []
+    mu = []  # pylint: disable=invalid-name
 
     # Star to be plotted on all TH2's
     _star = [0, 0]

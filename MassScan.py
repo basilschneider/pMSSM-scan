@@ -14,7 +14,7 @@ from MassScanPlots import MassScanPlots
 from ToolboxHelper import get_lst_entry_default
 
 
-class MassScan(object):
+class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     """ Make a mass scan for different SUSY particle masses with SUSYHIT and
     calculates branching ratios to various final states. """
@@ -141,7 +141,7 @@ class MassScan(object):
                 f_in.write(sub('{}.*'.format(slha),
                                '{}{}'.format(slha, m_particle), line))
 
-    def _run_external(self, name, cmd):
+    def _run_external(self, name, cmd):  # pylint: disable=no-self-use
 
         """ Run external software, such as SUSYHIT or SModelS. """
 
@@ -159,7 +159,7 @@ class MassScan(object):
 
         line_warning = 2
         with open('{}/suspect2.out'
-                  .format(self._dir_susyhit, 'r')) as f_suspect2:
+                  .format(self._dir_susyhit), 'r') as f_suspect2:
             for line in f_suspect2:
                 if line_warning == 0:
                     errorline = line.split('.')
@@ -546,7 +546,7 @@ class MassScan(object):
 
         """ Get inclusive cross-section. """
 
-        xs = 0.
+        xs_incl = 0.
         xs_strong = 0.
         with open('{}/susyhit_slha.out'
                   .format(self._dir_susyhit), 'r') as f_susyhit:
@@ -554,13 +554,13 @@ class MassScan(object):
             strong_xsec = False
             for line in f_susyhit:
                 if found_xsec:
-                    xs += float(line.split()[6])
+                    xs_incl += float(line.split()[6])
                     found_xsec = False
                     if strong_xsec:
                         xs_strong += float(line.split()[6])
                         strong_xsec = False
                 # If the xs matches, set bool, next line will have the xs
-                if search('XSECTION *1\.30E\+04 *2212 2212', line):
+                if search(r'XSECTION *1\.30E\+04 *2212 2212', line):
                     found_xsec = True
                     # Check if strong production
                     if self._is_strong(float(line.split()[5])) and \
@@ -568,7 +568,7 @@ class MassScan(object):
                         strong_xsec = True
 
         # Multiply by 1000. to get cross-section in fb
-        return 1000.*xs, 1000.*xs_strong
+        return 1000.*xs_incl, 1000.*xs_strong
 
     def _get_xs(self, id_particle_1, id_particle_2=-1.):
 
@@ -583,14 +583,14 @@ class MassScan(object):
             found_xsec = False
             for line in f_susyhit:
                 if found_xsec:
-                    xs = float(line.split()[6])
+                    xs_incl = float(line.split()[6])
                     LGR.debug('Found XS %s for particles %s and %s from line '
-                              '%s.', xs, id_particle_1, id_particle_2,
+                              '%s.', xs_incl, id_particle_1, id_particle_2,
                               line.rstrip())
                     # Multiply by 1000. to return cross-section in fb
-                    return 1000.*xs
+                    return 1000.*xs_incl
                 # If the xs matches, set bool, next line will have the xs
-                if search('XSECTION *1\.30E\+04 *2212 2212 2 {} {}'
+                if search(r'XSECTION *1\.30E\+04 *2212 2212 2 {} {}'
                           .format(id_particle_1, id_particle_2), line):
                     LGR.debug(line.rstrip())
                     found_xsec = True
@@ -598,7 +598,7 @@ class MassScan(object):
         # If no cross-section was found, return 0
         return 0.
 
-    def _get_mu(self):
+    def _get_mu(self):  # pylint: disable=no-self-use
 
         """ Get excluded observed signal strength from SModelS output file. """
 
@@ -632,7 +632,8 @@ class MassScan(object):
         # Check that no mass is negative (is that needed?)
         # if min(l_masses) < 0.:
         #     for val in filter(lambda l: l<0., l_masses):
-        #         LGR.warning('%s has negative mass.', l_names[l_masses.index(val)])
+        #         LGR.warning('%s has negative mass.',
+        #                     l_names[l_masses.index(val)])
         #     return False
 
         return True
@@ -657,7 +658,7 @@ class MassScan(object):
 
         self._threshold = threshold
 
-    def do_scan(self):
+    def do_scan(self):  # pylint: disable=too-many-branches,too-many-statements
 
         """ Loops over the different mass combinations and calls appropriate
         functions to set masses in the SUSYHIT input file and to fill the
@@ -669,8 +670,8 @@ class MassScan(object):
 
         # Copy template input file
         system('cp {}.template {}/{}.in'.format(self._get_susyhit_filename(),
-                                                 self._dir_susyhit,
-                                                 self._get_susyhit_filename()))
+                                                self._dir_susyhit,
+                                                self._get_susyhit_filename()))
 
         # Fill SM dictionary
         self._fill_dict_sm()
@@ -743,8 +744,8 @@ class MassScan(object):
                     # excluded and 13 TeV cross-sections for cross-sections
                     # itself
                     for com in [8, 13]:
-                        self._run_external('SModelS', 'runTools xseccomputer -p '
-                                           '-s {} -f {}/susyhit_slha.out'
+                        self._run_external('SModelS', 'runTools xseccomputer '
+                                           '-p -s {} -f {}/susyhit_slha.out'
                                            .format(com, self._dir_susyhit))
                     self._get_xs_all()
 
@@ -767,7 +768,8 @@ class MassScan(object):
                     if self._threshold >= 1.:
                         br_leptons, br_jets, br_photons = [0], [0], [0]
                     else:
-                        br_leptons, br_jets, br_photons = self._get_brs(self._id_gluino)
+                        br_leptons, br_jets, br_photons = \
+                        self._get_brs(self._id_gluino)
 
                     if not br_leptons or not br_jets or not br_photons:
                         self._skip_point(m_3, mu_ewsb)

@@ -18,39 +18,39 @@
 BLOCK SPINFO  # Spectrum Program information
      1   SuSpect     # RGE +Spectrum calculator
      2   2.43         # version number
-# Caution: warning or error message follows 
+# Caution: warning or error message follows
      3   Pb: non-convergent spectrum after 50 iter.!
 #
 BLOCK MODSEL  # Model selection
-     1     0   #general MSSM low scale                            
+     1     0   #general MSSM low scale
 #
 BLOCK MINPAR  # Input parameters
-         3     1.00000000E+01   #  tanbeta(mZ)        
+         3     1.00000000E+01   #  tanbeta(mZ)
 BLOCK EXTPAR  # Input parameters
- 0 8.00000000E+03   # EWSB scale          
- 1 2.00000000E+03   #  M_1                
- 2 2.00000000E+03   #  M_2                
- 3 8.00000000E+03   #  M_3                
- 11 0.00000000E+00   #  A_t                
- 12 0.00000000E+00   #  A_b                
- 13 0.00000000E+00   #  A_tau              
- 23 1.00000000E+03   #  mu(EWSB)           
- 26 8.00000000E+03   #  MA_pole            
- 31 8.00000000E+03   #  M_eL               
- 32 8.00000000E+03   #  M_muL              
- 33 8.00000000E+03   #  M_tauL             
- 34 8.00000000E+03   #  M_eR               
- 35 8.00000000E+03   #  M_muR              
- 36 8.00000000E+03   #  M_tauR             
- 41 8.00000000E+03   #  M_q1L              
- 42 8.00000000E+03   #  M_q2L              
- 43 8.00000000E+03   #  M_q3L              
- 44 8.00000000E+03   #  M_uR               
- 45 8.00000000E+03   #  M_cR               
- 46 8.00000000E+03   #  M_tR               
- 47 8.00000000E+03   #  M_dR               
- 48 8.00000000E+03   #  M_sR               
- 49 8.00000000E+03   #  M_bR               
+ 0 8.00000000E+03   # EWSB scale
+ 1 8.00000000E+03   #  M_1
+ 2 8.00000000E+03   #  M_2
+ 3 8.00000000E+03   #  M_3
+ 11 0.00000000E+00   #  A_t
+ 12 0.00000000E+00   #  A_b
+ 13 0.00000000E+00   #  A_tau
+ 23 8.00000000E+03   #  mu(EWSB)
+ 26 8.00000000E+03   #  MA_pole
+ 31 8.00000000E+03   #  M_eL
+ 32 8.00000000E+03   #  M_muL
+ 33 8.00000000E+03   #  M_tauL
+ 34 8.00000000E+03   #  M_eR
+ 35 8.00000000E+03   #  M_muR
+ 36 8.00000000E+03   #  M_tauR
+ 41 8.00000000E+03   #  M_q1L
+ 42 8.00000000E+03   #  M_q2L
+ 43 8.00000000E+03   #  M_q3L
+ 44 8.00000000E+03   #  M_uR
+ 45 8.00000000E+03   #  M_cR
+ 46 8.00000000E+03   #  M_tR
+ 47 8.00000000E+03   #  M_dR
+ 48 8.00000000E+03   #  M_sR
+ 49 8.00000000E+03   #  M_bR
 #
 BLOCK SMINPUTS  # Standard Model inputs
          1     1.27908970E+02   # alpha_em^-1(M_Z)^MSbar
@@ -98,7 +98,7 @@ BLOCK MASS  # Mass Spectrum
    1000024     9.72379451E+02         # ~chi_1+
    1000037     1.13046121E+03         # ~chi_2+
 #
-BLOCK SU_LOWPAR  # Values constrained by exp data 
+BLOCK SU_LOWPAR  # Values constrained by exp data
          1     3.37497361E-07   # Delta rho parameter
          2     5.51785467E-12   # g_mu -2
          3     3.25920889E-04   # Br(b -> s gamma)

@@ -49,11 +49,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # Simply changing this value here won't work right now
     _susyhit_option = 1
 
-    # Define M_3
-    l_m_3 = [200., 350.]
+    # Define parameter x
+    l_prmtr_x = [200., 350.]
+    prmtr_id_x = 3
 
-    # Define mu
-    l_mu_ewsb = [300.]
+    # Define parameter y
+    l_prmtr_y = [300.]
+    prmtr_id_y = 23
 
     # Track errors, we still want to fill all lists, otherwise the
     # binning will be screwed up
@@ -678,7 +680,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         # # Calculate total number of different mass combinations
         # total = len(M_GLUINOS) * len(M_CHARGINOS1) * len(M_NEUTRALINOS1)
-        total = len(self.l_m_3) * len(self.l_mu_ewsb)
+        total = len(self.l_prmtr_x) * len(self.l_prmtr_y)
 
         # Define counter to count from 1 to total
         counter = 0
@@ -690,8 +692,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # for m_gluino in M_GLUINOS:
         #     for m_chargino_diff in M_CHARGINOS1:
         #         for m_neutralino_diff in M_NEUTRALINOS1:
-        for m_3 in self.l_m_3:
-            for mu_ewsb in self.l_mu_ewsb:
+        for prmtr_x in self.l_prmtr_x:
+            for prmtr_y in self.l_prmtr_y:
 
                 # Clear SUSY dictionary (SM can stay)
                 self._d_susy.clear()
@@ -702,7 +704,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 self._error = False
 
                 LGR.info('Processing mass combination %3d of %3d: (%4d/%4d).',
-                         counter, total, m_3, mu_ewsb)
+                         counter, total, prmtr_x, prmtr_y)
 
                 # # Calculate chargino and neutralino masses
                 # m_chargino1 = m_gluino - m_chargino_diff
@@ -711,32 +713,32 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # LGR.debug('m_g = %4d  -  m_c1 = %4d  -  m_n1 = %4d',
                 #           m_gluino, m_chargino1, m_neutralino1)
-                LGR.debug('m_3 = %4d  -  mu = %4d', m_3, mu_ewsb)
+                LGR.debug('prmtr_x = %4d  -  mu = %4d', prmtr_x, prmtr_y)
 
                 # # Set masses in SUSYHIT input file
                 # _set_masses(id_gluino, m_gluino)
                 # _set_masses(id_chargino1, m_chargino1)
                 # _set_masses(id_neutralino2, m_neutralino2)
                 # _set_masses(id_neutralino1, m_neutralino1)
-                self._set_parameter(3, m_3)
-                self._set_parameter(23, mu_ewsb)
-                #self._set_parameter(1, mu_ewsb)
-                #self._set_parameter(2, mu_ewsb)
+                self._set_parameter(self.prmtr_id_x, prmtr_x)
+                self._set_parameter(self.prmtr_id_y, prmtr_y)
+                self._set_parameter(1, prmtr_y+100)
+                #self._set_parameter(2, prmtr_y)
 
                 # Fill the coordinates
-                plots.coordinate_x.append(m_3)
-                plots.coordinate_y.append(mu_ewsb)
+                plots.coordinate_x.append(prmtr_x)
+                plots.coordinate_y.append(prmtr_y)
 
                 # Run SUSYHIT
                 self._run_external('SUSYHIT', 'cd {} && ./run'
                                    .format(self._dir_susyhit))
                 if not self._check_susyhit_output():
-                    self._skip_point(m_3, mu_ewsb)
+                    self._skip_point(prmtr_x, prmtr_y)
 
                 if not self._error:
                     # Get particle masses
                     if not self._get_masses():
-                        self._skip_point(m_3, mu_ewsb)
+                        self._skip_point(prmtr_x, prmtr_y)
 
                 # Calculate cross-section with SModelS
                 if not self._error:
@@ -759,7 +761,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                     # Move SModelS output file
                     system('mv smodels_summary.txt smodels_summary_{}_{}.txt'
-                           .format(m_3, mu_ewsb))
+                           .format(prmtr_x, prmtr_y))
 
                     LGR.debug('Excluded signal strength: %s', self._mu)
 
@@ -772,7 +774,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         self._get_brs(self._id_gluino)
 
                     if not br_leptons or not br_jets or not br_photons:
-                        self._skip_point(m_3, mu_ewsb)
+                        self._skip_point(prmtr_x, prmtr_y)
 
                 # If there was an error, empty all values
                 if self._error:

@@ -15,6 +15,10 @@ class MassScanPlots(object):
     coordinate_x = []
     coordinate_y = []
 
+    # Axes labels
+    _axis_x = 'M_{3} [GeV]'
+    _axis_y = '#mu [GeV]'
+
     # Branching ratios
     br_leptons = [[], [], [], [], []]
     br_jets = [[], [], [], [], [], [], [], [], [], [], [], [], []]
@@ -135,10 +139,6 @@ class MassScanPlots(object):
 
         """ Create specific plot. """
 
-        # Axes are predefined for now
-        axis_x = 'M_{3} [GeV]'
-        axis_y = '#mu [GeV]'
-
         # Set z range
         z_low = 0.
         if percentage:
@@ -155,13 +155,20 @@ class MassScanPlots(object):
         # Define TH2
         self._toolbox.create_histogram(name, title, self.coordinate_x,
                                        self.coordinate_y)
-        self._toolbox.modify_axes(axis_x, axis_y, z_low, z_high)
+        self._toolbox.modify_axes(self._axis_x, self._axis_y, z_low, z_high)
 
         # Fill numbers
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    coordinate_z, scale)
         self._toolbox.plot_star(self._star)
         self._toolbox.save()
+
+    def set_axis(self, axis_x, axis_y):
+
+        """ Set axis labels. """
+
+        self._axis_x = axis_x
+        self._axis_y = axis_y
 
     def set_rootfile(self, s_rootfile_name):
 

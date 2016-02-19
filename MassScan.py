@@ -725,6 +725,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 self._set_parameter(1, prmtr_y+100)
                 #self._set_parameter(2, prmtr_y)
 
+                # Set the plot axis labels
+                plots.set_axis(self.prmtr_id_x, self.prmtr_id_y)
+
                 # Fill the coordinates
                 plots.coordinate_x.append(prmtr_x)
                 plots.coordinate_y.append(prmtr_y)

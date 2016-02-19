@@ -167,8 +167,36 @@ class MassScanPlots(object):
 
         """ Set axis labels. """
 
+        axis_x = self._get_axis_label(axis_x)
+        axis_y = self._get_axis_label(axis_y)
+        self.set_axis_x(axis_x)
+        self.set_axis_y(axis_y)
+
+    def set_axis_x(self, axis_x):
+
+        """ Set x axis label. """
+
         self._axis_x = axis_x
+
+    def set_axis_y(self, axis_y):
+
+        """ Set y axis label. """
+
         self._axis_y = axis_y
+
+    def _get_axis_label(self, axis):
+
+        """ Translate particle ID into string for axis labels. """
+
+        if axis == 1:
+            return "M_{1} [GeV]"
+        if axis == 2:
+            return "M_{2} [GeV]"
+        if axis == 3:
+            return "M_{3} [GeV]"
+        if axis == 23:
+            return "#mu [GeV]"
+        return str(axis)
 
     def set_rootfile(self, s_rootfile_name):
 

@@ -747,12 +747,29 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
                 self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
                 for key, value in self._l_prmtr_x_add.iteritems():
-                    self._set_parameter_slha(key, prmtr_x+value)
+                    # Some combinations are concatenated for axis labeling
+                    if key == 414243:
+                        for newkey in range(41, 44):
+                            self._set_parameter_slha(newkey, prmtr_x+value)
+                    elif key == 444546474849:
+                        for newkey in range(44, 50):
+                            self._set_parameter_slha(newkey, prmtr_x+value)
+                    else:
+                        self._set_parameter_slha(key, prmtr_x+value)
                 for key, value in self._l_prmtr_y_add.iteritems():
-                    self._set_parameter_slha(key, prmtr_y+value)
+                    # Some combinations are concatenated for axis labeling
+                    if key == 414243:
+                        for newkey in range(41, 44):
+                            self._set_parameter_slha(newkey, prmtr_y+value)
+                    elif key == 444546474849:
+                        for newkey in range(44, 50):
+                            self._set_parameter_slha(newkey, prmtr_y+value)
+                    else:
+                        self._set_parameter_slha(key, prmtr_y+value)
 
                 # Set the plot axis labels
-                plots.set_axis(self._prmtr_id_x, self._prmtr_id_y)
+                plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
+                               self._l_prmtr_x_add, self._l_prmtr_y_add)
 
                 # Fill the coordinates
                 plots.coordinate_x.append(prmtr_x)

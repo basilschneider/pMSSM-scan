@@ -3,8 +3,9 @@
 """ Plotting class for mass scan. """
 
 from os import system
-from ToolboxTH2 import ToolboxTH2
 from ROOT import TFile  # pylint: disable=import-error
+from Logger import LGR
+from ToolboxTH2 import ToolboxTH2
 
 
 class MassScanPlots(object):
@@ -163,14 +164,37 @@ class MassScanPlots(object):
         self._toolbox.plot_star(self._star)
         self._toolbox.save()
 
-    def set_axis(self, axis_x, axis_y):
+    def set_axis(self, axis_x, axis_y, axis_x_add, axis_y_add):
 
         """ Set axis labels. """
 
+        # Set the main label
         axis_x = self._get_axis_label(axis_x)
         axis_y = self._get_axis_label(axis_y)
+
+        # Add all additional labels from the dictionaries
+        for key, value in axis_x_add.iteritems():
+            if value > 0:
+                axis_x += ' = {} - {}'.format(self._get_axis_label(key), value)
+            else:
+                axis_x += ' = {} + {}'.format(self._get_axis_label(key),
+                                              abs(value))
+        for key, value in axis_y_add.iteritems():
+            if value > 0:
+                axis_y += ' = {} - {}'.format(self._get_axis_label(key), value)
+            else:
+                axis_y += ' = {} + {}'.format(self._get_axis_label(key),
+                                              abs(value))
+
+        # Add unit
+        axis_x += ' [GeV]'
+        axis_y += ' [GeV]'
+
         self.set_axis_x(axis_x)
         self.set_axis_y(axis_y)
+
+        LGR.debug('Set x axis to %s', axis_x)
+        LGR.debug('Set y axis to %s', axis_y)
 
     def set_axis_x(self, axis_x):
 
@@ -189,13 +213,17 @@ class MassScanPlots(object):
         """ Translate particle ID into string for axis labels. """
 
         if axis == 1:
-            return "M_{1} [GeV]"
+            return 'M_{1}'
         if axis == 2:
-            return "M_{2} [GeV]"
+            return 'M_{2}'
         if axis == 3:
-            return "M_{3} [GeV]"
+            return 'M_{3}'
         if axis == 23:
-            return "#mu [GeV]"
+            return '#mu'
+        if axis == 414243:
+            return 'm_{q_{L}}'
+        if axis == 444546474849:
+            return 'm_{q_{R}}'
         return str(axis)
 
     def set_rootfile(self, s_rootfile_name):

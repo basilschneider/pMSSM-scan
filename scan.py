@@ -8,7 +8,7 @@ if __name__ == "__main__":
     MY_SCAN = MassScan()
     MY_SCAN.set_threshold(.01)
     MY_SCAN.set_parameter(3, 23)
-    MY_SCAN.set_parameter_add_y(1, 100)
+    #MY_SCAN.set_parameter_add_y(1, 100)
     M_3 = [100*i for i in range(1, 10)]
     MU_EWSB = [100*i for i in range(1, 10)]
     MY_SCAN.l_prmtr_x = [400]

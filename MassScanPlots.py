@@ -140,7 +140,7 @@ class MassScanPlots(object):
         # Signal strength
         name = 'mu'
         title = '#mu'
-        self._make_plot(name, title, self.mu, True)
+        self._make_plot(name, title, self.mu, decimals=2)
 
         # Close root file
         if self._toolbox.rootfile.IsOpen():
@@ -154,7 +154,8 @@ class MassScanPlots(object):
         system('mv smodels_summary_*.txt {} 2>/dev/null'
                .format(self._toolbox.directory))
 
-    def _make_plot(self, name, title, coordinate_z, percentage=False):
+    def _make_plot(self, name, title, coordinate_z, percentage=False,
+                   decimals=1):
 
         """ Create specific plot. """
 
@@ -182,7 +183,7 @@ class MassScanPlots(object):
 
         # Fill numbers
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
-                                   coordinate_z, scale)
+                                   coordinate_z, scale, decimals)
         self._toolbox.plot_star(self._star)
         self._toolbox.plot_diagonal()
         self._toolbox.save()

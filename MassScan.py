@@ -40,9 +40,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _m_smhiggs = -1.
 
     # Cross-sections
-    _xs_incl = -1.
-    _xs_strong = -1.
-    _xs_gluinos = -1.
+    _xs13_incl = -1.
+    _xs13_strong = -1.
+    _xs13_gluinos = -1.
 
     # Signal strength
     _mu = 0.
@@ -570,8 +570,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         LGR.debug('Get cross-sections:')
 
-        self._xs_incl, self._xs_strong = self._get_xs_incl()
-        self._xs_gluinos = self._get_xs(self._id_gluino)
+        self._xs13_incl, self._xs13_strong = self._get_xs_incl()
+        self._xs13_gluinos = self._get_xs(self._id_gluino)
 
     def _get_xs_incl(self):
 
@@ -835,9 +835,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # If there was an error, empty all values
                 if self._error:
-                    self._xs_incl = 0.
-                    self._xs_strong = 0.
-                    self._xs_gluinos = 0.
+                    self._xs13_incl = 0.
+                    self._xs13_strong = 0.
+                    self._xs13_gluinos = 0.
                     self._m_gluino = 0.
                     self._m_neutralino1 = 0.
                     self._m_neutralino2 = 0.
@@ -861,13 +861,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # Plots for xs's
                 if self._calc_xs:
-                    plots.xs_incl.append(self._xs_incl)
+                    plots.xs13_incl.append(self._xs13_incl)
                     try:
-                        plots.xs_gluinos.append(self._xs_gluinos/self._xs_incl)
-                        plots.xs_strong.append(self._xs_strong/self._xs_incl)
+                        plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
+                        plots.xs13_strong.append(self._xs13_strong/self._xs13_incl)
                     except ZeroDivisionError:
-                        plots.xs_gluinos.append(0.)
-                        plots.xs_strong.append(0.)
+                        plots.xs13_gluinos.append(0.)
+                        plots.xs13_strong.append(0.)
 
                 # Fill lists per number of object for br plots
                 if self._calc_br:

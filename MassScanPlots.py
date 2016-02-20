@@ -27,9 +27,9 @@ class MassScanPlots(object):
     br_met = [[], [], [], [], []]
 
     # xs's
-    xs_incl = []
-    xs_strong = []
-    xs_gluinos = []
+    xs13_incl = []
+    xs13_strong = []
+    xs13_gluinos = []
 
     # Masses
     m_gluino = []
@@ -85,17 +85,17 @@ class MassScanPlots(object):
         self._make_plot(name, title, self.m_diff_c1_n1)
 
         # Cross-sections
-        name = 'xs_incl'
+        name = 'xs13_incl'
         title = '#sigma_{inclusive} [fb]'
-        self._make_plot(name, title, self.xs_incl)
+        self._make_plot(name, title, self.xs13_incl)
 
-        name = 'xs_strong'
+        name = 'xs13_strong'
         title = '#sigma_{strong}/#sigma_{inclusive}'
-        self._make_plot(name, title, self.xs_strong, True)
+        self._make_plot(name, title, self.xs13_strong, True)
 
-        name = 'xs_gluino_gluino'
+        name = 'xs13_gluino_gluino'
         title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive}'
-        self._make_plot(name, title, self.xs_gluinos, True)
+        self._make_plot(name, title, self.xs13_gluinos, True)
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):
@@ -115,11 +115,11 @@ class MassScanPlots(object):
 
         # Cross-sections times branching ratio
         for no_leptons in range(len(self.br_leptons)):
-            name = 'xs_x_br_{}_leptons'.format(no_leptons)
+            name = 'xs13_x_br_{}_leptons'.format(no_leptons)
             title = '#sigma #times BR into {} leptons [fb]'.format(no_leptons)
             self._make_plot(name, title,
                             [a*b for a, b in
-                             zip(self.br_leptons[no_leptons], self.xs_incl)])
+                             zip(self.br_leptons[no_leptons], self.xs13_incl)])
 
         # Signal strength
         name = 'mu'

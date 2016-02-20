@@ -42,7 +42,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _mu = 0.
 
     # Directory where SUSYHIT is installed
-    _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/susyhit'
+    _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
+    _dir_susyhit += 'susyhit-1.5-suspect-2.4.3'
     # Define SUSYHIT option, this should be the same as in susyhit.in:
     # 1 for SuSpect-HDECAY-SDECAY
     # 2 for SDECAY-HDECAY

@@ -43,6 +43,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _xs13_incl = -1.
     _xs13_strong = -1.
     _xs13_gluinos = -1.
+    _xs8_incl = -1.
+    _xs8_strong = -1.
 
     # Signal strength
     _mu = 0.
@@ -570,12 +572,21 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         LGR.debug('Get cross-sections:')
 
-        self._xs13_incl, self._xs13_strong = self._get_xs_incl()
-        self._xs13_gluinos = self._get_xs(self._id_gluino)
+        self._xs13_incl, self._xs13_strong = self._get_xs_incl(13)
+        self._xs8_incl, self._xs8_strong = self._get_xs_incl(8)
+        self._xs13_gluinos = self._get_xs(13, self._id_gluino)
 
-    def _get_xs_incl(self):
+    def _get_xs_incl(self, com):
 
         """ Get inclusive cross-section. """
+
+        # Regex to be searched in SLHA file
+        if com == 13:
+            regex_xs = r'XSECTION *1\.30E\+04 *2212 2212'
+        elif com == 8:
+            regex_xs = r'XSECTION *8\.00E\+03 *2212 2212'
+        else:
+            raise ValueError('Only cross-sections of 8 or 13 TeV are allowed.')
 
         xs_incl = 0.
         xs_strong = 0.
@@ -591,7 +602,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         xs_strong += float(line.split()[6])
                         strong_xsec = False
                 # If the xs matches, set bool, next line will have the xs
-                if search(r'XSECTION *1\.30E\+04 *2212 2212', line):
+                if search(regex_xs, line):
                     found_xsec = True
                     # Check if strong production
                     if self._is_strong(float(line.split()[5])) and \
@@ -601,13 +612,23 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Multiply by 1000. to get cross-section in fb
         return 1000.*xs_incl, 1000.*xs_strong
 
-    def _get_xs(self, id_particle_1, id_particle_2=-1.):
+    def _get_xs(self, com, id_particle_1, id_particle_2=-1.):
 
         """ Get specific cross-section. """
 
         # If id_particle_2 is not defined, set it to id_particle_1
         if id_particle_2 < 0:
             id_particle_2 = id_particle_1
+
+        # Regex to be searched in SLHA file
+        if com == 13:
+            regex_xs = r'XSECTION *1\.30E\+04 *2212 2212 2 {} {}' \
+                       .format(id_particle_1, id_particle_2)
+        elif com == 8:
+            regex_xs = r'XSECTION *8\.00E\+03 *2212 2212 2 {} {}' \
+                       .format(id_particle_1, id_particle_2)
+        else:
+            raise ValueError('Only cross-sections of 8 or 13 TeV are allowed.')
 
         with open('{}/susyhit_slha.out'
                   .format(self._dir_susyhit), 'r') as f_susyhit:
@@ -621,8 +642,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     # Multiply by 1000. to return cross-section in fb
                     return 1000.*xs_incl
                 # If the xs matches, set bool, next line will have the xs
-                if search(r'XSECTION *1\.30E\+04 *2212 2212 2 {} {}'
-                          .format(id_particle_1, id_particle_2), line):
+                if search(regex_xs, line):
                     LGR.debug(line.rstrip())
                     found_xsec = True
 
@@ -786,11 +806,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if not self._check_susyhit_output():
                     self._skip_point(prmtr_x, prmtr_y)
 
-                # Move SUSYHIT output
-                if not self._error:
-                    system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
-                           .format(self._dir_susyhit, prmtr_x, prmtr_y))
-
                 if not self._error and self._calc_masses:
                     # Get particle masses
                     if not self._get_masses():
@@ -807,6 +822,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                                            .format(com, self._dir_susyhit))
                     if self._calc_xs:
                         self._get_xs_all()
+
+                # Move SUSYHIT output
+                if not self._error:
+                    system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
+                           .format(self._dir_susyhit, prmtr_x, prmtr_y))
 
                 # Check if models are already excluded
                 if not self._error and self._calc_mu:
@@ -838,6 +858,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._xs13_incl = 0.
                     self._xs13_strong = 0.
                     self._xs13_gluinos = 0.
+                    self._xs8_incl = 0.
+                    self._xs8_strong = 0.
                     self._m_gluino = 0.
                     self._m_neutralino1 = 0.
                     self._m_neutralino2 = 0.
@@ -862,12 +884,15 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 # Plots for xs's
                 if self._calc_xs:
                     plots.xs13_incl.append(self._xs13_incl)
+                    plots.xs8_incl.append(self._xs8_incl)
                     try:
-                        plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
                         plots.xs13_strong.append(self._xs13_strong/self._xs13_incl)
+                        plots.xs8_strong.append(self._xs13_strong/self._xs13_incl)
+                        plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
                     except ZeroDivisionError:
-                        plots.xs13_gluinos.append(0.)
                         plots.xs13_strong.append(0.)
+                        plots.xs8_strong.append(0.)
+                        plots.xs13_gluinos.append(0.)
 
                 # Fill lists per number of object for br plots
                 if self._calc_br:

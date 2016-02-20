@@ -51,11 +51,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Define parameter x
     l_prmtr_x = [200., 350.]
-    prmtr_id_x = 3
+    _prmtr_id_x = 3
+    _l_prmtr_x_add = {}
 
     # Define parameter y
     l_prmtr_y = [300.]
-    prmtr_id_y = 23
+    _prmtr_id_y = 23
+    _l_prmtr_y_add = {}
 
     # Track errors, we still want to fill all lists, otherwise the
     # binning will be screwed up
@@ -84,6 +86,27 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # Branching ratios below this threshold are skipped (to save time)
     _threshold = 0.05
 
+    def set_parameter(self, prmtr_id_x, prmtr_id_y):
+
+        """ Set variable parameters x and y. """
+
+        self._prmtr_id_x = prmtr_id_x
+        self._prmtr_id_y = prmtr_id_y
+
+    def set_parameter_add_x(self, prmtr_id_x, offset):
+
+        """ Set additional parameters to the same value as x but with an
+        offset. """
+
+        self._l_prmtr_x_add[prmtr_id_x] = offset
+
+    def set_parameter_add_y(self, prmtr_id_x, offset):
+
+        """ Set additional parameters to the same value as y but with an
+        offset. """
+
+        self._l_prmtr_y_add[prmtr_id_x] = offset
+
     def _get_susyhit_filename(self):
 
         """ Get SUSYHIT filename as hardcoded in SUSYHIT. """
@@ -95,10 +118,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         else:
             raise ValueError('susyhit_option is neither 1 nor 2.')
 
-    def _set_parameter(self, idx, parameter):
+    def _set_parameter_slha(self, idx, parameter):
 
         """ Set parameter in SUSYHIT input file. """
 
+        LGR.debug('Set index %s to %s in SLHA.', idx, parameter)
         # Set regular expressions in SLHA file
         slha_in = '^ {} '.format(idx)
         slha_out = ' {} '.format(idx)
@@ -720,13 +744,15 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 # _set_masses(id_chargino1, m_chargino1)
                 # _set_masses(id_neutralino2, m_neutralino2)
                 # _set_masses(id_neutralino1, m_neutralino1)
-                self._set_parameter(self.prmtr_id_x, prmtr_x)
-                self._set_parameter(self.prmtr_id_y, prmtr_y)
-                self._set_parameter(1, prmtr_y+100)
-                #self._set_parameter(2, prmtr_y)
+                self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
+                self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
+                for key, value in self._l_prmtr_x_add.iteritems():
+                    self._set_parameter_slha(key, prmtr_x+value)
+                for key, value in self._l_prmtr_y_add.iteritems():
+                    self._set_parameter_slha(key, prmtr_y+value)
 
                 # Set the plot axis labels
-                plots.set_axis(self.prmtr_id_x, self.prmtr_id_y)
+                plots.set_axis(self._prmtr_id_x, self._prmtr_id_y)
 
                 # Fill the coordinates
                 plots.coordinate_x.append(prmtr_x)

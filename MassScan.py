@@ -21,9 +21,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Flags what to calculate
     _calc_masses = True
-    _calc_xs = False
-    _calc_br = False
-    _calc_mu = False
+    _calc_xs = True
+    _calc_br = True
+    _calc_mu = True
 
     # Define ID's of particles
     _id_gluino = 1000021
@@ -208,8 +208,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     return False
                 if line.startswith('Warning'):
                     line_warning -= 1
-
-
         return True
 
     def _fill_dict_sm(self):
@@ -787,6 +785,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                                    .format(self._dir_susyhit))
                 if not self._check_susyhit_output():
                     self._skip_point(prmtr_x, prmtr_y)
+
+                # Move SUSYHIT output
+                if not self._error:
+                    system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
+                           .format(self._dir_susyhit, prmtr_x, prmtr_y))
 
                 if not self._error and self._calc_masses:
                     # Get particle masses

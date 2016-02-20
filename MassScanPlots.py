@@ -132,6 +132,7 @@ class MassScanPlots(object):
 
         # Move used SLHA template to output folder
         system('cp suspect2_lha.template {}'.format(self._toolbox.directory))
+        system('mv susyhit_* {}'.format(self._toolbox.directory))
 
         # Move SModelS output to output folder
         system('mv smodels_summary_*.txt {} 2>/dev/null'

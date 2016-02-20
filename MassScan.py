@@ -877,9 +877,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     plots.m_neutralino2.append(self._m_neutralino2)
                     plots.m_chargino1.append(self._m_chargino1)
                     plots.m_smhiggs.append(self._m_smhiggs)
-                    plots.m_diff_g_c1.append(self._m_gluino - self._m_chargino1)
-                    plots.m_diff_c1_n1.append(self._m_chargino1 -
-                                          self._m_neutralino1)
 
                 # Plots for xs's
                 if self._calc_xs:
@@ -889,14 +886,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         plots.xs13_strong.append(self._xs13_strong/self._xs13_incl)
                         plots.xs8_strong.append(self._xs13_strong/self._xs13_incl)
                         plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
-                        # XS ratio
-                        plots.xs13_xs8.append(self._xs13_incl/self._xs8_incl)
                     except ZeroDivisionError:
                         plots.xs13_strong.append(0.)
                         plots.xs8_strong.append(0.)
                         plots.xs13_gluinos.append(0.)
-                        # XS ratio
-                        plots.xs13_xs8.append(0.)
 
                 # Fill lists per number of object for br plots
                 if self._calc_br:

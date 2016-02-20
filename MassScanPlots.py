@@ -32,7 +32,6 @@ class MassScanPlots(object):
     xs13_gluinos = []
     xs8_incl = []
     xs8_strong = []
-    xs13_xs8 = []
 
     # Masses
     m_gluino = []
@@ -40,10 +39,6 @@ class MassScanPlots(object):
     m_neutralino2 = []
     m_chargino1 = []
     m_smhiggs = []
-
-    # Mass differences
-    m_diff_g_c1 = []
-    m_diff_c1_n1 = []
 
     # Signal strength
     mu = []  # pylint: disable=invalid-name
@@ -55,7 +50,7 @@ class MassScanPlots(object):
 
     def plot(self):
 
-        """ Root plotting """
+        """ ROOT plotting. """
 
         # Masses
         name = 'm_gluino'
@@ -81,11 +76,14 @@ class MassScanPlots(object):
         # Mass differences
         name = 'm_gluino-m_chargino1'
         title = 'm_{#tilde{g}} - m_{#chi_{1}^{#pm}} [GeV]'
-        self._make_plot(name, title, self.m_diff_g_c1)
+        self._make_plot(name, title, [a-b for a, b in
+                                      zip(self.m_gluino, self.m_chargino1)])
 
         name = 'm_chargino1-m_neutralino1'
         title = 'm_{#chi_{1}^{#pm}} - m_{#chi_{1}^{0}} [GeV]'
-        self._make_plot(name, title, self.m_diff_c1_n1)
+        self._make_plot(name, title, [a-b for a, b in
+                                      zip(self.m_chargino1,
+                                          self.m_neutralino1)])
 
         # Cross-sections
         name = 'xs13_incl'
@@ -111,7 +109,8 @@ class MassScanPlots(object):
 
         name = 'xs13_xs8'
         title = '#sigma_{strong} (13 TeV)/#sigma_{inclusive} (8 TeV)'
-        self._make_plot(name, title, self.xs13_xs8)
+        self._make_plot(name, title, [a/b for a, b in
+                                      zip(self.xs13_incl, self.xs8_incl)])
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):

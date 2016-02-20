@@ -167,6 +167,7 @@ class MassScanPlots(object):
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    coordinate_z, scale)
         self._toolbox.plot_star(self._star)
+        self._toolbox.plot_diagonal()
         self._toolbox.save()
 
     def set_axis(self, axis_x, axis_y, axis_x_add, axis_y_add):

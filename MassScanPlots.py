@@ -32,6 +32,7 @@ class MassScanPlots(object):
     xs13_gluinos = []
     xs8_incl = []
     xs8_strong = []
+    xs13_xs8 = []
 
     # Masses
     m_gluino = []
@@ -107,6 +108,10 @@ class MassScanPlots(object):
         name = 'xs8_strong'
         title = '#sigma_{strong}/#sigma_{inclusive} (8 TeV)'
         self._make_plot(name, title, self.xs8_strong, True)
+
+        name = 'xs13_xs8'
+        title = '#sigma_{strong} (13 TeV)/#sigma_{inclusive} (8 TeV)'
+        self._make_plot(name, title, self.xs13_xs8)
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):

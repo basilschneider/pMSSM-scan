@@ -19,6 +19,12 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     """ Make a mass scan for different SUSY particle masses with SUSYHIT and
     calculates branching ratios to various final states. """
 
+    # Flags what to calculate
+    _calc_masses = True
+    _calc_xs = False
+    _calc_br = False
+    _calc_mu = False
+
     # Define ID's of particles
     _id_gluino = 1000021
     _id_neutralino1 = 1000022
@@ -782,13 +788,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if not self._check_susyhit_output():
                     self._skip_point(prmtr_x, prmtr_y)
 
-                if not self._error:
+                if not self._error and self._calc_masses:
                     # Get particle masses
                     if not self._get_masses():
                         self._skip_point(prmtr_x, prmtr_y)
 
                 # Calculate cross-section with SModelS
-                if not self._error:
+                if not self._error and (self._calc_xs or self._calc_mu):
                     # 8 TeV cross-sections to check if the model is already
                     # excluded and 13 TeV cross-sections for cross-sections
                     # itself
@@ -796,10 +802,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         self._run_external('SModelS', 'runTools xseccomputer '
                                            '-p -s {} -f {}/susyhit_slha.out'
                                            .format(com, self._dir_susyhit))
-                    self._get_xs_all()
+                    if self._calc_xs:
+                        self._get_xs_all()
 
                 # Check if models are already excluded
-                if not self._error:
+                if not self._error and self._calc_mu:
                     self._run_external('SModelS', 'runSModelS '
                                        '-o smodels_summary.txt '
                                        '-f {}/susyhit_slha.out'
@@ -812,7 +819,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                     LGR.debug('Excluded signal strength: %s', self._mu)
 
-                if not self._error:
+                if not self._error and self._calc_br:
                     # Calculate branching ratios, if threshold is below 1
                     if self._threshold >= 1.:
                         br_leptons, br_jets, br_photons = [0], [0], [0]
@@ -838,34 +845,36 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     br_jets = []
                     br_photons = []
 
-                # Plots for xs's
-                plots.xs_incl.append(self._xs_incl)
-                try:
-                    plots.xs_gluinos.append(self._xs_gluinos/self._xs_incl)
-                    plots.xs_strong.append(self._xs_strong/self._xs_incl)
-                except ZeroDivisionError:
-                    plots.xs_gluinos.append(0.)
-                    plots.xs_strong.append(0.)
-
-                # Plots for masses
-                plots.m_gluino.append(self._m_gluino)
-                plots.m_neutralino1.append(self._m_neutralino1)
-                plots.m_neutralino2.append(self._m_neutralino2)
-                plots.m_chargino1.append(self._m_chargino1)
-                plots.m_smhiggs.append(self._m_smhiggs)
-
-                # Plots for mass differences
-                plots.m_diff_g_c1.append(self._m_gluino - self._m_chargino1)
-                plots.m_diff_c1_n1.append(self._m_chargino1 -
+                # Plots for masses and mass differences
+                if self._calc_masses:
+                    plots.m_gluino.append(self._m_gluino)
+                    plots.m_neutralino1.append(self._m_neutralino1)
+                    plots.m_neutralino2.append(self._m_neutralino2)
+                    plots.m_chargino1.append(self._m_chargino1)
+                    plots.m_smhiggs.append(self._m_smhiggs)
+                    plots.m_diff_g_c1.append(self._m_gluino - self._m_chargino1)
+                    plots.m_diff_c1_n1.append(self._m_chargino1 -
                                           self._m_neutralino1)
 
-                # Plots for signal strength
-                plots.mu.append(self._mu)
+                # Plots for xs's
+                if self._calc_xs:
+                    plots.xs_incl.append(self._xs_incl)
+                    try:
+                        plots.xs_gluinos.append(self._xs_gluinos/self._xs_incl)
+                        plots.xs_strong.append(self._xs_strong/self._xs_incl)
+                    except ZeroDivisionError:
+                        plots.xs_gluinos.append(0.)
+                        plots.xs_strong.append(0.)
 
-                # Fill lists per number of object
-                self._fill_lists(br_leptons, plots.br_leptons)
-                self._fill_lists(br_jets, plots.br_jets)
-                self._fill_lists(br_photons, plots.br_photons)
+                # Fill lists per number of object for br plots
+                if self._calc_br:
+                    self._fill_lists(br_leptons, plots.br_leptons)
+                    self._fill_lists(br_jets, plots.br_jets)
+                    self._fill_lists(br_photons, plots.br_photons)
+
+                # Plots for signal strength
+                if self._calc_mu:
+                    plots.mu.append(self._mu)
 
         # Restore backup SUSYHIT input file
         system('mv {}/{}.in{{.orig,}}'.format(self._dir_susyhit,

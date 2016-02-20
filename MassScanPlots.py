@@ -54,43 +54,6 @@ class MassScanPlots(object):
 
         """ Root plotting """
 
-        # Branching ratios
-        for no_leptons in range(len(self.br_leptons)):
-            name = 'br_{}_leptons'.format(no_leptons)
-            title = 'branching ratio into {} leptons'.format(no_leptons)
-            self._make_plot(name, title, self.br_leptons[no_leptons], True)
-
-        for no_jets in range(len(self.br_jets)):
-            name = 'br_{}_jets'.format(no_jets)
-            title = 'branching ratio into {} jets'.format(no_jets)
-            self._make_plot(name, title, self.br_jets[no_jets], True)
-
-        for no_photons in range(len(self.br_photons)):
-            name = 'br_{}_photons'.format(no_photons)
-            title = 'branching ratio into {} photons'.format(no_photons)
-            self._make_plot(name, title, self.br_photons[no_photons], True)
-
-        # Cross-sections
-        name = 'xs_incl'
-        title = '#sigma_{inclusive} [fb]'
-        self._make_plot(name, title, self.xs_incl)
-
-        name = 'xs_strong'
-        title = '#sigma_{strong}/#sigma_{inclusive}'
-        self._make_plot(name, title, self.xs_strong, True)
-
-        name = 'xs_gluino_gluino'
-        title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive}'
-        self._make_plot(name, title, self.xs_gluinos, True)
-
-        # Cross-sections times branching ratio
-        for no_leptons in range(len(self.br_leptons)):
-            name = 'xs_x_br_{}_leptons'.format(no_leptons)
-            title = '#sigma #times BR into {} leptons [fb]'.format(no_leptons)
-            self._make_plot(name, title,
-                            [a*b for a, b in
-                             zip(self.br_leptons[no_leptons], self.xs_incl)])
-
         # Masses
         name = 'm_gluino'
         title = 'm_{#tilde{g}} [GeV]'
@@ -121,6 +84,43 @@ class MassScanPlots(object):
         title = 'm_{#chi_{1}^{#pm}} - m_{#chi_{1}^{0}} [GeV]'
         self._make_plot(name, title, self.m_diff_c1_n1)
 
+        # Cross-sections
+        name = 'xs_incl'
+        title = '#sigma_{inclusive} [fb]'
+        self._make_plot(name, title, self.xs_incl)
+
+        name = 'xs_strong'
+        title = '#sigma_{strong}/#sigma_{inclusive}'
+        self._make_plot(name, title, self.xs_strong, True)
+
+        name = 'xs_gluino_gluino'
+        title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive}'
+        self._make_plot(name, title, self.xs_gluinos, True)
+
+        # Branching ratios
+        for no_leptons in range(len(self.br_leptons)):
+            name = 'br_{}_leptons'.format(no_leptons)
+            title = 'branching ratio into {} leptons'.format(no_leptons)
+            self._make_plot(name, title, self.br_leptons[no_leptons], True)
+
+        for no_jets in range(len(self.br_jets)):
+            name = 'br_{}_jets'.format(no_jets)
+            title = 'branching ratio into {} jets'.format(no_jets)
+            self._make_plot(name, title, self.br_jets[no_jets], True)
+
+        for no_photons in range(len(self.br_photons)):
+            name = 'br_{}_photons'.format(no_photons)
+            title = 'branching ratio into {} photons'.format(no_photons)
+            self._make_plot(name, title, self.br_photons[no_photons], True)
+
+        # Cross-sections times branching ratio
+        for no_leptons in range(len(self.br_leptons)):
+            name = 'xs_x_br_{}_leptons'.format(no_leptons)
+            title = '#sigma #times BR into {} leptons [fb]'.format(no_leptons)
+            self._make_plot(name, title,
+                            [a*b for a, b in
+                             zip(self.br_leptons[no_leptons], self.xs_incl)])
+
         # Signal strength
         name = 'mu'
         title = '#mu'
@@ -134,11 +134,16 @@ class MassScanPlots(object):
         system('cp suspect2_lha.template {}'.format(self._toolbox.directory))
 
         # Move SModelS output to output folder
-        system('mv smodels_summary_*.txt {}'.format(self._toolbox.directory))
+        system('mv smodels_summary_*.txt {} 2>/dev/null'
+               .format(self._toolbox.directory))
 
     def _make_plot(self, name, title, coordinate_z, percentage=False):
 
         """ Create specific plot. """
+
+        # If there's nothing to plot, don't plot it
+        if len(coordinate_z) == 0:
+            return
 
         # Set z range
         z_low = 0.

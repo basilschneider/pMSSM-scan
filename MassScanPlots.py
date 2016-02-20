@@ -88,23 +88,24 @@ class MassScanPlots(object):
 
         # Cross-sections
         name = 'xs13_incl'
-        title = '#sigma_{inclusive} [fb]'
+        title = '#sigma_{inclusive} (13 TeV) [fb]'
         self._make_plot(name, title, self.xs13_incl)
 
         name = 'xs13_strong'
-        title = '#sigma_{strong}/#sigma_{inclusive}'
+        title = '#sigma_{strong}/#sigma_{inclusive} (13 TeV)'
         self._make_plot(name, title, self.xs13_strong, True)
 
         name = 'xs13_gluino_gluino'
-        title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/#sigma_{inclusive}'
+        title = '#sigma (pp #rightarrow #tilde{g}#tilde{g})/' \
+                '#sigma_{inclusive} (13 TeV)'
         self._make_plot(name, title, self.xs13_gluinos, True)
 
         name = 'xs8_incl'
-        title = '#sigma_{inclusive} [fb]'
+        title = '#sigma_{inclusive} (8 TeV) [fb]'
         self._make_plot(name, title, self.xs8_incl)
 
         name = 'xs8_strong'
-        title = '#sigma_{strong}/#sigma_{inclusive}'
+        title = '#sigma_{strong}/#sigma_{inclusive} (8 TeV)'
         self._make_plot(name, title, self.xs8_strong, True)
 
         # Branching ratios

@@ -6,6 +6,7 @@ from os import system
 from ROOT import TFile  # pylint: disable=import-error
 from Logger import LGR
 from ToolboxTH2 import ToolboxTH2
+from ToolboxHelper import safe_divide
 
 
 class MassScanPlots(object):
@@ -113,7 +114,7 @@ class MassScanPlots(object):
 
         name = 'xs13_xs8'
         title = '#sigma_{strong} (13 TeV)/#sigma_{inclusive} (8 TeV)'
-        self._make_plot(name, title, [a/b for a, b in
+        self._make_plot(name, title, [safe_divide(a, b) for a, b in
                                       zip(self.xs13_incl, self.xs8_incl)])
 
         # Branching ratios

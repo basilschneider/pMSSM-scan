@@ -202,13 +202,17 @@ class MassScanPlots(object):
 
         # Add all additional labels from the dictionaries
         for key, value in axis_x_add.iteritems():
-            if value > 0:
+            if value == 0:
+                axis_x += ' = {}'.format(self._get_axis_label(key))
+            elif value > 0:
                 axis_x += ' = {} - {}'.format(self._get_axis_label(key), value)
             else:
                 axis_x += ' = {} + {}'.format(self._get_axis_label(key),
                                               abs(value))
         for key, value in axis_y_add.iteritems():
-            if value > 0:
+            if value == 0:
+                axis_y += ' = {}'.format(self._get_axis_label(key))
+            elif value > 0:
                 axis_y += ' = {} - {}'.format(self._get_axis_label(key), value)
             else:
                 axis_y += ' = {} + {}'.format(self._get_axis_label(key),

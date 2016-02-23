@@ -253,10 +253,10 @@ class MassScanPlots(object):
             return 'M_{3}'
         if axis == 23:
             return '#mu'
-        if axis == 414243:
-            return 'm_{q_{L}}'
-        if axis == 444546474849:
-            return 'm_{q_{R}}'
+        if axis == 4142:
+            return 'm_{q_{12L}}'
+        if axis == 44454748:
+            return 'm_{q_{12R}}'
         return str(axis)
 
     def set_rootfile(self, s_rootfile_name):

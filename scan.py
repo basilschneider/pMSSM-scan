@@ -37,35 +37,35 @@ if __name__ == "__main__":
                 MY_SCAN.set_parameter_add_y(1, shift)
             elif grid == 3:
                 MY_SCAN.set_parameter(3, 1)
-                MY_SCAN.set_parameter_add_x(414243, 0)
-                MY_SCAN.set_parameter_add_x(444546474849, 0)
+                MY_SCAN.set_parameter_add_x(4142, 0)
+                MY_SCAN.set_parameter_add_x(44454748, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
             elif grid == 4:
                 MY_SCAN.set_parameter(3, 23)
-                MY_SCAN.set_parameter_add_x(414243, 0)
-                MY_SCAN.set_parameter_add_x(444546474849, 0)
+                MY_SCAN.set_parameter_add_x(4142, 0)
+                MY_SCAN.set_parameter_add_x(44454748, 0)
                 MY_SCAN.set_parameter_add_y(1, shift)
             elif grid == 5:
                 MY_SCAN.set_parameter(3, 1)
-                MY_SCAN.set_parameter_add_x(414243, 0)
+                MY_SCAN.set_parameter_add_x(4142, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
             elif grid == 6:
                 MY_SCAN.set_parameter(3, 23)
-                MY_SCAN.set_parameter_add_x(414243, 0)
+                MY_SCAN.set_parameter_add_x(4142, 0)
                 MY_SCAN.set_parameter_add_y(1, shift)
             elif grid == 7:
                 MY_SCAN.set_parameter(3, 1)
-                MY_SCAN.set_parameter_add_x(444546474849, 0)
+                MY_SCAN.set_parameter_add_x(44454748, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
             elif grid == 8:
                 MY_SCAN.set_parameter(3, 23)
-                MY_SCAN.set_parameter_add_x(444546474849, 0)
+                MY_SCAN.set_parameter_add_x(44454748, 0)
                 MY_SCAN.set_parameter_add_y(1, shift)
             elif grid == 9:
-                MY_SCAN.set_parameter(414243, 1)
+                MY_SCAN.set_parameter(4142, 1)
                 MY_SCAN.set_parameter_add_y(2, shift)
             elif grid == 10:
-                MY_SCAN.set_parameter(414243, 23)
+                MY_SCAN.set_parameter(4142, 23)
                 MY_SCAN.set_parameter_add_y(1, shift)
             elif grid == 11:
                 MY_SCAN.set_parameter(44454748, 1)

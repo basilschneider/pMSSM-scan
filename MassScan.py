@@ -138,41 +138,41 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         """ Set all parameters in the SLHA file. """
 
         # Some combinations are concatenated for axis labeling
-        if self._prmtr_id_x == 414243:
-            for newprmtr in range(41, 44):
+        if self._prmtr_id_x == 4142:
+            for newprmtr in range(41, 43):
                 self._set_parameter_slha(newprmtr, prmtr_x)
-        elif self._prmtr_id_x == 444546474849:
-            for newprmtr in range(44, 50):
+        elif self._prmtr_id_x == 44454748:
+            for newprmtr in [44, 45, 47, 48]:
                 self._set_parameter_slha(newprmtr, prmtr_x)
         else:
             self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
 
-        if self._prmtr_id_y == 414243:
-            for newprmtr in range(41, 44):
+        if self._prmtr_id_y == 4142:
+            for newprmtr in range(41, 43):
                 self._set_parameter_slha(newprmtr, prmtr_y)
-        elif self._prmtr_id_y == 444546474849:
-            for newprmtr in range(44, 50):
+        elif self._prmtr_id_y == 44454748:
+            for newprmtr in [44, 45, 47, 48]:
                 self._set_parameter_slha(newprmtr, prmtr_y)
         else:
             self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
 
         for key, value in self._l_prmtr_x_add.iteritems():
-            if key == 414243:
-                for newkey in range(41, 44):
+            if key == 4142:
+                for newkey in range(41, 43):
                     self._set_parameter_slha(newkey, prmtr_x+value)
-            elif key == 444546474849:
-                for newkey in range(44, 50):
+            elif key == 44454748:
+                for newkey in [44, 45, 47, 48]:
                     self._set_parameter_slha(newkey, prmtr_x+value)
             else:
                 self._set_parameter_slha(key, prmtr_x+value)
 
         for key, value in self._l_prmtr_y_add.iteritems():
             # Some combinations are concatenated for axis labeling
-            if key == 414243:
-                for newkey in range(41, 44):
+            if key == 4142:
+                for newkey in range(41, 43):
                     self._set_parameter_slha(newkey, prmtr_y+value)
-            elif key == 444546474849:
-                for newkey in range(44, 50):
+            elif key == 44454748:
+                for newkey in [44, 45, 47, 48]:
                     self._set_parameter_slha(newkey, prmtr_y+value)
             else:
                 self._set_parameter_slha(key, prmtr_y+value)

@@ -263,6 +263,11 @@ class MassScanPlots(object):
 
         """ Set rootfile name in toolbox. """
 
+        # If rootfile is located in a subdirectory, create directory first
+        if '/' in s_rootfile_name:
+            system('mkdir -p {}'
+                   .format('/'.join(s_rootfile_name.split('/')[:-1])))
+
         self._toolbox.rootfile = TFile(s_rootfile_name, 'UPDATE')
 
     def get_directory(self):

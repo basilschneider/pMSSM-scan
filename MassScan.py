@@ -19,6 +19,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     """ Make a mass scan for different SUSY particle masses with SUSYHIT and
     calculates branching ratios to various final states. """
 
+    # Class-level variables
+
     # Flags what to calculate
     _calc_masses = True
     _calc_xs = True
@@ -58,16 +60,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # Simply changing this value here won't work right now
     _susyhit_option = 1
 
-    # Define parameter x
-    l_prmtr_x = [200., 350.]
-    _prmtr_id_x = 3
-    _l_prmtr_x_add = {}
-
-    # Define parameter y
-    l_prmtr_y = [300.]
-    _prmtr_id_y = 23
-    _l_prmtr_y_add = {}
-
     # Track errors, we still want to fill all lists, otherwise the
     # binning will be screwed up
     _error = False
@@ -92,8 +84,22 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                  2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
                  1000021]
 
-    # Branching ratios below this threshold are skipped (to save time)
-    _threshold = 0.05
+    def __init__(self):
+
+        """ Initialization of class and instance variables. """
+
+        # Define parameter x
+        self.l_prmtr_x = [200., 350.]
+        self._prmtr_id_x = 3
+        self._l_prmtr_x_add = {}
+
+        # Define parameter y
+        self.l_prmtr_y = [300.]
+        self._prmtr_id_y = 23
+        self._l_prmtr_y_add = {}
+
+        # Branching ratios below this threshold are skipped (to save time)
+        self._threshold = 0.05
 
     def set_parameter(self, prmtr_id_x, prmtr_id_y):
 

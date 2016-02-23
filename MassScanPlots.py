@@ -12,41 +12,45 @@ class MassScanPlots(object):
 
     """ Plotting class for mass scan. """
 
-    # X/Y coordinates for plotting
-    coordinate_x = []
-    coordinate_y = []
+    def __init__(self):
 
-    # Axes labels
-    _axis_x = 'M_{3} [GeV]'
-    _axis_y = '#mu [GeV]'
+        """ Initialize object variables. """
 
-    # Branching ratios
-    br_leptons = [[], [], [], [], []]
-    br_jets = [[], [], [], [], [], [], [], [], [], [], [], [], []]
-    br_photons = [[], [], [], []]
-    br_met = [[], [], [], [], []]
+        # X/Y coordinates for plotting
+        self.coordinate_x = []
+        self.coordinate_y = []
 
-    # xs's
-    xs13_incl = []
-    xs13_strong = []
-    xs13_gluinos = []
-    xs8_incl = []
-    xs8_strong = []
+        # Axes labels
+        self._axis_x = 'M_{3} [GeV]'
+        self._axis_y = '#mu [GeV]'
 
-    # Masses
-    m_gluino = []
-    m_neutralino1 = []
-    m_neutralino2 = []
-    m_chargino1 = []
-    m_smhiggs = []
+        # Branching ratios
+        self.br_leptons = [[], [], [], [], []]
+        self.br_jets = [[], [], [], [], [], [], [], [], [], [], [], [], []]
+        self.br_photons = [[], [], [], []]
+        self.br_met = [[], [], [], [], []]
 
-    # Signal strength
-    mu = []  # pylint: disable=invalid-name
+        # xs's
+        self.xs13_incl = []
+        self.xs13_strong = []
+        self.xs13_gluinos = []
+        self.xs8_incl = []
+        self.xs8_strong = []
 
-    # Star to be plotted on all TH2's
-    _star = [0, 0]
+        # Masses
+        self.m_gluino = []
+        self.m_neutralino1 = []
+        self.m_neutralino2 = []
+        self.m_chargino1 = []
+        self.m_smhiggs = []
 
-    _toolbox = ToolboxTH2()
+        # Signal strength
+        self.mu = []  # pylint: disable=invalid-name
+
+        # Star to be plotted on all TH2's
+        self._star = [0, 0]
+
+        self._toolbox = ToolboxTH2()
 
     def plot(self):
 

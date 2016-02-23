@@ -842,9 +842,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         self._get_xs_all()
 
                 # Move SUSYHIT output
-                if not self._error:
-                    system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
-                           .format(self._dir_susyhit, prmtr_x, prmtr_y))
+                system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
+                       .format(self._dir_susyhit, prmtr_x, prmtr_y))
 
                 # Check if models are already excluded
                 if not self._error and self._calc_mu:

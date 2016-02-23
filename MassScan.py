@@ -127,6 +127,51 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         else:
             raise ValueError('susyhit_option is neither 1 nor 2.')
 
+    def _set_parameter_all(self, prmtr_x, prmtr_y):
+
+        """ Set all parameters in the SLHA file. """
+
+        # Some combinations are concatenated for axis labeling
+        if self._prmtr_id_x == 414243:
+            for newprmtr in range(41, 44):
+                self._set_parameter_slha(newprmtr, prmtr_x)
+        elif self._prmtr_id_x == 444546474849:
+            for newprmtr in range(44, 50):
+                self._set_parameter_slha(newprmtr, prmtr_x)
+        else:
+            self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
+
+        if self._prmtr_id_y == 414243:
+            for newprmtr in range(41, 44):
+                self._set_parameter_slha(newprmtr, prmtr_y)
+        elif self._prmtr_id_y == 444546474849:
+            for newprmtr in range(44, 50):
+                self._set_parameter_slha(newprmtr, prmtr_y)
+        else:
+            self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
+
+        for key, value in self._l_prmtr_x_add.iteritems():
+            if key == 414243:
+                for newkey in range(41, 44):
+                    self._set_parameter_slha(newkey, prmtr_x+value)
+            elif key == 444546474849:
+                for newkey in range(44, 50):
+                    self._set_parameter_slha(newkey, prmtr_x+value)
+            else:
+                self._set_parameter_slha(key, prmtr_x+value)
+
+        for key, value in self._l_prmtr_y_add.iteritems():
+            # Some combinations are concatenated for axis labeling
+            if key == 414243:
+                for newkey in range(41, 44):
+                    self._set_parameter_slha(newkey, prmtr_y+value)
+            elif key == 444546474849:
+                for newkey in range(44, 50):
+                    self._set_parameter_slha(newkey, prmtr_y+value)
+            else:
+                self._set_parameter_slha(key, prmtr_y+value)
+
+
     def _set_parameter_slha(self, idx, parameter):
 
         """ Set parameter in SUSYHIT input file. """
@@ -755,42 +800,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 LGR.info('Processing mass combination %3d of %3d: (%4d/%4d).',
                          counter, total, prmtr_x, prmtr_y)
 
-                # # Calculate chargino and neutralino masses
-                # m_chargino1 = m_gluino - m_chargino_diff
-                # m_neutralino2 = m_chargino1
-                # m_neutralino1 = m_chargino1 - m_neutralino_diff
-
-                # LGR.debug('m_g = %4d  -  m_c1 = %4d  -  m_n1 = %4d',
-                #           m_gluino, m_chargino1, m_neutralino1)
                 LGR.debug('prmtr_x = %4d  -  mu = %4d', prmtr_x, prmtr_y)
 
-                # # Set masses in SUSYHIT input file
-                # _set_masses(id_gluino, m_gluino)
-                # _set_masses(id_chargino1, m_chargino1)
-                # _set_masses(id_neutralino2, m_neutralino2)
-                # _set_masses(id_neutralino1, m_neutralino1)
-                self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
-                self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
-                for key, value in self._l_prmtr_x_add.iteritems():
-                    # Some combinations are concatenated for axis labeling
-                    if key == 414243:
-                        for newkey in range(41, 44):
-                            self._set_parameter_slha(newkey, prmtr_x+value)
-                    elif key == 444546474849:
-                        for newkey in range(44, 50):
-                            self._set_parameter_slha(newkey, prmtr_x+value)
-                    else:
-                        self._set_parameter_slha(key, prmtr_x+value)
-                for key, value in self._l_prmtr_y_add.iteritems():
-                    # Some combinations are concatenated for axis labeling
-                    if key == 414243:
-                        for newkey in range(41, 44):
-                            self._set_parameter_slha(newkey, prmtr_y+value)
-                    elif key == 444546474849:
-                        for newkey in range(44, 50):
-                            self._set_parameter_slha(newkey, prmtr_y+value)
-                    else:
-                        self._set_parameter_slha(key, prmtr_y+value)
+                self._set_parameter_all(prmtr_x, prmtr_y)
 
                 # Set the plot axis labels
                 plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,

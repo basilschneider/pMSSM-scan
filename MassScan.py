@@ -33,12 +33,16 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _id_neutralino2 = 1000023
     _id_chargino1 = 1000024
     _id_smhiggs = 25
+    _id_stop1 = 1000006
+    _id_stop2 = 2000006
 
     # Masses of particles
     _m_gluino = -1.
     _m_neutralino1 = -1.
     _m_neutralino2 = -1.
     _m_chargino1 = -1.
+    _m_stop1 = -1.
+    _m_stop2 = -1.
     _m_smhiggs = -1.
 
     # Cross-sections
@@ -723,6 +727,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_neutralino1 = self._get_m(self._id_neutralino1)
         self._m_neutralino2 = self._get_m(self._id_neutralino2)
         self._m_chargino1 = self._get_m(self._id_chargino1)
+        self._m_stop1 = self._get_m(self._id_stop1)
+        self._m_stop2 = self._get_m(self._id_stop2)
         self._m_smhiggs = self._get_m(self._id_smhiggs)
 
         # Helper lists for following checks
@@ -887,6 +893,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._m_neutralino1 = 0.
                     self._m_neutralino2 = 0.
                     self._m_chargino1 = 0.
+                    self._m_stop1 = 0.
+                    self._m_stop2 = 0.
                     self._m_smhiggs = 0.
                     self._mu = 0.
                     br_leptons = []
@@ -899,6 +907,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     plots.m_neutralino1.append(self._m_neutralino1)
                     plots.m_neutralino2.append(self._m_neutralino2)
                     plots.m_chargino1.append(self._m_chargino1)
+                    plots.m_stop1.append(self._m_stop1)
+                    plots.m_stop2.append(self._m_stop2)
                     plots.m_smhiggs.append(self._m_smhiggs)
 
                 # Plots for xs's

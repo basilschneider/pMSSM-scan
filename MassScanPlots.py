@@ -43,6 +43,8 @@ class MassScanPlots(object):
         self.m_neutralino1 = []
         self.m_neutralino2 = []
         self.m_chargino1 = []
+        self.m_stop1 = []
+        self.m_stop2 = []
         self.m_smhiggs = []
 
         # Signal strength
@@ -73,6 +75,14 @@ class MassScanPlots(object):
         name = 'm_chargino1'
         title = 'm_{#chi_{1}^{#pm}} [GeV]'
         self._make_plot(name, title, self.m_chargino1)
+
+        name = 'm_stop1'
+        title = 'm_{#tilde{t_{1}}} [GeV]'
+        self._make_plot(name, title, self.m_stop1)
+
+        name = 'm_stop2'
+        title = 'm_{#tilde{t_{2}}} [GeV]'
+        self._make_plot(name, title, self.m_stop2)
 
         name = 'm_smhiggs'
         title = 'm_{h^{0}} [GeV]'

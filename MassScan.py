@@ -720,8 +720,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     def _get_masses(self):
 
-        """ Calculates masses of SUSY particles and performs some sanity
-        checks. """
+        """ Calculates masses of SUSY particles. """
 
         self._m_gluino = self._get_m(self._id_gluino)
         self._m_neutralino1 = self._get_m(self._id_neutralino1)
@@ -730,25 +729,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop1 = self._get_m(self._id_stop1)
         self._m_stop2 = self._get_m(self._id_stop2)
         self._m_smhiggs = self._get_m(self._id_smhiggs)
-
-        # Helper lists for following checks
-        l_masses = [self._m_gluino, self._m_neutralino1,
-                    self._m_neutralino2, self._m_chargino1]
-        l_names = ['Gluino', 'Neutralino 1', 'Neutralino 2', 'Chargino 1']
-
-        # Check that N1 is LSP
-        if min(l_masses) != self._m_neutralino1:
-            LGR.warning('LSP is %s.', l_names[l_masses.index(min(l_masses))])
-            return False
-
-        # Check that no mass is negative (is that needed?)
-        # if min(l_masses) < 0.:
-        #     for val in filter(lambda l: l<0., l_masses):
-        #         LGR.warning('%s has negative mass.',
-        #                     l_names[l_masses.index(val)])
-        #     return False
-
-        return True
 
     def _get_m(self, id_particle):
 
@@ -762,6 +742,28 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     LGR.debug('Found mass %s for particle %s from line %s.',
                               mass, id_particle, line.rstrip())
                     return abs(mass)
+
+    def _check_lsp(self):
+
+        """ Check that the LSP is a neutralino1. """
+
+        min_mass = '1e10'
+
+        with open('{}/susyhit_slha.out'
+                  .format(self._dir_susyhit), 'r') as f_susyhit:
+            for line in f_susyhit:
+                # Check for SUSY masses
+                if search('^ *[12]000', line):
+                    mass = abs(float((line.split())[1]))
+                    id_particle = int((line.split())[0])
+                    if mass < min_mass:
+                        min_mass = mass
+                        min_id = id_particle
+        if min_id == 1000022:
+            return True
+        else:
+            LGR.warning('LSP is {}'.format(min_id))
+            return False
 
     def set_threshold(self, threshold):
 
@@ -855,10 +857,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if not self._check_susyhit_output():
                     self._skip_point(prmtr_x, prmtr_y)
 
+                # Check for LSP
+                if not self._check_lsp():
+                    self._skip_point(prmtr_x, prmtr_y)
+
                 if not self._error and self._calc_masses:
                     # Get particle masses
-                    if not self._get_masses():
-                        self._skip_point(prmtr_x, prmtr_y)
+                    self._get_masses()
 
                 # Calculate cross-section with SModelS
                 if not self._error and (self._calc_xs or self._calc_mu):

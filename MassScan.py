@@ -71,19 +71,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _d_sm = {}
     _d_susy = {}
 
-    # List of particles
-    _l_jets = [1, 2, 3, 4, 5, 21, 111, 211]
-    _l_leptons = [11, 13]
-    _l_met = [12, 14, 16, 1000022]
-    _l_photon = [22]
-    # Unknown particles are ignored
-    # (999 is a dummy particle, if decay modes are not known)
-    _l_unknown = [999]
-    _l_final_states = _l_jets + _l_leptons + _l_met + _l_photon + _l_unknown
-    _l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
-                 2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
-                 1000021]
-
     def __init__(self):
 
         """ Initialization of class and instance variables. """
@@ -100,6 +87,23 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         # Branching ratios below this threshold are skipped (to save time)
         self._threshold = 0.05
+
+        # List of particles
+        self._l_jets = [1, 2, 3, 4, 5, 21, 111, 211]
+        self._l_leptons = [11, 13]
+        self._l_met = [12, 14, 16, 1000022]
+        self._l_photon = [22]
+        # Unknown particles are ignored
+        # (999 is a dummy particle, if decay modes are not known)
+        self._l_unknown = [999]
+        self._l_final_states = self._l_jets + \
+                               self._l_leptons + \
+                               self._l_met + \
+                               self._l_photon + \
+                               self._l_unknown
+        self._l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
+                     2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
+                     1000021]
 
     def set_parameter(self, prmtr_id_x, prmtr_id_y):
 

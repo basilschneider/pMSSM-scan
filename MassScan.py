@@ -770,6 +770,27 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         self._threshold = threshold
 
+    def _reset(self):
+
+        """ Reset all plotted variables. """
+
+        self._xs13_incl = 0.
+        self._xs13_strong = 0.
+        self._xs13_gluinos = 0.
+        self._xs8_incl = 0.
+        self._xs8_strong = 0.
+        self._m_gluino = 0.
+        self._m_neutralino1 = 0.
+        self._m_neutralino2 = 0.
+        self._m_chargino1 = 0.
+        self._m_stop1 = 0.
+        self._m_stop2 = 0.
+        self._m_smhiggs = 0.
+        self._mu = 0.
+        br_leptons = []
+        br_jets = []
+        br_photons = []
+
     def do_scan(self):  # pylint: disable=too-many-branches,too-many-statements
 
         """ Loops over the different mass combinations and calls appropriate
@@ -884,22 +905,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # If there was an error, empty all values
                 if self._error:
-                    self._xs13_incl = 0.
-                    self._xs13_strong = 0.
-                    self._xs13_gluinos = 0.
-                    self._xs8_incl = 0.
-                    self._xs8_strong = 0.
-                    self._m_gluino = 0.
-                    self._m_neutralino1 = 0.
-                    self._m_neutralino2 = 0.
-                    self._m_chargino1 = 0.
-                    self._m_stop1 = 0.
-                    self._m_stop2 = 0.
-                    self._m_smhiggs = 0.
-                    self._mu = 0.
-                    br_leptons = []
-                    br_jets = []
-                    br_photons = []
+                    self._reset()
 
                 # Plots for masses and mass differences
                 if self._calc_masses:

@@ -3,7 +3,7 @@
 """ Plotting class for mass scan. """
 
 from os import system
-from ROOT import TFile  # pylint: disable=import-error
+from ROOT import TFile, gStyle  # pylint: disable=import-error
 from Logger import LGR
 from ToolboxTH2 import ToolboxTH2
 from ToolboxHelper import safe_divide
@@ -37,6 +37,10 @@ class MassScanPlots(object):
         self.xs13_gluinos = []
         self.xs8_incl = []
         self.xs8_strong = []
+
+        # Dominant production particle id
+        self.dom_id1 = []
+        self.dom_id2 = []
 
         # Masses
         self.m_gluino = []
@@ -143,6 +147,19 @@ class MassScanPlots(object):
         title = '#sigma_{strong} (13 TeV)/#sigma_{inclusive} (8 TeV)'
         self._make_plot(name, title, [safe_divide(a, b) for a, b in
                                       zip(self.xs13_incl, self.xs8_incl)])
+
+        # Dominant cross section particles
+        gStyle.SetPaintTextFormat('7.0f')
+
+        name = 'dom1'
+        title = 'Dominant cross section particle 1'
+        self._make_plot(name, title, self.dom_id1)
+
+        name = 'dom2'
+        title = 'Dominant cross section particle 2'
+        self._make_plot(name, title, self.dom_id2)
+
+        gStyle.SetPaintTextFormat('g')
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):

@@ -54,6 +54,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _xs8_incl = -1.
     _xs8_strong = -1.
 
+    # Dominant production cross section particles
+    _dom_id1 = -1
+    _dom_id2 = -1
+
     # Branching ratios into particles
     _br_leptons = []
     _br_jets = []
@@ -715,6 +719,41 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # If no cross-section was found, return 0
         return 0.
 
+    def _get_dominant_xs(self):
+
+        """ Get the dominant production process. """
+
+        regex_xs = r'XSECTION *1\.30E\+04 *2212 2212'
+
+        dom_xsec = 0.
+        dom_id1 = 0
+        dom_id2 = 0
+
+        with open('{}/susyhit_slha.out'
+                  .format(self._dir_susyhit), 'r') as f_susyhit:
+            found_xsec = False
+            for line in f_susyhit:
+                if found_xsec:
+                    # Check if cross section is largest
+                    if float(line.split()[6]) > dom_xsec:
+                        dom_xsec = float(line.split()[6])
+                        dom_id1 = dom_id1_temp
+                        dom_id2 = dom_id2_temp
+                    found_xsec = False
+                # If the xs matches, set bool, next line will have the xs
+                if search(regex_xs, line):
+                    dom_id1_temp = int(line.split()[5])
+                    dom_id2_temp = int(line.split()[6])
+                    found_xsec = True
+
+        LGR.debug('Dominant cross section particles: %s, %s', dom_id1, dom_id2)
+
+        # Currently, only pair production is supported
+        if dom_id1 != dom_id2:
+            LGR.warning('The dominant process is not a pair production, but '
+                        'associated production of %s and %s', dom_id1, dom_id2)
+        return dom_id1, dom_id2
+
     def _get_mu(self):  # pylint: disable=no-self-use
 
         """ Get excluded observed signal strength from SModelS output file. """
@@ -798,6 +837,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop2 = 0.
         self._m_smhiggs = 0.
         self._mu = 0.
+        self._dom_id1 = 0
+        self._dom_id2 = 0
         self._br_leptons = []
         self._br_jets = []
         self._br_photons = []
@@ -875,7 +916,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._get_masses()
 
                 # Calculate cross-section with SModelS
-                if not self._error and (self._calc_xs or self._calc_mu):
+                if not self._error and (self._calc_xs or
+                                        self._calc_mu or self._calc_br):
                     # 8 TeV cross-sections to check if the model is already
                     # excluded and 13 TeV cross-sections for cross-sections
                     # itself
@@ -885,6 +927,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                                            .format(com, self._dir_susyhit))
                     if self._calc_xs:
                         self._get_xs_all()
+
+                # Determine dominant production process
+                if not self._error and self._calc_br:
+                    self._dom_id1, self._dom_id2 = self._get_dominant_xs()
 
                 # Move SUSYHIT output
                 system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
@@ -906,6 +952,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                     LGR.debug('Excluded signal strength: %s', self._mu)
 
+                # Calculate branching ratios into final states
                 if not self._error and self._calc_br:
                     # Calculate branching ratios, if threshold is below 1
                     if self._threshold >= 1.:
@@ -948,6 +995,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # Fill lists per number of object for br plots
                 if self._calc_br:
+                    plots.dom_id1.append(self._dom_id1)
+                    plots.dom_id2.append(self._dom_id2)
                     self._fill_lists(self._br_leptons, plots.br_leptons)
                     self._fill_lists(self._br_jets, plots.br_jets)
                     self._fill_lists(self._br_photons, plots.br_photons)

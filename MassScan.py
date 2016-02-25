@@ -54,6 +54,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _xs8_incl = -1.
     _xs8_strong = -1.
 
+    # Branching ratios into particles
+    _br_leptons = []
+    _br_jets = []
+    _br_photons = []
+
     # Signal strength
     _mu = 0.
 
@@ -793,9 +798,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop2 = 0.
         self._m_smhiggs = 0.
         self._mu = 0.
-        br_leptons = []
-        br_jets = []
-        br_photons = []
+        self._br_leptons = []
+        self._br_jets = []
+        self._br_photons = []
 
     def do_scan(self):  # pylint: disable=too-many-branches,too-many-statements
 
@@ -904,12 +909,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if not self._error and self._calc_br:
                     # Calculate branching ratios, if threshold is below 1
                     if self._threshold >= 1.:
-                        br_leptons, br_jets, br_photons = [0], [0], [0]
+                        self._br_leptons, self._br_jets, self._br_photons = \
+                        [0], [0], [0]
                     else:
-                        br_leptons, br_jets, br_photons = \
-                        self._get_brs(self._id_gluino)
+                        self._br_leptons, self._br_jets, self._br_photons = \
+                        self._get_brs(self._dom_id1)
 
-                    if not br_leptons or not br_jets or not br_photons:
+                    if not self._br_leptons or not self._br_jets or not self._br_photons:
                         self._skip_point(prmtr_x, prmtr_y)
 
                 # If there was an error, empty all values
@@ -942,9 +948,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # Fill lists per number of object for br plots
                 if self._calc_br:
-                    self._fill_lists(br_leptons, plots.br_leptons)
-                    self._fill_lists(br_jets, plots.br_jets)
-                    self._fill_lists(br_photons, plots.br_photons)
+                    self._fill_lists(self._br_leptons, plots.br_leptons)
+                    self._fill_lists(self._br_jets, plots.br_jets)
+                    self._fill_lists(self._br_photons, plots.br_photons)
 
                 # Plots for signal strength
                 if self._calc_mu:

@@ -105,6 +105,18 @@ class MassScanPlots(object):
                                       zip(self.m_chargino1,
                                           self.m_neutralino1)])
 
+        name = 'm_neutralino3-m_neutralino1'
+        title = 'm_{#chi_{3}^{0}} - m_{#chi_{1}^{0}} [GeV]'
+        self._make_plot(name, title, [a-b for a, b in
+                                      zip(self.m_neutralino3,
+                                          self.m_neutralino1)])
+
+        name = 'm_neutralino3-m_chargino1'
+        title = 'm_{#chi_{3}^{0}} - m_{#chi_{1}^{#pm}} [GeV]'
+        self._make_plot(name, title, [a-b for a, b in
+                                      zip(self.m_neutralino3,
+                                          self.m_chargino1)])
+
         # Cross-sections
         name = 'xs13_incl'
         title = '#sigma_{inclusive} (13 TeV) [fb]'

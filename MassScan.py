@@ -31,6 +31,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _id_gluino = 1000021
     _id_neutralino1 = 1000022
     _id_neutralino2 = 1000023
+    _id_neutralino3 = 1000025
     _id_chargino1 = 1000024
     _id_smhiggs = 25
     _id_stop1 = 1000006
@@ -40,6 +41,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _m_gluino = -1.
     _m_neutralino1 = -1.
     _m_neutralino2 = -1.
+    _m_neutralino3 = -1.
     _m_chargino1 = -1.
     _m_stop1 = -1.
     _m_stop2 = -1.
@@ -725,6 +727,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_gluino = self._get_m(self._id_gluino)
         self._m_neutralino1 = self._get_m(self._id_neutralino1)
         self._m_neutralino2 = self._get_m(self._id_neutralino2)
+        self._m_neutralino3 = self._get_m(self._id_neutralino3)
         self._m_chargino1 = self._get_m(self._id_chargino1)
         self._m_stop1 = self._get_m(self._id_stop1)
         self._m_stop2 = self._get_m(self._id_stop2)
@@ -784,6 +787,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_gluino = 0.
         self._m_neutralino1 = 0.
         self._m_neutralino2 = 0.
+        self._m_neutralino3 = 0.
         self._m_chargino1 = 0.
         self._m_stop1 = 0.
         self._m_stop2 = 0.
@@ -917,6 +921,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     plots.m_gluino.append(self._m_gluino)
                     plots.m_neutralino1.append(self._m_neutralino1)
                     plots.m_neutralino2.append(self._m_neutralino2)
+                    plots.m_neutralino3.append(self._m_neutralino3)
                     plots.m_chargino1.append(self._m_chargino1)
                     plots.m_stop1.append(self._m_stop1)
                     plots.m_stop2.append(self._m_stop2)

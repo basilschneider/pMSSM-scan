@@ -42,6 +42,7 @@ class MassScanPlots(object):
         self.m_gluino = []
         self.m_neutralino1 = []
         self.m_neutralino2 = []
+        self.m_neutralino3 = []
         self.m_chargino1 = []
         self.m_stop1 = []
         self.m_stop2 = []
@@ -71,6 +72,10 @@ class MassScanPlots(object):
         name = 'm_neutralino2'
         title = 'm_{#chi_{2}^{0}} [GeV]'
         self._make_plot(name, title, self.m_neutralino2)
+
+        name = 'm_neutralino3'
+        title = 'm_{#chi_{3}^{0}} [GeV]'
+        self._make_plot(name, title, self.m_neutralino3)
 
         name = 'm_chargino1'
         title = 'm_{#chi_{1}^{#pm}} [GeV]'

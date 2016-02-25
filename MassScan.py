@@ -843,6 +843,59 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._br_jets = []
         self._br_photons = []
 
+    def _fill_plots(self, prmtr_x, prmtr_y):
+
+        """ Fill all lists in the MassScanPlots object. """
+
+        # Create MassScanPlots object for plotting
+        plots = MassScanPlots()
+
+        # Set the plot axis labels
+        plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
+                       self._l_prmtr_x_add, self._l_prmtr_y_add)
+
+        # Fill the coordinates
+        plots.coordinate_x.append(prmtr_x)
+        plots.coordinate_y.append(prmtr_y)
+
+        # Plots for masses and mass differences
+        if self._calc_masses:
+            plots.m_gluino.append(self._m_gluino)
+            plots.m_neutralino1.append(self._m_neutralino1)
+            plots.m_neutralino2.append(self._m_neutralino2)
+            plots.m_neutralino3.append(self._m_neutralino3)
+            plots.m_chargino1.append(self._m_chargino1)
+            plots.m_stop1.append(self._m_stop1)
+            plots.m_stop2.append(self._m_stop2)
+            plots.m_smhiggs.append(self._m_smhiggs)
+
+        # Plots for xs's
+        if self._calc_xs:
+            plots.xs13_incl.append(self._xs13_incl)
+            plots.xs8_incl.append(self._xs8_incl)
+            try:
+                plots.xs13_strong.append(self._xs13_strong/self._xs13_incl)
+                plots.xs8_strong.append(self._xs13_strong/self._xs13_incl)
+                plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
+            except ZeroDivisionError:
+                plots.xs13_strong.append(0.)
+                plots.xs8_strong.append(0.)
+                plots.xs13_gluinos.append(0.)
+
+        # Fill lists per number of object for br plots
+        if self._calc_br:
+            plots.dom_id1.append(self._dom_id1)
+            plots.dom_id2.append(self._dom_id2)
+            self._fill_lists(self._br_leptons, plots.br_leptons)
+            self._fill_lists(self._br_jets, plots.br_jets)
+            self._fill_lists(self._br_photons, plots.br_photons)
+
+        # Plots for signal strength
+        if self._calc_mu:
+            plots.mu.append(self._mu)
+
+        return plots
+
     def do_scan(self):  # pylint: disable=too-many-branches,too-many-statements
 
         """ Loops over the different mass combinations and calls appropriate
@@ -868,9 +921,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Define counter to count from 1 to total
         counter = 0
 
-        # Create MassScanPlots object for plotting
-        plots = MassScanPlots()
-
         # Loop over all mass combinations
         # for m_gluino in M_GLUINOS:
         #     for m_chargino_diff in M_CHARGINOS1:
@@ -892,14 +942,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 LGR.debug('prmtr_x = %4d  -  mu = %4d', prmtr_x, prmtr_y)
 
                 self._set_parameter_all(prmtr_x, prmtr_y)
-
-                # Set the plot axis labels
-                plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
-                               self._l_prmtr_x_add, self._l_prmtr_y_add)
-
-                # Fill the coordinates
-                plots.coordinate_x.append(prmtr_x)
-                plots.coordinate_y.append(prmtr_y)
 
                 # Run SUSYHIT
                 self._run_external('SUSYHIT', 'cd {} && ./run'
@@ -969,41 +1011,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if self._error:
                     self._reset()
 
-                # Plots for masses and mass differences
-                if self._calc_masses:
-                    plots.m_gluino.append(self._m_gluino)
-                    plots.m_neutralino1.append(self._m_neutralino1)
-                    plots.m_neutralino2.append(self._m_neutralino2)
-                    plots.m_neutralino3.append(self._m_neutralino3)
-                    plots.m_chargino1.append(self._m_chargino1)
-                    plots.m_stop1.append(self._m_stop1)
-                    plots.m_stop2.append(self._m_stop2)
-                    plots.m_smhiggs.append(self._m_smhiggs)
-
-                # Plots for xs's
-                if self._calc_xs:
-                    plots.xs13_incl.append(self._xs13_incl)
-                    plots.xs8_incl.append(self._xs8_incl)
-                    try:
-                        plots.xs13_strong.append(self._xs13_strong/self._xs13_incl)
-                        plots.xs8_strong.append(self._xs13_strong/self._xs13_incl)
-                        plots.xs13_gluinos.append(self._xs13_gluinos/self._xs13_incl)
-                    except ZeroDivisionError:
-                        plots.xs13_strong.append(0.)
-                        plots.xs8_strong.append(0.)
-                        plots.xs13_gluinos.append(0.)
-
-                # Fill lists per number of object for br plots
-                if self._calc_br:
-                    plots.dom_id1.append(self._dom_id1)
-                    plots.dom_id2.append(self._dom_id2)
-                    self._fill_lists(self._br_leptons, plots.br_leptons)
-                    self._fill_lists(self._br_jets, plots.br_jets)
-                    self._fill_lists(self._br_photons, plots.br_photons)
-
-                # Plots for signal strength
-                if self._calc_mu:
-                    plots.mu.append(self._mu)
+                plots = self._fill_plots(prmtr_x, prmtr_y)
 
         # Restore backup SUSYHIT input file
         system('mv {}/{}.in{{.orig,}}'.format(self._dir_susyhit,

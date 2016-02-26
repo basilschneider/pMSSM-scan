@@ -11,7 +11,8 @@ from functools import reduce
 from cmath import isnan
 from Logger import LGR
 from MassScanPlots import MassScanPlots
-from ToolboxHelper import get_lst_entry_default
+from DecayChannel import DecayChannel
+from ToolboxHelper import get_lst_entry_default, tree
 
 
 class MassScan(object):  # pylint: disable=too-many-instance-attributes
@@ -23,9 +24,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Flags what to calculate
     _calc_masses = True
-    _calc_xs = True
+    _calc_xs = False
     _calc_br = True
-    _calc_mu = True
+    _calc_mu = False
 
     # Define ID's of particles
     _id_gluino = 1000021
@@ -57,6 +58,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # Dominant production cross section particles
     _dom_id1 = -1
     _dom_id2 = -1
+
+    # Decay channels
+    _dc_gluino = DecayChannel()
 
     # Branching ratios into particles
     _br_leptons = []
@@ -839,20 +843,31 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
+        self._dc_gluino.reset()
         self._br_leptons = []
         self._br_jets = []
         self._br_photons = []
 
-    def _fill_plots(self, prmtr_x, prmtr_y):
+    def _get_dcs(self, id_particle):
+
+        """ Fill lists with decays for particle with id particle_id. """
+
+        # Create decay_channel object
+        dc_obj = DecayChannel()
+
+        # If particle not yet in dictionary, fill it
+        if not id_particle in self._d_susy:
+            self._fill_dict_susy(id_particle)
+
+        # Loop over decays
+        for decay in self._d_susy[id_particle]:
+            dc_obj.fill_dcs(decay)
+
+        return dc_obj
+
+    def _fill_plots(self, plots, prmtr_x, prmtr_y):
 
         """ Fill all lists in the MassScanPlots object. """
-
-        # Create MassScanPlots object for plotting
-        plots = MassScanPlots()
-
-        # Set the plot axis labels
-        plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
-                       self._l_prmtr_x_add, self._l_prmtr_y_add)
 
         # Fill the coordinates
         plots.coordinate_x.append(prmtr_x)
@@ -881,6 +896,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 plots.xs13_strong.append(0.)
                 plots.xs8_strong.append(0.)
                 plots.xs13_gluinos.append(0.)
+
+        # Plots for decay channels
+        if self._calc_br:
+            plots.dc_gluino.append(self._dc_gluino)
 
         # Fill lists per number of object for br plots
         if self._calc_br:
@@ -921,10 +940,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Define counter to count from 1 to total
         counter = 0
 
-        # Loop over all mass combinations
-        # for m_gluino in M_GLUINOS:
-        #     for m_chargino_diff in M_CHARGINOS1:
-        #         for m_neutralino_diff in M_NEUTRALINOS1:
+        # Create MassScanPlots object for plotting
+        plots = MassScanPlots()
+
+        # Set the plot axis labels
+        plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
+                       self._l_prmtr_x_add, self._l_prmtr_y_add)
+
         for prmtr_x in self.l_prmtr_x:
             for prmtr_y in self.l_prmtr_y:
 
@@ -1007,11 +1029,15 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     if not self._br_leptons or not self._br_jets or not self._br_photons:
                         self._skip_point(prmtr_x, prmtr_y)
 
+                # Get decay channels
+                if not self._error and self._calc_br:
+                    self._dc_gluino = self._get_dcs(self._id_gluino)
+
                 # If there was an error, empty all values
                 if self._error:
                     self._reset()
 
-                plots = self._fill_plots(prmtr_x, prmtr_y)
+                plots = self._fill_plots(plots, prmtr_x, prmtr_y)
 
         # Restore backup SUSYHIT input file
         system('mv {}/{}.in{{.orig,}}'.format(self._dir_susyhit,

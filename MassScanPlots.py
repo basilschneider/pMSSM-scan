@@ -5,6 +5,7 @@
 from os import system
 from ROOT import TFile, gStyle  # pylint: disable=import-error
 from Logger import LGR
+from DecayChannel import DecayChannel
 from ToolboxTH2 import ToolboxTH2
 from ToolboxHelper import safe_divide
 
@@ -51,6 +52,9 @@ class MassScanPlots(object):
         self.m_stop1 = []
         self.m_stop2 = []
         self.m_smhiggs = []
+
+        # Decay channels
+        self.dc_gluino = []
 
         # Signal strength
         self.mu = []  # pylint: disable=invalid-name
@@ -161,6 +165,11 @@ class MassScanPlots(object):
 
         gStyle.SetPaintTextFormat('g')
 
+        # Decay channels
+        name = 'dc_gluino'
+        title = 'Relative decay channels of gluino'
+        self._make_plot_dc(name, title, self.dc_gluino)
+
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):
             name = 'br_{}_leptons'.format(no_leptons)
@@ -234,6 +243,20 @@ class MassScanPlots(object):
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    coordinate_z, scale, decimals)
         self._toolbox.plot_star(self._star)
+        self._toolbox.plot_diagonal()
+        self._toolbox.save()
+
+    def _make_plot_dc(self, name, title, dcs):
+
+        """ Create plot showing relative decay channels. """
+
+        # The TH2 needs to have ten times as many bins per axis
+        self._toolbox.create_histogram(name, title, self.coordinate_x,
+                                       self.coordinate_y, 10)
+        self._toolbox.modify_axes(self._axis_x, self._axis_y)
+
+        # Fill numbers
+        self._toolbox.plot_dcs(self.coordinate_x, self.coordinate_y, dcs)
         self._toolbox.plot_diagonal()
         self._toolbox.save()
 

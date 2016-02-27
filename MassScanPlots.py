@@ -55,6 +55,8 @@ class MassScanPlots(object):
 
         # Decay channels
         self.dc_gluino = []
+        self.dc_chargino1 = []
+        self.dc_neutralino2 = []
 
         # Signal strength
         self.mu = []  # pylint: disable=invalid-name
@@ -167,8 +169,16 @@ class MassScanPlots(object):
 
         # Decay channels
         name = 'dc_gluino'
-        title = 'Relative decay channels of gluino'
+        title = 'Relative decay channels of #tilde{g}'
         self._make_plot_dc(name, title, self.dc_gluino)
+
+        name = 'dc_chargino1'
+        title = 'Relative decay channels of #tilde{#chi}_{1}^{#pm}'
+        self._make_plot_dc(name, title, self.dc_chargino1)
+
+        name = 'dc_neutralino2'
+        title = 'Relative decay channels of #tilde{#chi}_{2}^{0}'
+        self._make_plot_dc(name, title, self.dc_neutralino2)
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):

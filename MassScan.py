@@ -61,6 +61,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Decay channels
     _dc_gluino = DecayChannel()
+    _dc_chargino1 = DecayChannel()
+    _dc_neutralino2 = DecayChannel()
 
     # Branching ratios into particles
     _br_leptons = []
@@ -844,6 +846,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._dom_id1 = 0
         self._dom_id2 = 0
         self._dc_gluino.reset()
+        self._dc_chargino1.reset()
+        self._dc_neutralino2.reset()
         self._br_leptons = []
         self._br_jets = []
         self._br_photons = []
@@ -900,6 +904,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Plots for decay channels
         if self._calc_br:
             plots.dc_gluino.append(self._dc_gluino)
+            plots.dc_chargino1.append(self._dc_chargino1)
+            plots.dc_neutralino2.append(self._dc_neutralino2)
 
         # Fill lists per number of object for br plots
         if self._calc_br:
@@ -1032,6 +1038,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 # Get decay channels
                 if not self._error and self._calc_br:
                     self._dc_gluino = self._get_dcs(self._id_gluino)
+                    self._dc_chargino1 = self._get_dcs(self._id_chargino1)
+                    self._dc_neutralino2 = self._get_dcs(self._id_neutralino2)
 
                 # If there was an error, empty all values
                 if self._error:

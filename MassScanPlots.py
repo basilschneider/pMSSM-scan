@@ -260,6 +260,10 @@ class MassScanPlots(object):
 
         """ Create plot showing relative decay channels. """
 
+        # If there's nothing to plot, don't plot it
+        if len(dcs) == 0:
+            return
+
         # The TH2 needs to have ten times as many bins per axis
         self._toolbox.create_histogram(name, title, self.coordinate_x,
                                        self.coordinate_y, 10)

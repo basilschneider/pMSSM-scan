@@ -2,7 +2,8 @@
 
 """ Data object to store decay channel characteristic values. """
 
-from ROOT import kOrange, kRed, kAzure, kBlue, kPink, kMagenta, kTeal, kGreen
+from ROOT import kGreen, kCyan, kBlue, kMagenta
+from ROOT import kPink, kViolet, kAzure, kTeal
 from Logger import LGR
 
 class DecayChannel(object):
@@ -144,7 +145,7 @@ class DecayChannel(object):
         """ Return title for SUSY process. """
 
         if ps_susy == 1:
-            return '#tile{g}'
+            return '#tilde{g} '
         if ps_susy == 2:
             return '#tilde{#chi}_{1}^{0}'
         if ps_susy == 3:
@@ -181,72 +182,72 @@ class DecayChannel(object):
 
         if ps_susy == 1:
             if ps_sm == 1:
-                return kOrange
-            if ps_sm == 2:
-                return kOrange+7
-            if ps_sm == 3:
-                return kOrange-3
-            if ps_sm == 4:
-                return kOrange+10
-            if ps_sm == 5:
-                return kRed-4
-            if ps_sm == 6:
-                return kRed
-            if ps_sm == 7:
-                return kRed+2
-            if ps_sm == 8:
-                return kRed+3
-        if ps_susy == 2:
-            if ps_sm == 1:
-                return kAzure+8
-            if ps_sm == 2:
-                return kAzure+2
-            if ps_sm == 3:
-                return kAzure+7
-            if ps_sm == 4:
-                return kAzure-6
-            if ps_sm == 5:
-                return kBlue-4
-            if ps_sm == 6:
-                return kBlue
-            if ps_sm == 7:
-                return kBlue+2
-            if ps_sm == 8:
-                return kBlue+3
-        if ps_susy == 3:
-            if ps_sm == 1:
-                return kPink+6
+                return kPink+2
             if ps_sm == 2:
                 return kPink+5
             if ps_sm == 3:
-                return kPink+4
+                return kPink+7
             if ps_sm == 4:
-                return kPink+3
-            if ps_sm == 5:
-                return kMagenta-4
-            if ps_sm == 6:
                 return kMagenta
-            if ps_sm == 7:
+            if ps_sm == 5:
+                return kMagenta+1
+            if ps_sm == 6:
                 return kMagenta+2
-            if ps_sm == 8:
+            if ps_sm == 7:
                 return kMagenta+3
+            if ps_sm == 8:
+                return kMagenta-1
+        if ps_susy == 2:
+            if ps_sm == 1:
+                return kViolet+2
+            if ps_sm == 2:
+                return kViolet+5
+            if ps_sm == 3:
+                return kViolet+7
+            if ps_sm == 4:
+                return kBlue
+            if ps_sm == 5:
+                return kBlue+1
+            if ps_sm == 6:
+                return kBlue+2
+            if ps_sm == 7:
+                return kBlue+3
+            if ps_sm == 8:
+                return kBlue-1
+        if ps_susy == 3:
+            if ps_sm == 1:
+                return kAzure+2
+            if ps_sm == 2:
+                return kAzure+5
+            if ps_sm == 3:
+                return kAzure+7
+            if ps_sm == 4:
+                return kCyan
+            if ps_sm == 5:
+                return kCyan+1
+            if ps_sm == 6:
+                return kCyan+2
+            if ps_sm == 7:
+                return kCyan+3
+            if ps_sm == 8:
+                return kCyan-1
         if ps_susy == 4:
             if ps_sm == 1:
-                return kTeal+6
+                return kTeal+2
             if ps_sm == 2:
                 return kTeal+5
             if ps_sm == 3:
-                return kTeal+4
+                return kTeal+7
             if ps_sm == 4:
-                return kTeal+3
-            if ps_sm == 5:
-                return kGreen-4
-            if ps_sm == 6:
                 return kGreen
-            if ps_sm == 7:
+            if ps_sm == 5:
+                return kGreen+1
+            if ps_sm == 6:
                 return kGreen+2
-            if ps_sm == 8:
+            if ps_sm == 7:
                 return kGreen+3
+            if ps_sm == 8:
+                return kGreen-1
 
         # If all fails...
         return kBlack

@@ -56,14 +56,15 @@ class DecayChannel(object):
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
                         'found.'.format(id_particle))
-            return 5
+            return 0
 
     def _classify_particles_sm(self, id_particles):
 
         """ Classify list id_particles into SM subcategory (see
         self._classify_particles() for details. """
 
-        cat_sm = 9
+        # 0 means undefined
+        cat_sm = 0
         if len(id_particles) == 1:
             if id_particles[0] == 21:
                 # g
@@ -77,6 +78,9 @@ class DecayChannel(object):
             elif id_particles[0] == 24:
                 # W
                 cat_sm = 7
+            elif id_particles[0] == 25:
+                # h
+                cat_sm = 9
         elif len(id_particles) == 2:
             if id_particles[0] in [1, 2, 3, 4, 5]:
                 if id_particles[1] in [1, 2, 3, 4, 5]:
@@ -97,7 +101,7 @@ class DecayChannel(object):
                     # ll
                     cat_sm = 4
 
-        if cat_sm == 9:
+        if cat_sm == 0:
             LGR.warning('Decay channel category for SM particle(s) %s not '
                         'found.', id_particles)
 
@@ -111,10 +115,9 @@ class DecayChannel(object):
 
     def get_susy_ps(self):
 
-        """ Get number of different distinguished SUSY processes (including
-        overflow). """
+        """ Get number of different distinguished SUSY processes. """
 
-        return 5
+        return 4
 
     def get_sm(self):
 
@@ -124,8 +127,7 @@ class DecayChannel(object):
 
     def get_sm_ps(self):
 
-        """ Get number of differente distinguished SM processes (including
-        overflow). """
+        """ Get number of differente distinguished SM processes. """
 
         return 9
 
@@ -176,6 +178,8 @@ class DecayChannel(object):
             return 'W'
         if ps_sm == 8:
             return 'Z'
+        if ps_sm == 9:
+            return 'h'
         return '?'
 
     def get_color(self, ps_susy, ps_sm):
@@ -199,6 +203,8 @@ class DecayChannel(object):
                 return kMagenta+3
             if ps_sm == 8:
                 return kMagenta-1
+            if ps_sm == 9:
+                return kMagenta+4
         if ps_susy == 2:
             if ps_sm == 1:
                 return kViolet+2
@@ -216,6 +222,8 @@ class DecayChannel(object):
                 return kBlue+3
             if ps_sm == 8:
                 return kBlue-1
+            if ps_sm == 9:
+                return kBlue+4
         if ps_susy == 3:
             if ps_sm == 1:
                 return kAzure+2
@@ -233,6 +241,8 @@ class DecayChannel(object):
                 return kCyan+3
             if ps_sm == 8:
                 return kCyan-1
+            if ps_sm == 9:
+                return kCyan+4
         if ps_susy == 4:
             if ps_sm == 1:
                 return kTeal+2
@@ -250,6 +260,8 @@ class DecayChannel(object):
                 return kGreen+3
             if ps_sm == 8:
                 return kGreen-1
+            if ps_sm == 9:
+                return kGreen+4
 
         # If all fails...
         return kYellow

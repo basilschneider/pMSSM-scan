@@ -24,9 +24,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Flags what to calculate
     _calc_masses = True
-    _calc_xs = True
+    _calc_xs = False
     _calc_br = True
-    _calc_mu = True
+    _calc_mu = False
 
     # Define ID's of particles
     _id_gluino = 1000021
@@ -38,40 +38,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _id_stop1 = 1000006
     _id_stop2 = 2000006
 
-    # Masses of particles
-    _m_gluino = -1.
-    _m_neutralino1 = -1.
-    _m_neutralino2 = -1.
-    _m_neutralino3 = -1.
-    _m_chargino1 = -1.
-    _m_stop1 = -1.
-    _m_stop2 = -1.
-    _m_smhiggs = -1.
-
-    # Cross-sections
-    _xs13_incl = -1.
-    _xs13_strong = -1.
-    _xs13_gluinos = -1.
-    _xs8_incl = -1.
-    _xs8_strong = -1.
-
-    # Dominant production cross section particles
-    _dom_id1 = -1
-    _dom_id2 = -1
-
-    # Decay channels
-    _dc_gluino = DecayChannel()
-    _dc_chargino1 = DecayChannel()
-    _dc_neutralino2 = DecayChannel()
-
-    # Branching ratios into particles
-    _br_leptons = []
-    _br_jets = []
-    _br_photons = []
-
-    # Signal strength
-    _mu = 0.
-
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
     _dir_susyhit += 'susyhit-1.5-suspect-2.4.3'
@@ -80,17 +46,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # 2 for SDECAY-HDECAY
     # Simply changing this value here won't work right now
     _susyhit_option = 1
-
-    # Track errors, we still want to fill all lists, otherwise the
-    # binning will be screwed up
-    _error = False
-
-    # Dictionary for decay modes;
-    # The SM decays are filled by hand
-    # The SUSY decays are filled on the fly when needed,
-    # based on the SUSYHIT output file
-    _d_sm = {}
-    _d_susy = {}
 
     def __init__(self):
 
@@ -125,6 +80,51 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
                      2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
                      1000021]
+
+        # Masses of particles
+        self._m_gluino = -1.
+        self._m_neutralino1 = -1.
+        self._m_neutralino2 = -1.
+        self._m_neutralino3 = -1.
+        self._m_chargino1 = -1.
+        self._m_stop1 = -1.
+        self._m_stop2 = -1.
+        self._m_smhiggs = -1.
+
+        # Cross-sections
+        self._xs13_incl = -1.
+        self._xs13_strong = -1.
+        self._xs13_gluinos = -1.
+        self._xs8_incl = -1.
+        self._xs8_strong = -1.
+
+        # Dominant production cross section particles
+        self._dom_id1 = -1
+        self._dom_id2 = -1
+
+        # Decay channels
+        self._dc_gluino = DecayChannel()
+        self._dc_chargino1 = DecayChannel()
+        self._dc_neutralino2 = DecayChannel()
+
+        # Branching ratios into particles
+        self._br_leptons = []
+        self._br_jets = []
+        self._br_photons = []
+
+        # Signal strength
+        self._mu = 0.
+
+        # Track errors, we still want to fill all lists, otherwise the
+        # binning will be screwed up
+        self._error = False
+
+        # Dictionary for decay modes;
+        # The SM decays are filled by hand
+        # The SUSY decays are filled on the fly when needed,
+        # based on the SUSYHIT output file
+        self._d_sm = {}
+        self._d_susy = {}
 
     def set_parameter(self, prmtr_id_x, prmtr_id_y):
 
@@ -845,9 +845,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
-        self._dc_gluino.reset()
-        self._dc_chargino1.reset()
-        self._dc_neutralino2.reset()
+        self._dc_gluino = DecayChannel()
+        self._dc_chargino1 = DecayChannel()
+        self._dc_neutralino2 = DecayChannel()
         self._br_leptons = []
         self._br_jets = []
         self._br_photons = []

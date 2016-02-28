@@ -252,7 +252,7 @@ class DecayChannel(object):
         # If all fails...
         return kBlack
 
-    def reset():
+    def reset(self):
 
         """ Empty all lists. """
 

@@ -3,7 +3,7 @@
 """ Data object to store decay channel characteristic values. """
 
 from ROOT import kGreen, kCyan, kBlue, kMagenta
-from ROOT import kPink, kViolet, kAzure, kTeal
+from ROOT import kPink, kViolet, kAzure, kTeal, kYellow
 from Logger import LGR
 
 class DecayChannel(object):
@@ -56,7 +56,7 @@ class DecayChannel(object):
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
                         'found.'.format(id_particle))
-            return 9
+            return 5
 
     def _classify_particles_sm(self, id_particles):
 
@@ -98,8 +98,8 @@ class DecayChannel(object):
                     cat_sm = 4
 
         if cat_sm == 9:
-            LGR.warning('Decay channel category for SM particles %s not '
-                        'found.'.format(id_particles))
+            LGR.warning('Decay channel category for SM particle(s) %s not '
+                        'found.', id_particles)
 
         return cat_sm
 
@@ -111,9 +111,10 @@ class DecayChannel(object):
 
     def get_susy_ps(self):
 
-        """ Get number of different distinguished SUSY processes. """
+        """ Get number of different distinguished SUSY processes (including
+        overflow). """
 
-        return 4
+        return 5
 
     def get_sm(self):
 
@@ -123,9 +124,10 @@ class DecayChannel(object):
 
     def get_sm_ps(self):
 
-        """ Get number of differente distinguished SM processes. """
+        """ Get number of differente distinguished SM processes (including
+        overflow). """
 
-        return 8
+        return 9
 
     def get_br(self):
 
@@ -250,4 +252,4 @@ class DecayChannel(object):
                 return kGreen-1
 
         # If all fails...
-        return kBlack
+        return kYellow

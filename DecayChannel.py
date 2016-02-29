@@ -55,7 +55,7 @@ class DecayChannel(object):
             return 4
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
-                        'found.'.format(id_particle))
+                        'found.', id_particle)
             return 0
 
     def _classify_particles_sm(self, id_particles):

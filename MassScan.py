@@ -9,6 +9,7 @@ from re import sub, subn, search
 from itertools import dropwhile, takewhile, ifilterfalse, tee, product
 from functools import reduce
 from cmath import isnan
+from fileinput import input
 from Logger import LGR
 from MassScanPlots import MassScanPlots
 from DecayChannel import DecayChannel
@@ -24,9 +25,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Flags what to calculate
     _calc_masses = True
-    _calc_xs = False
+    _calc_xs = True
     _calc_br = True
-    _calc_mu = False
+    _calc_mu = True
 
     # Define ID's of particles
     _id_gluino = 1000021
@@ -46,6 +47,11 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     # 2 for SDECAY-HDECAY
     # Simply changing this value here won't work right now
     _susyhit_option = 1
+
+    # Define k-factors for separate for strong and weak processes. These are
+    # applied to the LO cross sections and have to be calculated separately
+    _k_strong = 1.99
+    _k_weak = 1.30
 
     def __init__(self):
 
@@ -642,6 +648,45 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         for idx, lst_out in enumerate(lst_outs):
             lst_out.append(get_lst_entry_default(lst_in, idx, default))
 
+    def _apply_k_factor(self):
+
+        """ Apply K-factor to LO cross sections. The k-factors differ for
+        strong and weak production. They have to be calculated separately.  """
+
+        # Use fileinput.input to do inline editing
+        found_xsec = False
+        strong_xsec = False
+        for line in input('{}/susyhit_slha.out'
+                          .format(self._dir_susyhit), inplace=True):
+            if found_xsec:
+
+                if strong_xsec:
+                    k_factor = self._k_strong
+                else:
+                    k_factor = self._k_weak
+
+                list_line = line.split()
+                list_line[6] = str(k_factor*float(list_line[6]))
+                line_new = ' '.join(list_line)
+
+                # The print statement is redirected to the file
+                print line_new
+
+                found_xsec = False
+                strong_xsec = False
+                continue
+
+            # If the xs matches, set bool, next line will have the xs
+            if search('XSECTION', line):
+                found_xsec = True
+                # Check if strong production
+                if self._is_strong(float(line.split()[5])) and \
+                   self._is_strong(float(line.split()[6])):
+                    strong_xsec = True
+
+            print line,
+
+
     def _get_xs_all(self):
 
         """ Get all cross-sections. """
@@ -995,6 +1040,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         self._run_external('SModelS', 'runTools xseccomputer '
                                            '-p -s {} -f {}/susyhit_slha.out'
                                            .format(com, self._dir_susyhit))
+
+                    # Apply k-factors
+                    self._apply_k_factor()
+
                     if self._calc_xs:
                         self._get_xs_all()
 

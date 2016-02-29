@@ -19,17 +19,19 @@ if __name__ == "__main__":
     ##PLOTS.set_star(-1071.46632, 534.761347)
     #PLOTS.plot()
 
-    X = [100*i for i in range(1, 13)]
-    Y = [100*i for i in range(1, 13)]
+    X = [100*i for i in range(2, 9)]
+    Y = [100*i for i in range(2, 9)]
     for grid in range(1, 13):
         for limit in ['a', 'b']:
+
+            print('Processing grid{}{}'.format(grid, limit))
 
             MY_SCAN = MassScan()
             MY_SCAN.set_threshold(.01)
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output22_full-scan-with-nlo-nll'
+            output = 'output27_full-scan'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:

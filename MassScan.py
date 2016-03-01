@@ -1026,7 +1026,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._skip_point(prmtr_x, prmtr_y)
 
                 # Check for LSP
-                if not self._check_lsp():
+                if not self._error and not self._check_lsp():
                     self._skip_point(prmtr_x, prmtr_y)
 
                 if not self._error and self._calc_masses:

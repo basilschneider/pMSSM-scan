@@ -25,9 +25,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     # Flags what to calculate
     _calc_masses = True
-    _calc_xs = False
+    _calc_xs = True
     _calc_br = True
-    _calc_mu = False
+    _calc_mu = True
 
     # Define ID's of particles
     _id_gluino = 1000021

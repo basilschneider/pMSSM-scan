@@ -55,6 +55,15 @@ class DecayChannel(object):
             return 4
         elif id_particle == 1000025:
             return 5
+        elif id_particle in [1000001, 1000002, 1000003, 1000004,
+                             2000001, 2000002, 2000003, 2000004]:
+            return 6
+        elif id_particle in [1000005, 1000006, 2000005, 2000006]:
+            return 7
+        elif id_particle in [1000011, 1000012, 1000013, 1000014,
+                             1000015, 1000016, 2000011, 2000012,
+                             2000013, 2000014, 2000015, 2000016]:
+            return 8
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
                         'found.', id_particle)
@@ -83,6 +92,15 @@ class DecayChannel(object):
             elif id_particles[0] == 25:
                 # h
                 cat_sm = 9
+            elif id_particles[0] in [1, 2, 3, 4, 5]:
+                # q
+                cat_sm = 10
+            elif id_particles[0] == 6:
+                # t
+                cat_sm = 11
+            elif id_particles[0] in [11, 12, 13, 14, 15, 16]:
+                # l
+                cat_sm = 12
         elif len(id_particles) == 2:
             if id_particles[0] in [1, 2, 3, 4, 5]:
                 if id_particles[1] in [1, 2, 3, 4, 5]:
@@ -119,7 +137,7 @@ class DecayChannel(object):
 
         """ Get number of different distinguished SUSY processes. """
 
-        return 5
+        return 8
 
     def get_sm(self):
 
@@ -131,7 +149,7 @@ class DecayChannel(object):
 
         """ Get number of differente distinguished SM processes. """
 
-        return 9
+        return 12
 
     def get_br(self):
 
@@ -160,6 +178,12 @@ class DecayChannel(object):
             return '#tilde{#chi}_{1}^{#pm}'
         if ps_susy == 5:
             return '#tilde{#chi}_{3}^{0}'
+        if ps_susy == 6:
+            return '#tilde{q}_{12}'
+        if ps_susy == 7:
+            return '#tilde{q}_{3}'
+        if ps_susy == 8:
+            return '#tilde{l}'
         return '?'
 
     def _get_ps_sm(self, ps_sm):
@@ -173,7 +197,7 @@ class DecayChannel(object):
         if ps_sm == 3:
             return 'qt'
         if ps_sm == 4:
-            return 'l#bar{l}'
+            return '#l#bar{l}'
         if ps_sm == 5:
             return 'g'
         if ps_sm == 6:
@@ -184,6 +208,12 @@ class DecayChannel(object):
             return 'Z'
         if ps_sm == 9:
             return 'h'
+        if ps_sm == 10:
+            return 'q'
+        if ps_sm == 11:
+            return 't'
+        if ps_sm == 12:
+            return '#l'
         return '?'
 
     def get_color(self, ps_susy, ps_sm):
@@ -191,13 +221,13 @@ class DecayChannel(object):
         """ Return color for category combination. """
 
         if ps_susy == 1:
-            if ps_sm == 1:
+            if ps_sm in [1, 10]:
                 return kPink+2
-            if ps_sm == 2:
+            if ps_sm in [2, 11]:
                 return kPink+5
             if ps_sm == 3:
                 return kPink+7
-            if ps_sm == 4:
+            if ps_sm in [4, 12]:
                 return kMagenta
             if ps_sm == 5:
                 return kMagenta+1
@@ -209,14 +239,14 @@ class DecayChannel(object):
                 return kMagenta-1
             if ps_sm == 9:
                 return kMagenta+4
-        if ps_susy == 2:
-            if ps_sm == 1:
+        if ps_susy in [2, 6]:
+            if ps_sm in [1, 10]:
                 return kViolet+2
-            if ps_sm == 2:
+            if ps_sm in [2, 11]:
                 return kViolet+5
             if ps_sm == 3:
                 return kViolet+7
-            if ps_sm == 4:
+            if ps_sm in [4, 12]:
                 return kBlue
             if ps_sm == 5:
                 return kBlue+1
@@ -228,14 +258,14 @@ class DecayChannel(object):
                 return kBlue-1
             if ps_sm == 9:
                 return kBlue+4
-        if ps_susy == 3:
-            if ps_sm == 1:
+        if ps_susy in [3, 7]:
+            if ps_sm in [1, 10]:
                 return kAzure+2
-            if ps_sm == 2:
+            if ps_sm in [2, 11]:
                 return kAzure+5
             if ps_sm == 3:
                 return kAzure+7
-            if ps_sm == 4:
+            if ps_sm in [4, 12]:
                 return kCyan
             if ps_sm == 5:
                 return kCyan+1
@@ -247,14 +277,14 @@ class DecayChannel(object):
                 return kCyan-1
             if ps_sm == 9:
                 return kCyan+4
-        if ps_susy == 4:
-            if ps_sm == 1:
+        if ps_susy in [4, 8]:
+            if ps_sm in [1, 10]:
                 return kTeal+2
-            if ps_sm == 2:
+            if ps_sm in [2, 11]:
                 return kTeal+5
             if ps_sm == 3:
                 return kTeal+7
-            if ps_sm == 4:
+            if ps_sm in [4, 12]:
                 return kGreen
             if ps_sm == 5:
                 return kGreen+1
@@ -267,13 +297,13 @@ class DecayChannel(object):
             if ps_sm == 9:
                 return kGreen+4
         if ps_susy == 5:
-            if ps_sm == 1:
+            if ps_sm in [1, 10]:
                 return kOrange+2
-            if ps_sm == 2:
+            if ps_sm in [2, 11]:
                 return kOrange+5
             if ps_sm == 3:
                 return kOrange+7
-            if ps_sm == 4:
+            if ps_sm in [4, 12]:
                 return kRed
             if ps_sm == 5:
                 return kRed+1

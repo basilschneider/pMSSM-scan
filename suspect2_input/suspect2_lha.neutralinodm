@@ -23,7 +23,7 @@ BLOCK SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
 #        (other possibility 0: MA_pole, MU(EWSB) input instead)
      7    0   #  choice for sparticles masses rad. corr. (=/= h):
 #               2 ->all (recommended, defaut); 1->no R.C. in squarks & gauginos.
-     8    1   # 1 (defaut): EWSB scale=(mt_L*mt_R)^(1/2) 
+     8    1   # 1 (defaut): EWSB scale=(mt_L*mt_R)^(1/2)
 #         (Or = 0: arbitrary EWSB scale: give EWSB in BLOCK EXTPAR below) 
      9    2   # Final spectrum accuracy: 1 -> 1% acc.; 2 -> 0.01 % acc.(defaut)
      10   2   # Higgs boson masses rad. corr. calculation options: 
@@ -54,13 +54,13 @@ BLOCK EXTPAR  # Input parameters
  36 8.00000000E+03   #  M_tauR
  41 8.00000000E+03   #  M_q1L
  42 8.00000000E+03   #  M_q2L
- 43 8.00000000E+03   #  M_q3L
+ 43 8.00000000E+04   #  M_q3L
  44 8.00000000E+03   #  M_uR
  45 8.00000000E+03   #  M_cR
- 46 8.00000000E+03   #  M_tR
+ 46 8.00000000E+04   #  M_tR
  47 8.00000000E+03   #  M_dR
  48 8.00000000E+03   #  M_sR
- 49 8.00000000E+03   #  M_bR
+ 49 8.00000000E+04   #  M_bR
 #
 BLOCK SMINPUTS  # Standard Model inputs
          1     1.27908970E+02   # alpha_em^-1(M_Z)^MSbar

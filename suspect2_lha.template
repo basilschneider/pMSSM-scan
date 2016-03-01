@@ -54,13 +54,13 @@ BLOCK EXTPAR  # Input parameters
  36 8.00000000E+03   #  M_tauR
  41 8.00000000E+03   #  M_q1L
  42 8.00000000E+03   #  M_q2L
- 43 8.00000000E+03   #  M_q3L
+ 43 8.00000000E+04   #  M_q3L
  44 8.00000000E+03   #  M_uR
  45 8.00000000E+03   #  M_cR
- 46 8.00000000E+03   #  M_tR
+ 46 8.00000000E+04   #  M_tR
  47 8.00000000E+03   #  M_dR
  48 8.00000000E+03   #  M_sR
- 49 8.00000000E+03   #  M_bR
+ 49 8.00000000E+04   #  M_bR
 #
 BLOCK SMINPUTS  # Standard Model inputs
          1     1.27908970E+02   # alpha_em^-1(M_Z)^MSbar

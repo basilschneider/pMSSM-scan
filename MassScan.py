@@ -1103,8 +1103,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._get_masses()
 
                 # Calculate cross-section with SModelS
-                if not self._error and (self._calc_xs or
-                                        self._calc_mu or self._calc_br):
+                if not self._error and (self._calc_xs or self._calc_mu):
                     # 8 TeV cross-sections to check if the model is already
                     # excluded and 13 TeV cross-sections for cross-sections
                     # itself

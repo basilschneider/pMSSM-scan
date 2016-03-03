@@ -52,6 +52,14 @@ class MassScanPlots(object):
         self.m_stop1 = []
         self.m_stop2 = []
         self.m_smhiggs = []
+        self.m_sdown_l = []
+        self.m_sdown_r = []
+        self.m_sup_l = []
+        self.m_sup_r = []
+        self.m_sstrange_l = []
+        self.m_sstrange_r = []
+        self.m_scharm_l = []
+        self.m_scharm_r = []
 
         # Decay channels
         self.dc_gluino = []
@@ -103,6 +111,38 @@ class MassScanPlots(object):
         name = 'm_smhiggs'
         title = 'm_{h^{0}} [GeV]'
         self._make_plot(name, title, self.m_smhiggs)
+
+        name = 'm_sdown_l'
+        title = 'm_{#tilde{d}_{L}} [GeV]'
+        self._make_plot(name, title, self.m_sdown_l)
+
+        name = 'm_sdown_r'
+        title = 'm_{#tilde{d}_{R}} [GeV]'
+        self._make_plot(name, title, self.m_sdown_r)
+
+        name = 'm_sup_l'
+        title = 'm_{#tilde{u}_{L}} [GeV]'
+        self._make_plot(name, title, self.m_sup_l)
+
+        name = 'm_sup_r'
+        title = 'm_{#tilde{u}_{R}} [GeV]'
+        self._make_plot(name, title, self.m_sup_r)
+
+        name = 'm_sstrange_l'
+        title = 'm_{#tilde{s}_{L}} [GeV]'
+        self._make_plot(name, title, self.m_sstrange_l)
+
+        name = 'm_sstrange_r'
+        title = 'm_{#tilde{s}_{R}} [GeV]'
+        self._make_plot(name, title, self.m_sstrange_r)
+
+        name = 'm_scharm_l'
+        title = 'm_{#tilde{c}_{L}} [GeV]'
+        self._make_plot(name, title, self.m_scharm_l)
+
+        name = 'm_scharm_r'
+        title = 'm_{#tilde{c}_{R}} [GeV]'
+        self._make_plot(name, title, self.m_scharm_r)
 
         # Mass differences
         name = 'm_gluino-m_chargino1'

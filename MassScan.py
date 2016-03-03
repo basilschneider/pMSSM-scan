@@ -38,6 +38,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _id_smhiggs = 25
     _id_stop1 = 1000006
     _id_stop2 = 2000006
+    _id_sdown_l = 1000001
+    _id_sdown_r = 2000001
+    _id_sup_l = 1000002
+    _id_sup_r = 2000002
+    _id_sstrange_l = 1000003
+    _id_sstrange_r = 2000003
+    _id_scharm_l = 1000004
+    _id_scharm_r = 2000004
 
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
@@ -96,6 +104,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop1 = -1.
         self._m_stop2 = -1.
         self._m_smhiggs = -1.
+        self._m_sdown_l = -1.
+        self._m_sdown_r = -1.
+        self._m_sup_l = -1.
+        self._m_sup_r = -1.
+        self._m_sstrange_l = -1.
+        self._m_sstrange_r = -1.
+        self._m_scharm_l = -1.
+        self._m_scharm_r = -1.
 
         # Cross-sections
         self._xs13_incl = -1.
@@ -828,6 +844,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop1 = self._get_m(self._id_stop1)
         self._m_stop2 = self._get_m(self._id_stop2)
         self._m_smhiggs = self._get_m(self._id_smhiggs)
+        self._m_sdown_l = self._get_m(self._id_sdown_l)
+        self._m_sdown_r = self._get_m(self._id_sdown_r)
+        self._m_sup_l = self._get_m(self._id_sup_l)
+        self._m_sup_r = self._get_m(self._id_sup_r)
+        self._m_sstrange_l = self._get_m(self._id_sstrange_l)
+        self._m_sstrange_r = self._get_m(self._id_sstrange_r)
+        self._m_scharm_l = self._get_m(self._id_scharm_l)
+        self._m_scharm_r = self._get_m(self._id_scharm_r)
 
     def _get_m(self, id_particle):
 
@@ -888,6 +912,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_stop1 = 0.
         self._m_stop2 = 0.
         self._m_smhiggs = 0.
+        self._m_sdown_l = 0.
+        self._m_sdown_r = 0.
+        self._m_sup_l = 0.
+        self._m_sup_r = 0.
+        self._m_sstrange_l = 0.
+        self._m_sstrange_r = 0.
+        self._m_scharm_l = 0.
+        self._m_scharm_r = 0.
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
@@ -924,7 +956,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         plots.coordinate_x.append(prmtr_x)
         plots.coordinate_y.append(prmtr_y)
 
-        # Plots for masses and mass differences
+        # Plots for masses
         if self._calc_masses:
             plots.m_gluino.append(self._m_gluino)
             plots.m_neutralino1.append(self._m_neutralino1)
@@ -934,6 +966,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
             plots.m_stop1.append(self._m_stop1)
             plots.m_stop2.append(self._m_stop2)
             plots.m_smhiggs.append(self._m_smhiggs)
+            plots.m_sdown_l.append(self._m_sdown_l)
+            plots.m_sdown_r.append(self._m_sdown_r)
+            plots.m_sup_l.append(self._m_sup_l)
+            plots.m_sup_r.append(self._m_sup_r)
+            plots.m_sstrange_l.append(self._m_sstrange_l)
+            plots.m_sstrange_r.append(self._m_sstrange_r)
+            plots.m_scharm_l.append(self._m_scharm_l)
+            plots.m_scharm_r.append(self._m_scharm_r)
 
         # Plots for xs's
         if self._calc_xs:

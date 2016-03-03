@@ -79,28 +79,28 @@ class DecayChannel(object):
         if len(id_particles) == 1:
             if id_particles[0] == 21:
                 # g
-                cat_sm = 5
+                cat_sm = 7
             elif id_particles[0] == 22:
                 # y
-                cat_sm = 6
+                cat_sm = 8
             elif id_particles[0] == 23:
                 # Z
-                cat_sm = 8
+                cat_sm = 10
             elif id_particles[0] == 24:
                 # W
-                cat_sm = 7
+                cat_sm = 9
             elif id_particles[0] == 25:
                 # h
-                cat_sm = 9
+                cat_sm = 11
             elif id_particles[0] in [1, 2, 3, 4, 5]:
                 # q
-                cat_sm = 10
+                cat_sm = 12
             elif id_particles[0] == 6:
                 # t
-                cat_sm = 11
+                cat_sm = 13
             elif id_particles[0] in [11, 12, 13, 14, 15, 16]:
                 # l
-                cat_sm = 12
+                cat_sm = 14
         elif len(id_particles) == 2:
             if id_particles[0] in [1, 2, 3, 4, 5]:
                 if id_particles[1] in [1, 2, 3, 4, 5]:
@@ -116,10 +116,20 @@ class DecayChannel(object):
                 elif id_particles[1] in [6]:
                     # tt
                     cat_sm = 2
-            elif id_particles[0] in [11, 12, 13, 14, 15, 16]:
-                if id_particles[1] in [11, 12, 13, 14, 15, 16]:
+            elif id_particles[0] in [11, 13, 15]:
+                if id_particles[1] in [11, 13, 15]:
                     # ll
                     cat_sm = 4
+                elif id_particles[1] in [12, 14, 16]:
+                    # nu l
+                    cat_sm = 5
+            elif id_particles[0] in [12, 14, 16]:
+                if id_particles[1] in [11, 13, 15]:
+                    # nu l
+                    cat_sm = 5
+                elif id_particles[1] in [12, 14, 16]:
+                    # nu nu
+                    cat_sm = 6
 
         if cat_sm == 0:
             LGR.warning('Decay channel category for SM particle(s) %s not '
@@ -149,7 +159,7 @@ class DecayChannel(object):
 
         """ Get number of differente distinguished SM processes. """
 
-        return 12
+        return 14
 
     def get_br(self):
 
@@ -197,23 +207,27 @@ class DecayChannel(object):
         if ps_sm == 3:
             return 'qt'
         if ps_sm == 4:
-            return '#l#bar{l}'
+            return 'l#bar{l}'
         if ps_sm == 5:
-            return 'g'
+            return 'l#nu'
         if ps_sm == 6:
-            return '#gamma'
+            return '#nu#nu'
         if ps_sm == 7:
-            return 'W'
+            return 'g'
         if ps_sm == 8:
-            return 'Z'
+            return '#gamma'
         if ps_sm == 9:
-            return 'h'
+            return 'W'
         if ps_sm == 10:
-            return 'q'
+            return 'Z'
         if ps_sm == 11:
-            return 't'
+            return 'h'
         if ps_sm == 12:
-            return '#l'
+            return 'q'
+        if ps_sm == 13:
+            return 't'
+        if ps_sm == 14:
+            return 'l'
         return '?'
 
     def get_color(self, ps_susy, ps_sm):
@@ -221,99 +235,99 @@ class DecayChannel(object):
         """ Return color for category combination. """
 
         if ps_susy == 1:
-            if ps_sm in [1, 10]:
+            if ps_sm in [1, 12]:
                 return kPink+2
-            if ps_sm in [2, 11]:
+            if ps_sm in [2, 13]:
                 return kPink+5
             if ps_sm == 3:
                 return kPink+7
-            if ps_sm in [4, 12]:
+            if ps_sm in [4, 5, 14]:
                 return kMagenta
-            if ps_sm == 5:
+            if ps_sm in [6, 7]:
                 return kMagenta+1
-            if ps_sm == 6:
-                return kMagenta+2
-            if ps_sm == 7:
-                return kMagenta+3
             if ps_sm == 8:
-                return kMagenta-1
+                return kMagenta+2
             if ps_sm == 9:
+                return kMagenta+3
+            if ps_sm == 10:
+                return kMagenta-1
+            if ps_sm == 11:
                 return kMagenta+4
         if ps_susy in [2, 6]:
-            if ps_sm in [1, 10]:
+            if ps_sm in [1, 12]:
                 return kViolet+2
-            if ps_sm in [2, 11]:
+            if ps_sm in [2, 13]:
                 return kViolet+5
             if ps_sm == 3:
                 return kViolet+7
-            if ps_sm in [4, 12]:
+            if ps_sm in [4, 5, 14]:
                 return kBlue
-            if ps_sm == 5:
+            if ps_sm in [6, 7]:
                 return kBlue+1
-            if ps_sm == 6:
-                return kBlue+2
-            if ps_sm == 7:
-                return kBlue+3
             if ps_sm == 8:
-                return kBlue-1
+                return kBlue+2
             if ps_sm == 9:
+                return kBlue+3
+            if ps_sm == 10:
+                return kBlue-1
+            if ps_sm == 11:
                 return kBlue+4
         if ps_susy in [3, 7]:
-            if ps_sm in [1, 10]:
+            if ps_sm in [1, 12]:
                 return kAzure+2
-            if ps_sm in [2, 11]:
+            if ps_sm in [2, 13]:
                 return kAzure+5
             if ps_sm == 3:
                 return kAzure+7
-            if ps_sm in [4, 12]:
+            if ps_sm in [4, 5, 14]:
                 return kCyan
-            if ps_sm == 5:
+            if ps_sm in [6, 7]:
                 return kCyan+1
-            if ps_sm == 6:
-                return kCyan+2
-            if ps_sm == 7:
-                return kCyan+3
             if ps_sm == 8:
-                return kCyan-1
+                return kCyan+2
             if ps_sm == 9:
+                return kCyan+3
+            if ps_sm == 10:
+                return kCyan-1
+            if ps_sm == 11:
                 return kCyan+4
         if ps_susy in [4, 8]:
-            if ps_sm in [1, 10]:
+            if ps_sm in [1, 12]:
                 return kTeal+2
-            if ps_sm in [2, 11]:
+            if ps_sm in [2, 13]:
                 return kTeal+5
             if ps_sm == 3:
                 return kTeal+7
-            if ps_sm in [4, 12]:
+            if ps_sm in [4, 5, 14]:
                 return kGreen
-            if ps_sm == 5:
+            if ps_sm in [6, 7]:
                 return kGreen+1
-            if ps_sm == 6:
-                return kGreen+2
-            if ps_sm == 7:
-                return kGreen+3
             if ps_sm == 8:
-                return kGreen-1
+                return kGreen+2
             if ps_sm == 9:
+                return kGreen+3
+            if ps_sm == 10:
+                return kGreen-1
+            if ps_sm == 11:
                 return kGreen+4
         if ps_susy == 5:
-            if ps_sm in [1, 10]:
+            if ps_sm in [1, 12]:
                 return kOrange+2
-            if ps_sm in [2, 11]:
+            if ps_sm in [2, 13]:
                 return kOrange+5
             if ps_sm == 3:
                 return kOrange+7
-            if ps_sm in [4, 12]:
+            if ps_sm in [4, 5, 14]:
                 return kRed
-            if ps_sm == 5:
+            if ps_sm in [6, 7]:
                 return kRed+1
-            if ps_sm == 6:
-                return kRed+2
-            if ps_sm == 7:
-                return kRed+3
             if ps_sm == 8:
-                return kRed-1
+                return kRed+2
             if ps_sm == 9:
+                return kRed+3
+            if ps_sm == 10:
+                return kRed-1
+            if ps_sm == 11:
                 return kRed+4
 
         # If all fails...

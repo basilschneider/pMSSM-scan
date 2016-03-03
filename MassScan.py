@@ -129,6 +129,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._dc_chargino1 = DecayChannel()
         self._dc_neutralino2 = DecayChannel()
         self._dc_neutralino3 = DecayChannel()
+        self._dc_sdown_l = DecayChannel()
+        self._dc_sdown_r = DecayChannel()
+        self._dc_sup_l = DecayChannel()
+        self._dc_sup_r = DecayChannel()
+        self._dc_sstrange_l = DecayChannel()
+        self._dc_sstrange_r = DecayChannel()
+        self._dc_scharm_l = DecayChannel()
+        self._dc_scharm_r = DecayChannel()
 
         # Branching ratios into particles
         self._br_leptons = []
@@ -927,6 +935,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._dc_chargino1 = DecayChannel()
         self._dc_neutralino2 = DecayChannel()
         self._dc_neutralino3 = DecayChannel()
+        self._dc_sdown_l = DecayChannel()
+        self._dc_sdown_r = DecayChannel()
+        self._dc_sup_l = DecayChannel()
+        self._dc_sup_r = DecayChannel()
+        self._dc_sstrange_l = DecayChannel()
+        self._dc_sstrange_r = DecayChannel()
+        self._dc_scharm_l = DecayChannel()
+        self._dc_scharm_r = DecayChannel()
         self._br_leptons = []
         self._br_jets = []
         self._br_photons = []
@@ -994,6 +1010,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
             plots.dc_chargino1.append(self._dc_chargino1)
             plots.dc_neutralino2.append(self._dc_neutralino2)
             plots.dc_neutralino3.append(self._dc_neutralino3)
+            plots.dc_sdown_l.append(self._dc_sdown_l)
+            plots.dc_sdown_r.append(self._dc_sdown_r)
+            plots.dc_sup_l.append(self._dc_sup_l)
+            plots.dc_sup_r.append(self._dc_sup_r)
+            plots.dc_sstrange_l.append(self._dc_sstrange_l)
+            plots.dc_sstrange_r.append(self._dc_sstrange_r)
+            plots.dc_scharm_l.append(self._dc_scharm_l)
+            plots.dc_scharm_r.append(self._dc_scharm_r)
 
         # Fill lists per number of object for br plots
         if self._calc_br:
@@ -1133,6 +1157,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._dc_chargino1 = self._get_dcs(self._id_chargino1)
                     self._dc_neutralino2 = self._get_dcs(self._id_neutralino2)
                     self._dc_neutralino3 = self._get_dcs(self._id_neutralino3)
+                    self._dc_sdown_l = self._get_dcs(self._id_sdown_l)
+                    self._dc_sdown_r = self._get_dcs(self._id_sdown_r)
+                    self._dc_sup_l = self._get_dcs(self._id_sup_l)
+                    self._dc_sup_r = self._get_dcs(self._id_sup_r)
+                    self._dc_sstrange_l = self._get_dcs(self._id_sstrange_l)
+                    self._dc_sstrange_r = self._get_dcs(self._id_sstrange_r)
+                    self._dc_scharm_l = self._get_dcs(self._id_scharm_l)
+                    self._dc_scharm_r = self._get_dcs(self._id_scharm_r)
 
                 # If there was an error, empty all values
                 if self._error:

@@ -66,6 +66,14 @@ class MassScanPlots(object):
         self.dc_chargino1 = []
         self.dc_neutralino2 = []
         self.dc_neutralino3 = []
+        self.dc_sdown_l = []
+        self.dc_sdown_r = []
+        self.dc_sup_l = []
+        self.dc_sup_r = []
+        self.dc_sstrange_l = []
+        self.dc_sstrange_r = []
+        self.dc_scharm_l = []
+        self.dc_scharm_r = []
 
         # Signal strength
         self.mu = []  # pylint: disable=invalid-name
@@ -224,6 +232,38 @@ class MassScanPlots(object):
         name = 'dc_neutralino3'
         title = 'Relative decay channels of #tilde{#chi}_{3}^{0}'
         self._make_plot_dc(name, title, self.dc_neutralino3)
+
+        name = 'dc_sdown_l'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sdown_l)
+
+        name = 'dc_sdown_r'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sdown_r)
+
+        name = 'dc_sup_l'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sup_l)
+
+        name = 'dc_sup_r'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sup_r)
+
+        name = 'dc_sstrange_l'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sstrange_l)
+
+        name = 'dc_sstrange_r'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_sstrange_r)
+
+        name = 'dc_scharm_l'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_scharm_l)
+
+        name = 'dc_scharm_r'
+        title = 'Relative decay channels of #tilde{g}'
+        self._make_plot_dc(name, title, self.dc_scharm_r)
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):

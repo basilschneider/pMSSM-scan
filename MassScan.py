@@ -113,6 +113,9 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_scharm_l = -1.
         self._m_scharm_r = -1.
 
+        # Lifetimes of particles
+        self._lt_gluino = -1.
+
         # Cross-sections
         self._xs13_incl = -1.
         self._xs13_strong = -1.
@@ -847,7 +850,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
     def _get_masses(self):
 
-        """ Calculates masses of SUSY particles. """
+        """ Get masses of SUSY particles. """
 
         self._m_gluino = self._get_m(self._id_gluino)
         self._m_neutralino1 = self._get_m(self._id_neutralino1)
@@ -878,6 +881,23 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     LGR.debug('Found mass %s for particle %s from line %s.',
                               mass, id_particle, line.rstrip())
                     return abs(mass)
+
+    def _get_lifetimes(self):
+
+        """ Get lifetimes of particles. """
+
+        self._lt_gluino = self._get_lt(self._id_gluino)
+
+    def _get_lt(self, id_particle):
+
+        """ Return lifetime of particle with ID id_particle. """
+
+        with open('{}/susyhit_slha.out'
+                  .format(self._dir_susyhit), 'r') as f_susyhit:
+            for line in f_susyhit:
+                if search('^DECAY *{}'.format(id_particle), line):
+                    lifetime = 1./(float((line.split())[2])*1.51926778e24)
+                    return lifetime
 
     def _check_lsp(self):
 
@@ -933,6 +953,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_sstrange_r = 0.
         self._m_scharm_l = 0.
         self._m_scharm_r = 0.
+        self._lt_gluino = 0.
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
@@ -995,6 +1016,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
             plots.m_sstrange_r.append(self._m_sstrange_r)
             plots.m_scharm_l.append(self._m_scharm_l)
             plots.m_scharm_r.append(self._m_scharm_r)
+
+        # Plots for lifetimes
+        if self._calc_br:
+            plots.lt_gluino.append(self._lt_gluino)
 
         # Plots for xs's
         if self._calc_xs:
@@ -1098,9 +1123,13 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 if not self._error and not self._check_lsp():
                     self._skip_point(prmtr_x, prmtr_y)
 
+                # Get particle masses
                 if not self._error and self._calc_masses:
-                    # Get particle masses
                     self._get_masses()
+
+                # Get particle lifetimes
+                if not self._error and self._calc_br:
+                    self._get_lifetimes()
 
                 # Calculate cross-section with SModelS
                 if not self._error and (self._calc_xs or self._calc_mu):
@@ -1130,7 +1159,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # Check if models are already excluded
                 if not self._error and self._calc_mu:
-                    self._run_external('SModelS', 'timeout 60 runSModelS '
+                    self._run_external('SModelS', 'timeout 1800 runSModelS '
                                        '-o smodels_summary.txt '
                                        '-f {}/susyhit_slha.out'
                                        .format(self._dir_susyhit), False)

@@ -61,6 +61,9 @@ class MassScanPlots(object):
         self.m_scharm_l = []
         self.m_scharm_r = []
 
+        # Lifetimes
+        self.lt_gluino = []
+
         # Decay channels
         self.dc_gluino = []
         self.dc_chargino1 = []
@@ -151,6 +154,15 @@ class MassScanPlots(object):
         name = 'm_scharm_r'
         title = 'm_{#tilde{c}_{R}} [GeV]'
         self._make_plot(name, title, self.m_scharm_r)
+
+        # Lifetimes
+        gStyle.SetPaintTextFormat('3.2g')
+
+        name = 'lt_gluino'
+        title = '#tau_{#tilde{g}} [s]'
+        self._make_plot(name, title, self.lt_gluino, decimals=99)
+
+        gStyle.SetPaintTextFormat('g')
 
         # Mass differences
         name = 'm_gluino-m_chargino1'

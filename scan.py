@@ -19,8 +19,8 @@ if __name__ == "__main__":
     ##PLOTS.set_star(-1071.46632, 534.761347)
     #PLOTS.plot()
 
-    X = [100*i+50 for i in range(2, 16)]
-    Y = [100*i for i in range(2, 16)]
+    X = [100*i+50 for i in range(2, 13)]
+    Y = [100*i for i in range(2, 13)]
     for grid in range(1, 13):
         for limit in ['a', 'b']:
 
@@ -31,7 +31,7 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output35_test'
+            output = 'output37_all-grids'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:

@@ -283,7 +283,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 f_in.write(sub('{}.*'.format(slha),
                                '{}{}'.format(slha, m_particle), line))
 
-    def _run_external(self, name, cmd):  # pylint: disable=no-self-use
+    def _run_external(self, name, cmd,  # pylint: disable=no-self-use
+                      check_for_error=True):
 
         """ Run external software, such as SUSYHIT or SModelS. """
 
@@ -292,7 +293,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         if LGR.getEffectiveLevel() > 10:
             cmd += ' &> /dev/null'
         # Logic inverted: bash success (0) is python failure
-        if system(cmd):
+        if system(cmd) and check_for_error:
             raise RuntimeError('Could not run {}.'.format(name))
 
     def _check_susyhit_output(self):
@@ -834,10 +835,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         """ Get excluded observed signal strength from SModelS output file. """
 
-        with open('smodels_summary.txt', 'r') as f_smodels:
-            for line in f_smodels:
-                if line.startswith('The highest r value is'):
-                    return float(line.rstrip().split()[-1])
+        try:
+            with open('smodels_summary.txt', 'r') as f_smodels:
+                for line in f_smodels:
+                    if line.startswith('The highest r value is'):
+                        return float(line.rstrip().split()[-1])
+        except IOError:
+            pass
+
         return 0.
 
     def _get_masses(self):
@@ -1126,14 +1131,14 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
                 # Check if models are already excluded
                 if not self._error and self._calc_mu:
-                    self._run_external('SModelS', 'runSModelS '
+                    self._run_external('SModelS', 'timeout 60 runSModelS '
                                        '-o smodels_summary.txt '
                                        '-f {}/susyhit_slha.out'
-                                       .format(self._dir_susyhit))
+                                       .format(self._dir_susyhit), False)
                     self._mu = self._get_mu()
 
                     # Move SModelS output file
-                    system('mv smodels_summary.txt smodels_summary_{}_{}.txt'
+                    system('mv smodels_summary.txt smodels_summary_{}_{}.txt 2>/dev/null'
                            .format(prmtr_x, prmtr_y))
 
                     LGR.debug('Excluded signal strength: %s', self._mu)

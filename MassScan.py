@@ -1151,7 +1151,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         [0], [0], [0]
                     else:
                         self._br_leptons, self._br_jets, self._br_photons = \
-                        self._get_brs(self._dom_id1)
+                        self._get_brs(self._id_gluino)
+                        #self._get_brs(self._dom_id1)
 
                     if not self._br_leptons or not self._br_jets or not self._br_photons:
                         self._skip_point(prmtr_x, prmtr_y)

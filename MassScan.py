@@ -115,6 +115,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         # Lifetimes of particles
         self._lt_gluino = -1.
+        self._lt_chargino1 = -1.
+        self._lt_neutralino2 = -1.
 
         # Cross-sections
         self._xs13_incl = -1.
@@ -887,6 +889,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         """ Get lifetimes of particles. """
 
         self._lt_gluino = self._get_lt(self._id_gluino)
+        self._lt_chargino1 = self._get_lt(self._id_chargino1)
+        self._lt_neutralino2 = self._get_lt(self._id_neutralino2)
 
     def _get_lt(self, id_particle):
 
@@ -954,6 +958,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._m_scharm_l = 0.
         self._m_scharm_r = 0.
         self._lt_gluino = 0.
+        self._lt_chargino1 = 0.
+        self._lt_neutralino2 = 0.
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
@@ -1020,6 +1026,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Plots for lifetimes
         if self._calc_br:
             plots.lt_gluino.append(self._lt_gluino)
+            plots.lt_chargino1.append(self._lt_chargino1)
+            plots.lt_neutralino2.append(self._lt_neutralino2)
 
         # Plots for xs's
         if self._calc_xs:

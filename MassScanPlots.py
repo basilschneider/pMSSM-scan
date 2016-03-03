@@ -63,6 +63,8 @@ class MassScanPlots(object):
 
         # Lifetimes
         self.lt_gluino = []
+        self.lt_chargino1 = []
+        self.lt_neutralino2 = []
 
         # Decay channels
         self.dc_gluino = []
@@ -161,6 +163,14 @@ class MassScanPlots(object):
         name = 'lt_gluino'
         title = '#tau_{#tilde{g}} [s]'
         self._make_plot(name, title, self.lt_gluino, decimals=99)
+
+        name = 'lt_chargino1'
+        title = '#tau_{#tilde{#chi}_{1}^{#pm}} [s]'
+        self._make_plot(name, title, self.lt_chargino1, decimals=99)
+
+        name = 'lt_neutralino2'
+        title = '#tau_{#tilde{#chi}_{2}^{0}} [s]'
+        self._make_plot(name, title, self.lt_neutralino2, decimals=99)
 
         gStyle.SetPaintTextFormat('g')
 

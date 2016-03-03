@@ -5,7 +5,6 @@
 from os import system
 from ROOT import TFile, gStyle  # pylint: disable=import-error
 from Logger import LGR
-from DecayChannel import DecayChannel
 from ToolboxTH2 import ToolboxTH2
 from ToolboxHelper import safe_divide
 

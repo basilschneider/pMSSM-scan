@@ -5,18 +5,19 @@
 
 from os import system
 from re import sub, subn, search
-# pylint: disable=no-name-in-module
 from itertools import dropwhile, takewhile, ifilterfalse, tee, product
 from functools import reduce
 from cmath import isnan
 from fileinput import input
 from Logger import LGR
+from ToolboxHelper import get_lst_entry_default
+from PdgParticle import PdgParticle
 from MassScanPlots import MassScanPlots
 from DecayChannel import DecayChannel
-from ToolboxHelper import get_lst_entry_default, tree
+from CrossSection import CrossSection
 
 
-class MassScan(object):  # pylint: disable=too-many-instance-attributes
+class MassScan(PdgParticle):
 
     """ Make a mass scan for different SUSY particle masses with SUSYHIT and
     calculates branching ratios to various final states. """
@@ -27,25 +28,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
     _calc_masses = True
     _calc_xs = True
     _calc_br = True
-    _calc_mu = True
-
-    # Define ID's of particles
-    _id_gluino = 1000021
-    _id_neutralino1 = 1000022
-    _id_neutralino2 = 1000023
-    _id_neutralino3 = 1000025
-    _id_chargino1 = 1000024
-    _id_smhiggs = 25
-    _id_stop1 = 1000006
-    _id_stop2 = 2000006
-    _id_sdown_l = 1000001
-    _id_sdown_r = 2000001
-    _id_sup_l = 1000002
-    _id_sup_r = 2000002
-    _id_sstrange_l = 1000003
-    _id_sstrange_r = 2000003
-    _id_scharm_l = 1000004
-    _id_scharm_r = 2000004
+    _calc_mu = False
 
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
@@ -77,23 +60,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
         # Branching ratios below this threshold are skipped (to save time)
         self._threshold = 0.05
-
-        # List of particles
-        self._l_jets = [1, 2, 3, 4, 5, 21, 111, 211]
-        self._l_leptons = [11, 13]
-        self._l_met = [12, 14, 16, 1000022]
-        self._l_photon = [22]
-        # Unknown particles are ignored
-        # (999 is a dummy particle, if decay modes are not known)
-        self._l_unknown = [999]
-        self._l_final_states = self._l_jets + \
-                               self._l_leptons + \
-                               self._l_met + \
-                               self._l_photon + \
-                               self._l_unknown
-        self._l_strong = [1000001, 1000002, 1000003, 1000004, 1000005, 1000006,
-                     2000001, 2000002, 2000003, 2000004, 2000005, 2000006,
-                     1000021]
 
         # Masses of particles
         self._m_gluino = -1.
@@ -128,6 +94,10 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         # Dominant production cross section particles
         self._dom_id1 = -1
         self._dom_id2 = -1
+
+        # Cross-sections
+        self._xs13 = CrossSection()
+        self._xs8 = CrossSection()
 
         # Decay channels
         self._dc_gluino = DecayChannel()
@@ -498,7 +468,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                 continue
             # Divide sample in final states and non final states
             final, non_final = [tuple(x) for x in self._partition
-                                (lambda y: not self._is_final(y), path)]
+                                (lambda y: not self._is_final_state(y), path)]
             if non_final:
                 visited = visited.union((id_particle,))
                 for node in product(*[self._prob_tree(x, visited)
@@ -605,60 +575,6 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         while len(lst) <= idx:
             lst.append(val)
 
-    def _is_final(self, id_particle):
-
-        """ Return if id_particle is considered final, i.e. a final state
-        particle or an ignored particle. """
-
-        return self._is_final_state(abs(id_particle))
-
-    def _is_final_state(self, id_particle):
-
-        """ Return if id_particle is considered a final state or not. """
-
-        return abs(id_particle) in self._l_final_states
-
-    def _is_jet(self, id_particle):
-
-        """ Return if id_particle is a final state jet or not. """
-
-        # All particles in this list need to be in the final state list as well
-        return abs(id_particle) in self._l_jets
-
-    def _is_lepton(self, id_particle):
-
-        """ Return if id_particle is a charged final state lepton or not. """
-
-        # All particles in this list need to be in the final state list as well
-        return abs(id_particle) in self._l_leptons
-
-    def _is_met(self, id_particle):
-
-        """ Return if id_particle is undetectable and leads to missing
-        transverse momentum. """
-
-        # All particles in this list need to be in the final state list as well
-        return abs(id_particle) in self._l_met
-
-    def _is_photon(self, id_particle):
-
-        """ Return if id_particle is final state photon or not. """
-
-        # All particles in this list need to be in the final state list as well
-        return abs(id_particle) in self._l_photon
-
-    def _is_unknown(self, id_particle):
-
-        """ Return if id_particle has unknown decays. """
-
-        return abs(id_particle) in self._l_unknown
-
-    def _is_strong(self, id_particle):
-
-        """ Returns if SUSY particle is colored. """
-
-        return abs(id_particle) in self._l_strong
-
     def _skip_point(self, coordinate_x,  # pylint: disable=no-self-use
                     coordinate_y):
 
@@ -717,124 +633,33 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
 
             print line,
 
+    def _get_xs(self):
 
-    def _get_xs_all(self):
+        """ Get cross sections. """
 
-        """ Get all cross-sections. """
+        self._xs13 = CrossSection()
+        self._xs8 = CrossSection()
 
-        LGR.debug('Get cross-sections:')
+        # Get cross sections from SLHA, both for 13 and 8 TeV
+        self._xs13.get_xs(13, self._dir_susyhit)
+        self._xs8.get_xs(8, self._dir_susyhit)
 
-        self._xs13_incl, self._xs13_strong = self._get_xs_incl(13)
-        self._xs8_incl, self._xs8_strong = self._get_xs_incl(8)
-        self._xs13_gluinos = self._get_xs(13, self._id_gluino)
+        # Get dominant production process
+        self._dom_id1, self._dom_id2 = self._xs13.get_xs_dominant()
 
-    def _get_xs_incl(self, com):
+        # Get inclusive cross sections
+        self._xs13_incl = self._xs13.get_xs_incl()
+        self._xs8_incl = self._xs8.get_xs_incl()
 
-        """ Get inclusive cross-section. """
+        # Get strong cross sections
+        self._xs13_strong = self._xs13.get_xs_strong()
+        self._xs8_strong = self._xs8.get_xs_strong()
 
-        # Regex to be searched in SLHA file
-        if com == 13:
-            regex_xs = r'XSECTION *1\.30E\+04 *2212 2212'
-        elif com == 8:
-            regex_xs = r'XSECTION *8\.00E\+03 *2212 2212'
-        else:
-            raise ValueError('Only cross-sections of 8 or 13 TeV are allowed.')
+        # Get gluino gluino cross section
+        self._xs13_gluinos = self._xs13.get_xs_particle(self._id_gluino)
 
-        xs_incl = 0.
-        xs_strong = 0.
-        with open('{}/susyhit_slha.out'
-                  .format(self._dir_susyhit), 'r') as f_susyhit:
-            found_xsec = False
-            strong_xsec = False
-            for line in f_susyhit:
-                if found_xsec:
-                    xs_incl += float(line.split()[6])
-                    found_xsec = False
-                    if strong_xsec:
-                        xs_strong += float(line.split()[6])
-                        strong_xsec = False
-                # If the xs matches, set bool, next line will have the xs
-                if search(regex_xs, line):
-                    found_xsec = True
-                    # Check if strong production
-                    if self._is_strong(float(line.split()[5])) and \
-                       self._is_strong(float(line.split()[6])):
-                        strong_xsec = True
-
-        # Multiply by 1000. to get cross-section in fb
-        return 1000.*xs_incl, 1000.*xs_strong
-
-    def _get_xs(self, com, id_particle_1, id_particle_2=-1.):
-
-        """ Get specific cross-section. """
-
-        # If id_particle_2 is not defined, set it to id_particle_1
-        if id_particle_2 < 0:
-            id_particle_2 = id_particle_1
-
-        # Regex to be searched in SLHA file
-        if com == 13:
-            regex_xs = r'XSECTION *1\.30E\+04 *2212 2212 2 {} {}' \
-                       .format(id_particle_1, id_particle_2)
-        elif com == 8:
-            regex_xs = r'XSECTION *8\.00E\+03 *2212 2212 2 {} {}' \
-                       .format(id_particle_1, id_particle_2)
-        else:
-            raise ValueError('Only cross-sections of 8 or 13 TeV are allowed.')
-
-        with open('{}/susyhit_slha.out'
-                  .format(self._dir_susyhit), 'r') as f_susyhit:
-            found_xsec = False
-            for line in f_susyhit:
-                if found_xsec:
-                    xs_incl = float(line.split()[6])
-                    LGR.debug('Found XS %s for particles %s and %s from line '
-                              '%s.', xs_incl, id_particle_1, id_particle_2,
-                              line.rstrip())
-                    # Multiply by 1000. to return cross-section in fb
-                    return 1000.*xs_incl
-                # If the xs matches, set bool, next line will have the xs
-                if search(regex_xs, line):
-                    LGR.debug(line.rstrip())
-                    found_xsec = True
-
-        # If no cross-section was found, return 0
-        return 0.
-
-    def _get_dominant_xs(self):
-
-        """ Get the dominant production process. """
-
-        regex_xs = r'XSECTION *1\.30E\+04 *2212 2212'
-
-        dom_xsec = 0.
-        dom_id1 = 0
-        dom_id2 = 0
-
-        with open('{}/susyhit_slha.out'
-                  .format(self._dir_susyhit), 'r') as f_susyhit:
-            found_xsec = False
-            for line in f_susyhit:
-                if found_xsec:
-                    # Check if cross section is largest
-                    if float(line.split()[6]) > dom_xsec:
-                        dom_xsec = float(line.split()[6])
-                        dom_id1 = dom_id1_temp
-                        dom_id2 = dom_id2_temp
-                    found_xsec = False
-                # If the xs matches, set bool, next line will have the xs
-                if search(regex_xs, line):
-                    dom_id1_temp = int(line.split()[5])
-                    dom_id2_temp = int(line.split()[6])
-                    found_xsec = True
-
-        LGR.debug('Dominant cross section particles: %s, %s', dom_id1, dom_id2)
-
-        # Currently, only pair production is supported
-        if dom_id1 != dom_id2:
-            LGR.warning('The dominant process is not a pair production, but '
-                        'associated production of %s and %s', dom_id1, dom_id2)
-        return dom_id1, dom_id2
+        LGR.critical(self._xs13_incl)
+        LGR.critical(self._xs13_strong)
 
     def _get_mu(self):  # pylint: disable=no-self-use
 
@@ -922,7 +747,7 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         if min_id == 1000022:
             return True
         else:
-            LGR.warning('LSP is {}'.format(min_id))
+            LGR.warning('LSP is %s', min_id)
             return False
 
     def set_threshold(self, threshold):
@@ -963,6 +788,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
+        self._xs13 = CrossSection()
+        self._xs8 = CrossSection()
         self._dc_gluino = DecayChannel()
         self._dc_chargino1 = DecayChannel()
         self._dc_neutralino2 = DecayChannel()
@@ -1153,11 +980,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._apply_k_factor()
 
                     if self._calc_xs:
-                        self._get_xs_all()
+                        self._get_xs()
 
-                # Determine dominant production process
-                if not self._error and self._calc_br:
-                    self._dom_id1, self._dom_id2 = self._get_dominant_xs()
 
                 # Move SUSYHIT output
                 system('cp {}/susyhit_slha.out susyhit_slha_{}_{}.out'
@@ -1174,8 +998,8 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                     self._mu = self._get_mu()
 
                     # Move SModelS output file
-                    system('mv smodels_summary.txt smodels_summary_{}_{}.txt 2>/dev/null'
-                           .format(prmtr_x, prmtr_y))
+                    system('mv smodels_summary.txt smodels_summary_{}_{}.txt '
+                           '2>/dev/null'.format(prmtr_x, prmtr_y))
 
                     LGR.debug('Excluded signal strength: %s', self._mu)
 
@@ -1186,11 +1010,15 @@ class MassScan(object):  # pylint: disable=too-many-instance-attributes
                         self._br_leptons, self._br_jets, self._br_photons = \
                         [0], [0], [0]
                     else:
+                        # Get all production processes over a certain threshold
+
                         self._br_leptons, self._br_jets, self._br_photons = \
                         self._get_brs(self._id_gluino)
                         #self._get_brs(self._dom_id1)
 
-                    if not self._br_leptons or not self._br_jets or not self._br_photons:
+                    if not self._br_leptons or \
+                       not self._br_jets or \
+                       not self._br_photons:
                         self._skip_point(prmtr_x, prmtr_y)
 
                 # Get decay channels

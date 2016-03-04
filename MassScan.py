@@ -481,10 +481,66 @@ class MassScan(PdgParticle):
             else:
                 yield prob, final
 
-    def _get_brs(self, id_parent):  # pylint: disable=too-many-locals
+    def _get_brs(self, id_parent_1, id_parent_2=-1.):
 
         """ Get probabilites for branching into one, two, ... leptons and jets.
         This includes the combinatorics from 2 parent particles. """
+
+        # If id_parent_2 is not set, set it to same value as id_parent_1
+        if id_parent_2 < 0:
+            id_parent_2 = id_parent_1
+
+        br_leptons_1leg_1, br_jets_1leg_1, br_photons_1leg_1 = \
+            self._get_br_1leg(id_parent_1)
+
+        # Don't call self._get_br_1leg() again if both parent particles are the
+        # same
+        if id_parent_2 == id_parent_1:
+            br_leptons_1leg_2 = br_leptons_1leg_1
+            br_jets_1leg_2 = br_jets_1leg_1
+            br_photons_1leg_2 = br_photons_1leg_1
+        else:
+            br_leptons_1leg_2, br_jets_1leg_2, br_photons_1leg_2 = \
+                self._get_br_1leg(id_parent_2)
+
+        # Create list with right length
+        br_leptons_2leg = [0]*(len(br_leptons_1leg_1)+len(br_leptons_1leg_2)-1)
+        br_jets_2leg = [0]*(len(br_jets_1leg_1)+len(br_jets_1leg_2)-1)
+        br_photons_2leg = [0]*(len(br_photons_1leg_1)+len(br_photons_1leg_2)-1)
+
+        # Combinatorics going from one leg to two legs
+        for idx_l1, br_l1 in enumerate(br_leptons_1leg_1):
+            for idx_l2, br_l2 in enumerate(br_leptons_1leg_2):
+                br_leptons_2leg[idx_l1+idx_l2] += br_l1*br_l2
+
+        for idx_j1, br_j1 in enumerate(br_jets_1leg_1):
+            for idx_j2, br_j2 in enumerate(br_jets_1leg_2):
+                br_jets_2leg[idx_j1+idx_j2] += br_j1*br_j2
+
+        for idx_l1, br_l1 in enumerate(br_photons_1leg_1):
+            for idx_l2, br_l2 in enumerate(br_photons_1leg_2):
+                br_photons_2leg[idx_l1+idx_l2] += br_l1*br_l2
+
+        # If total branching ratio (for both legs) is under a certain
+        # threshold, throw a warning; this can have many reasons, like unknown
+        # (ignored) particle decays, or thresholds to limit computing time
+        if sum(br_leptons_2leg) < .9:
+            LGR.warning('The defined threshold led to a total branching '
+                        'ratio of %s. You might want to consider lowering the '
+                        'threshold.', sum(br_leptons_2leg))
+
+        LGR.debug('Branching ratios into leptons (1st leg): %s',
+                  br_leptons_1leg_1)
+        LGR.debug('Branching ratios into leptons (2nd leg): %s',
+                  br_leptons_1leg_2)
+        LGR.debug('Branching ratios into leptons (both legs): %s',
+                  br_leptons_2leg)
+
+        return br_leptons_2leg, br_jets_2leg, br_photons_2leg
+
+    def _get_br_1leg(self, id_parent):
+
+        """ Get branching ratio into particles for one particle. """
 
         br_leptons_1leg = []
         br_jets_1leg = []
@@ -534,39 +590,7 @@ class MassScan(PdgParticle):
         LGR.debug('Branching ratios into photons: %s', br_photons_1leg)
         LGR.debug('Total branching ratio: %s', sum(br_leptons_1leg))
 
-        # Create list with right length
-        br_leptons_2leg = [0]*((2*len(br_leptons_1leg))-1)
-        br_jets_2leg = [0]*((2*len(br_jets_1leg))-1)
-        br_photons_2leg = [0]*((2*len(br_jets_1leg))-1)
-
-        # Combinatorics going from one leg to two legs
-        for idx_l1, br_l1 in enumerate(br_leptons_1leg):
-            for idx_l2, br_l2 in enumerate(br_leptons_1leg):
-                br_leptons_2leg[idx_l1+idx_l2] += br_l1*br_l2
-
-        for idx_j1, br_j1 in enumerate(br_jets_1leg):
-            for idx_j2, br_j2 in enumerate(br_jets_1leg):
-                br_jets_2leg[idx_j1+idx_j2] += br_j1*br_j2
-
-        for idx_l1, br_l1 in enumerate(br_photons_1leg):
-            for idx_l2, br_l2 in enumerate(br_photons_1leg):
-                br_photons_2leg[idx_l1+idx_l2] += br_l1*br_l2
-
-        # If total branching ratio (for both legs) is under a certain
-        # threshold, throw a warning; this can have many reasons, like unknown
-        # (ignored) particle decays, or thresholds to limit computing time
-        if sum(br_leptons_2leg) < .9:
-            LGR.warning('The defined threshold led to a total branching '
-                        'ratio of %s. You might want to consider lowering the '
-                        'threshold.', sum(br_leptons_2leg))
-
-        LGR.debug('Branching ratios into leptons (one leg): %s',
-                  br_leptons_1leg)
-        LGR.debug('Branching ratios into leptons (two legs): %s',
-                  br_leptons_2leg)
-        LGR.debug('Branching ratios into jets (one leg): %s', br_jets_1leg)
-        LGR.debug('Branching ratios into jets (two legs): %s', br_jets_2leg)
-        return br_leptons_2leg, br_jets_2leg, br_photons_2leg
+        return br_leptons_1leg, br_jets_1leg, br_photons_1leg
 
     def _expand_list(self, lst, idx, val=0.):  # pylint: disable=no-self-use
 
@@ -657,9 +681,6 @@ class MassScan(PdgParticle):
 
         # Get gluino gluino cross section
         self._xs13_gluinos = self._xs13.get_xs_particle(self._id_gluino)
-
-        LGR.critical(self._xs13_incl)
-        LGR.critical(self._xs13_strong)
 
     def _get_mu(self):  # pylint: disable=no-self-use
 
@@ -1011,10 +1032,8 @@ class MassScan(PdgParticle):
                         [0], [0], [0]
                     else:
                         # Get all production processes over a certain threshold
-
                         self._br_leptons, self._br_jets, self._br_photons = \
-                        self._get_brs(self._id_gluino)
-                        #self._get_brs(self._dom_id1)
+                        self._get_brs(self._id_gluino, self._id_gluino)
 
                     if not self._br_leptons or \
                        not self._br_jets or \

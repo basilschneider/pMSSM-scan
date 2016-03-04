@@ -31,7 +31,7 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output43_new_xs'
+            output = 'output44_full-scan'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:

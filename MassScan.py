@@ -28,7 +28,7 @@ class MassScan(PdgParticle):
     _calc_masses = True
     _calc_xs = True
     _calc_br = True
-    _calc_mu = False
+    _calc_mu = True
 
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
@@ -80,9 +80,9 @@ class MassScan(PdgParticle):
         self._m_scharm_r = -1.
 
         # Lifetimes of particles
-        self._lt_gluino = -1.
-        self._lt_chargino1 = -1.
-        self._lt_neutralino2 = -1.
+        self._ct_gluino = -1.
+        self._ct_chargino1 = -1.
+        self._ct_neutralino2 = -1.
 
         # Cross-sections
         self._xs13_incl = -1.
@@ -766,13 +766,13 @@ class MassScan(PdgParticle):
                               mass, id_particle, line.rstrip())
                     return abs(mass)
 
-    def _get_lifetimes(self):
+    def _get_ctau(self):
 
-        """ Get lifetimes of particles. """
+        """ Get c*tau of particles. """
 
-        self._lt_gluino = self._get_lt(self._id_gluino)
-        self._lt_chargino1 = self._get_lt(self._id_chargino1)
-        self._lt_neutralino2 = self._get_lt(self._id_neutralino2)
+        self._ct_gluino = 3e11 * self._get_lt(self._id_gluino)
+        self._ct_chargino1 = 3e11 * self._get_lt(self._id_chargino1)
+        self._ct_neutralino2 = 3e11 * self._get_lt(self._id_neutralino2)
 
     def _get_lt(self, id_particle):
 
@@ -839,9 +839,9 @@ class MassScan(PdgParticle):
         self._m_sstrange_r = 0.
         self._m_scharm_l = 0.
         self._m_scharm_r = 0.
-        self._lt_gluino = 0.
-        self._lt_chargino1 = 0.
-        self._lt_neutralino2 = 0.
+        self._ct_gluino = 0.
+        self._ct_chargino1 = 0.
+        self._ct_neutralino2 = 0.
         self._mu = 0.
         self._dom_id1 = 0
         self._dom_id2 = 0
@@ -909,9 +909,9 @@ class MassScan(PdgParticle):
 
         # Plots for lifetimes
         if self._calc_br:
-            plots.lt_gluino.append(self._lt_gluino)
-            plots.lt_chargino1.append(self._lt_chargino1)
-            plots.lt_neutralino2.append(self._lt_neutralino2)
+            plots.ct_gluino.append(self._ct_gluino)
+            plots.ct_chargino1.append(self._ct_chargino1)
+            plots.ct_neutralino2.append(self._ct_neutralino2)
 
         # Plots for xs's
         if self._calc_xs:
@@ -1021,7 +1021,7 @@ class MassScan(PdgParticle):
 
                 # Get particle lifetimes
                 if not self._error and self._calc_br:
-                    self._get_lifetimes()
+                    self._get_ctau()
 
                 # Calculate cross-section with SModelS
                 if not self._error and (self._calc_xs or self._calc_mu):

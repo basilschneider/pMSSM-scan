@@ -481,6 +481,28 @@ class MassScan(PdgParticle):
             else:
                 yield prob, final
 
+    def _get_br_all(self):
+
+        """ Get branching fractions into n particles for all production
+        processes. """
+
+        self._br_leptons = []
+        self._br_jets = []
+        self._br_photons = []
+
+        if self._threshold >= 1.:
+            self._br_leptons = [0]
+            self._br_jets = [0]
+            self._br_photons = [0]
+        else:
+            # Calculate branching ratios, if threshold is below 1
+            self._get_brs(self._id_gluino, self._id_gluino)
+
+        if not self._br_leptons or \
+           not self._br_jets or \
+           not self._br_photons:
+            self._skip_point(prmtr_x, prmtr_y)
+
     def _get_brs(self, id_parent_1, id_parent_2=-1.):
 
         """ Get probabilites for branching into one, two, ... leptons and jets.
@@ -536,7 +558,9 @@ class MassScan(PdgParticle):
         LGR.debug('Branching ratios into leptons (both legs): %s',
                   br_leptons_2leg)
 
-        return br_leptons_2leg, br_jets_2leg, br_photons_2leg
+        self._br_leptons += br_leptons_2leg
+        self._br_jets += br_jets_2leg
+        self._br_photons += br_photons_2leg
 
     def _get_br_1leg(self, id_parent):
 
@@ -1026,19 +1050,7 @@ class MassScan(PdgParticle):
 
                 # Calculate branching ratios into final states
                 if not self._error and self._calc_br:
-                    # Calculate branching ratios, if threshold is below 1
-                    if self._threshold >= 1.:
-                        self._br_leptons, self._br_jets, self._br_photons = \
-                        [0], [0], [0]
-                    else:
-                        # Get all production processes over a certain threshold
-                        self._br_leptons, self._br_jets, self._br_photons = \
-                        self._get_brs(self._id_gluino, self._id_gluino)
-
-                    if not self._br_leptons or \
-                       not self._br_jets or \
-                       not self._br_photons:
-                        self._skip_point(prmtr_x, prmtr_y)
+                    self._get_br_all()
 
                 # Get decay channels
                 if not self._error and self._calc_br:

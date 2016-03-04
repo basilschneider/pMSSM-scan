@@ -289,20 +289,17 @@ class MassScanPlots(object):
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):
             name = 'br_{}_leptons'.format(no_leptons)
-            title = 'BR(#tilde{{g}}#tilde{{g}} #rightarrow {} leptons)'\
-                    .format(no_leptons)
+            title = 'BR into {} leptons)'.format(no_leptons)
             self._make_plot(name, title, self.br_leptons[no_leptons], True)
 
         for no_jets in range(len(self.br_jets)):
             name = 'br_{}_jets'.format(no_jets)
-            title = 'BR(#tilde{{g}}#tilde{{g}} #rightarrow {} jets)'\
-                    .format(no_jets)
+            title = 'BR into {} jets)'.format(no_jets)
             self._make_plot(name, title, self.br_jets[no_jets], True)
 
         for no_photons in range(len(self.br_photons)):
             name = 'br_{}_photons'.format(no_photons)
-            title = 'BR(#tilde{{g}}#tilde{{g}} #rightarrow {} photons)'\
-                    .format(no_photons)
+            title = 'BR into {} photons)'.format(no_photons)
             self._make_plot(name, title, self.br_photons[no_photons], True)
 
         # Cross-sections times branching ratio

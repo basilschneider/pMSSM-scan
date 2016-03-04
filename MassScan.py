@@ -490,23 +490,22 @@ class MassScan(PdgParticle):
         self._br_jets = []
         self._br_photons = []
 
+        # Don't calculate branching ratios, if threshold is above 1
         if self._threshold >= 1.:
             self._br_leptons = [0]
             self._br_jets = [0]
             self._br_photons = [0]
         else:
-            # Calculate branching ratios, if threshold is below 1
-            self._get_brs(self._id_gluino, self._id_gluino)
+            xs_incl = self._xs13.get_xs_incl()
+            for idx, xs in enumerate(self._xs13._xs):
+                self._get_brs(self._xs13._p1[idx],
+                              self._xs13._p2[idx], xs/xs_incl)
 
-        if not self._br_leptons or \
-           not self._br_jets or \
-           not self._br_photons:
-            self._skip_point(prmtr_x, prmtr_y)
-
-    def _get_brs(self, id_parent_1, id_parent_2=-1.):
+    def _get_brs(self, id_parent_1, id_parent_2=-1., weight=1.):
 
         """ Get probabilites for branching into one, two, ... leptons and jets.
-        This includes the combinatorics from 2 parent particles. """
+        This includes the combinatorics from 2 parent particles. The
+        probabilities are weighted by weight. """
 
         # If id_parent_2 is not set, set it to same value as id_parent_1
         if id_parent_2 < 0:
@@ -558,9 +557,22 @@ class MassScan(PdgParticle):
         LGR.debug('Branching ratios into leptons (both legs): %s',
                   br_leptons_2leg)
 
-        self._br_leptons += br_leptons_2leg
-        self._br_jets += br_jets_2leg
-        self._br_photons += br_photons_2leg
+        # Fill class variables
+        for idx, br in enumerate(br_leptons_2leg):
+            try:
+                self._br_leptons[idx] += weight*br
+            except IndexError:
+                self._br_leptons.append(weight*br)
+        for idx, br in enumerate(br_jets_2leg):
+            try:
+                self._br_jets[idx] += weight*br
+            except IndexError:
+                self._br_jets.append(weight*br)
+        for idx, br in enumerate(br_photons_2leg):
+            try:
+                self._br_photons[idx] += weight*br
+            except IndexError:
+                self._br_photons.append(weight*br)
 
     def _get_br_1leg(self, id_parent):
 
@@ -1051,6 +1063,11 @@ class MassScan(PdgParticle):
                 # Calculate branching ratios into final states
                 if not self._error and self._calc_br:
                     self._get_br_all()
+                    if not self._br_leptons or \
+                       not self._br_jets or \
+                       not self._br_photons:
+                        self._skip_point(prmtr_x, prmtr_y)
+
 
                 # Get decay channels
                 if not self._error and self._calc_br:

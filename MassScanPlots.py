@@ -220,7 +220,7 @@ class MassScanPlots(object):
         self._make_plot(name, title, self.xs8_strong, True)
 
         name = 'xs13_xs8'
-        title = '#sigma_{strong} (13 TeV)/#sigma_{inclusive} (8 TeV)'
+        title = '#sigma_{incl} (13 TeV)/#sigma_{incl} (8 TeV)'
         self._make_plot(name, title, [safe_divide(a, b) for a, b in
                                       zip(self.xs13_incl, self.xs8_incl)])
 
@@ -255,51 +255,51 @@ class MassScanPlots(object):
         self._make_plot_dc(name, title, self.dc_neutralino3)
 
         name = 'dc_sdown_l'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{d}_{L}'
         self._make_plot_dc(name, title, self.dc_sdown_l)
 
         name = 'dc_sdown_r'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{d}_{R}'
         self._make_plot_dc(name, title, self.dc_sdown_r)
 
         name = 'dc_sup_l'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{u}_{L}'
         self._make_plot_dc(name, title, self.dc_sup_l)
 
         name = 'dc_sup_r'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{u}_{R}'
         self._make_plot_dc(name, title, self.dc_sup_r)
 
         name = 'dc_sstrange_l'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{s}_{L}'
         self._make_plot_dc(name, title, self.dc_sstrange_l)
 
         name = 'dc_sstrange_r'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{s}_{R}'
         self._make_plot_dc(name, title, self.dc_sstrange_r)
 
         name = 'dc_scharm_l'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{c}_{L}'
         self._make_plot_dc(name, title, self.dc_scharm_l)
 
         name = 'dc_scharm_r'
-        title = 'Relative decay channels of #tilde{g}'
+        title = 'Relative decay channels of #tilde{c}_{R}'
         self._make_plot_dc(name, title, self.dc_scharm_r)
 
         # Branching ratios
         for no_leptons in range(len(self.br_leptons)):
             name = 'br_{}_leptons'.format(no_leptons)
-            title = 'BR into {} leptons)'.format(no_leptons)
+            title = 'BR into {} leptons'.format(no_leptons)
             self._make_plot(name, title, self.br_leptons[no_leptons], True)
 
         for no_jets in range(len(self.br_jets)):
             name = 'br_{}_jets'.format(no_jets)
-            title = 'BR into {} jets)'.format(no_jets)
+            title = 'BR into {} jets'.format(no_jets)
             self._make_plot(name, title, self.br_jets[no_jets], True)
 
         for no_photons in range(len(self.br_photons)):
             name = 'br_{}_photons'.format(no_photons)
-            title = 'BR into {} photons)'.format(no_photons)
+            title = 'BR into {} photons'.format(no_photons)
             self._make_plot(name, title, self.br_photons[no_photons], True)
 
         # Cross-sections times branching ratio

@@ -31,17 +31,17 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output44_full-scan'
+            output = 'output45_full-scan-different-shifts'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:
                 if limit == 'a':
-                    shift = 10
+                    shift = 15
                 else:
-                    shift = 30
+                    shift = 25
             else:
                 if limit == 'a':
-                    shift = 20
+                    shift = 30
                 else:
                     shift = 100
 

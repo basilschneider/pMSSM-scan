@@ -545,10 +545,10 @@ class MassScan(PdgParticle):
         # If total branching ratio (for both legs) is under a certain
         # threshold, throw a warning; this can have many reasons, like unknown
         # (ignored) particle decays, or thresholds to limit computing time
-        if sum(br_leptons_2leg) < .9:
-            LGR.warning('The defined threshold led to a total branching '
-                        'ratio of %s. You might want to consider lowering the '
-                        'threshold.', sum(br_leptons_2leg))
+        #if sum(br_leptons_2leg) < .9:
+        #    LGR.warning('The defined threshold led to a total branching '
+        #                'ratio of %s. You might want to consider lowering the '
+        #                'threshold.', sum(br_leptons_2leg))
 
         LGR.debug('Branching ratios into leptons (1st leg): %s',
                   br_leptons_1leg_1)

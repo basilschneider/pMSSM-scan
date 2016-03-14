@@ -22,7 +22,7 @@ if __name__ == "__main__":
     X = [100*i+50 for i in range(2, 13)]
     Y = [100*i for i in range(2, 13)]
     for grid in range(1, 13):
-        for limit in ['a', 'b']:
+        for limit in ['a', 'b', 'c']:
 
             print('Processing grid{}{}'.format(grid, limit))
 
@@ -31,19 +31,23 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output45_full-scan-different-shifts'
+            output = 'output50_n2-to-leps'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:
                 if limit == 'a':
-                    shift = 15
-                else:
-                    shift = 25
-            else:
-                if limit == 'a':
+                    shift = 10
+                elif limit == 'b':
                     shift = 30
                 else:
+                    shift = 20
+            else:
+                if limit == 'a':
+                    shift = 20
+                elif limit == 'b':
                     shift = 100
+                else:
+                    shift = 50
 
             if grid == 1:
                 MY_SCAN.set_parameter(3, 1)

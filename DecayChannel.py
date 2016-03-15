@@ -64,6 +64,8 @@ class DecayChannel(object):
                              1000015, 1000016, 2000011, 2000012,
                              2000013, 2000014, 2000015, 2000016]:
             return 8
+        elif id_particle == 1000037:
+            return 9
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
                         'found.', id_particle)
@@ -147,7 +149,7 @@ class DecayChannel(object):
 
         """ Get number of different distinguished SUSY processes. """
 
-        return 8
+        return 9
 
     def get_sm(self):
 
@@ -194,6 +196,8 @@ class DecayChannel(object):
             return '#tilde{q}_{3}'
         if ps_susy == 8:
             return '#tilde{l}'
+        if ps_susy == 9:
+            return '#tilde{#chi}_{2}^{#pm}'
         return '?'
 
     def _get_ps_sm(self, ps_sm):
@@ -234,7 +238,7 @@ class DecayChannel(object):
 
         """ Return color for category combination. """
 
-        if ps_susy == 1:
+        if ps_susy in [1, 9]:
             if ps_sm in [1, 12]:
                 return kPink+2
             if ps_sm in [2, 13]:

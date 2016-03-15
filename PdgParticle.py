@@ -14,6 +14,7 @@ class PdgParticle(object):
     _id_neutralino2 = 1000023
     _id_neutralino3 = 1000025
     _id_chargino1 = 1000024
+    _id_chargino2 = 1000037
     _id_smhiggs = 25
     _id_stop1 = 1000006
     _id_stop2 = 2000006

@@ -28,7 +28,7 @@ class MassScan(PdgParticle):
     _calc_masses = True
     _calc_xs = True
     _calc_br = True
-    _calc_mu = True
+    _calc_mu = False
 
     # Directory where SUSYHIT is installed
     _dir_susyhit = '/uscms/home/bschneid/nobackup/pkg/install/'
@@ -102,6 +102,7 @@ class MassScan(PdgParticle):
         # Decay channels
         self._dc_gluino = DecayChannel()
         self._dc_chargino1 = DecayChannel()
+        self._dc_chargino2 = DecayChannel()
         self._dc_neutralino2 = DecayChannel()
         self._dc_neutralino3 = DecayChannel()
         self._dc_sdown_l = DecayChannel()
@@ -849,6 +850,7 @@ class MassScan(PdgParticle):
         self._xs8 = CrossSection()
         self._dc_gluino = DecayChannel()
         self._dc_chargino1 = DecayChannel()
+        self._dc_chargino2 = DecayChannel()
         self._dc_neutralino2 = DecayChannel()
         self._dc_neutralino3 = DecayChannel()
         self._dc_sdown_l = DecayChannel()
@@ -930,6 +932,7 @@ class MassScan(PdgParticle):
         if self._calc_br:
             plots.dc_gluino.append(self._dc_gluino)
             plots.dc_chargino1.append(self._dc_chargino1)
+            plots.dc_chargino2.append(self._dc_chargino2)
             plots.dc_neutralino2.append(self._dc_neutralino2)
             plots.dc_neutralino3.append(self._dc_neutralino3)
             plots.dc_sdown_l.append(self._dc_sdown_l)
@@ -1073,6 +1076,7 @@ class MassScan(PdgParticle):
                 if not self._error and self._calc_br:
                     self._dc_gluino = self._get_dcs(self._id_gluino)
                     self._dc_chargino1 = self._get_dcs(self._id_chargino1)
+                    self._dc_chargino2 = self._get_dcs(self._id_chargino2)
                     self._dc_neutralino2 = self._get_dcs(self._id_neutralino2)
                     self._dc_neutralino3 = self._get_dcs(self._id_neutralino3)
                     self._dc_sdown_l = self._get_dcs(self._id_sdown_l)

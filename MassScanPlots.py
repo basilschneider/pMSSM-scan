@@ -71,6 +71,7 @@ class MassScanPlots(object):
         self.dc_chargino2 = []
         self.dc_neutralino2 = []
         self.dc_neutralino3 = []
+        self.dc_neutralino4 = []
         self.dc_sdown_l = []
         self.dc_sdown_r = []
         self.dc_sup_l = []
@@ -258,6 +259,10 @@ class MassScanPlots(object):
         name = 'dc_neutralino3'
         title = 'Relative decay channels of #tilde{#chi}_{3}^{0}'
         self._make_plot_dc(name, title, self.dc_neutralino3)
+
+        name = 'dc_neutralino4'
+        title = 'Relative decay channels of #tilde{#chi}_{4}^{0}'
+        self._make_plot_dc(name, title, self.dc_neutralino4)
 
         name = 'dc_sdown_l'
         title = 'Relative decay channels of #tilde{d}_{L}'

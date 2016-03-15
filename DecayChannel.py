@@ -3,7 +3,7 @@
 """ Data object to store decay channel characteristic values. """
 
 from ROOT import kGreen, kCyan, kBlue, kMagenta, kPink, kViolet
-from ROOT import kAzure, kTeal, kOrange, kRed, kYellow
+from ROOT import kAzure, kTeal, kOrange, kRed, kYellow, kSpring, kGray
 from Logger import LGR
 
 class DecayChannel(object):
@@ -66,6 +66,8 @@ class DecayChannel(object):
             return 8
         elif id_particle == 1000037:
             return 9
+        elif id_particle == 1000035:
+            return 10
         else:
             LGR.warning('Decay channel category for SUSY particle %s not '
                         'found.', id_particle)
@@ -149,7 +151,7 @@ class DecayChannel(object):
 
         """ Get number of different distinguished SUSY processes. """
 
-        return 9
+        return 10
 
     def get_sm(self):
 
@@ -198,6 +200,8 @@ class DecayChannel(object):
             return '#tilde{l}'
         if ps_susy == 9:
             return '#tilde{#chi}_{2}^{#pm}'
+        if ps_susy == 10:
+            return '#tilde{#chi}_{4}^{0}'
         return '?'
 
     def _get_ps_sm(self, ps_sm):
@@ -238,7 +242,7 @@ class DecayChannel(object):
 
         """ Return color for category combination. """
 
-        if ps_susy in [1, 9]:
+        if ps_susy == 1:
             if ps_sm in [1, 12]:
                 return kPink+2
             if ps_sm in [2, 13]:
@@ -333,6 +337,25 @@ class DecayChannel(object):
                 return kRed-1
             if ps_sm == 11:
                 return kRed+4
+        if ps_susy in [9, 10]:
+            if ps_sm in [1, 12]:
+                return kSpring+2
+            if ps_sm in [2, 13]:
+                return kSpring+5
+            if ps_sm == 3:
+                return kSpring+7
+            if ps_sm in [4, 5, 14]:
+                return kYellow
+            if ps_sm in [6, 7]:
+                return kYellow+1
+            if ps_sm == 8:
+                return kYellow+2
+            if ps_sm == 9:
+                return kYellow+3
+            if ps_sm == 10:
+                return kYellow-1
+            if ps_sm == 11:
+                return kYellow+4
 
         # If all fails...
-        return kYellow
+        return kGray

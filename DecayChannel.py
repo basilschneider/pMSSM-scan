@@ -318,7 +318,7 @@ class DecayChannel(object):
                 return kGreen-1
             if ps_sm == 11:
                 return kGreen+4
-        if ps_susy == 5:
+        if ps_susy in [5, 10]:
             if ps_sm in [1, 12]:
                 return kOrange+2
             if ps_sm in [2, 13]:
@@ -337,7 +337,7 @@ class DecayChannel(object):
                 return kRed-1
             if ps_sm == 11:
                 return kRed+4
-        if ps_susy in [9, 10]:
+        if ps_susy in [9]:
             if ps_sm in [1, 12]:
                 return kSpring+2
             if ps_sm in [2, 13]:

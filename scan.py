@@ -21,8 +21,13 @@ if __name__ == "__main__":
 
     X = [100*i+50 for i in range(2, 13)]
     Y = [100*i for i in range(2, 13)]
-    for grid in range(1, 13):
+    for grid in range(1, 14):
         for limit in ['a', 'b', 'c']:
+
+            if not grid in [2, 5]:
+                continue
+            if limit != 'a':
+                continue
 
             print('Processing grid{}{}'.format(grid, limit))
 
@@ -31,7 +36,7 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output50_n2-to-leps'
+            output = 'output57_for-slides'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:
@@ -69,6 +74,7 @@ if __name__ == "__main__":
                 MY_SCAN.set_parameter(3, 1)
                 MY_SCAN.set_parameter_add_x(4142, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
+                MY_SCAN.set_parameter_add_y(23, 100)
             elif grid == 6:
                 MY_SCAN.set_parameter(3, 23)
                 MY_SCAN.set_parameter_add_x(4142, 0)
@@ -93,6 +99,11 @@ if __name__ == "__main__":
             elif grid == 12:
                 MY_SCAN.set_parameter(44454748, 23)
                 MY_SCAN.set_parameter_add_y(1, shift)
+            elif grid == 13:
+                MY_SCAN.set_parameter(3, 23)
+                MY_SCAN.set_parameter_add_y(1, 0)
+                MY_SCAN.set_parameter_add_y(2, 0)
+
 
             PLOTS = MY_SCAN.do_scan()
             PLOTS.set_rootfile('{}/{}.root'.format(output, name))

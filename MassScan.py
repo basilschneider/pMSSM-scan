@@ -209,7 +209,8 @@ class MassScan(PdgParticle):
             self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
 
         # Set additional parameters in x (with possibly scale and offset)
-        for key in self._l_prmtr_x_add.keys() + self._l_prmtr_x_scale.keys():
+        for key in set(self._l_prmtr_x_add.keys() +
+                       self._l_prmtr_x_scale.keys()):
             if key == 4142:
                 for newkey in range(41, 43):
                     scale = self._l_prmtr_x_scale[newkey]
@@ -226,7 +227,8 @@ class MassScan(PdgParticle):
                 self._set_parameter_slha(key, scale*prmtr_x+value)
 
         # Set additional parameters in y (with possibly scale and offset)
-        for key in self._l_prmtr_y_add.keys() + self._l_prmtr_y_scale.keys():
+        for key in set(self._l_prmtr_y_add.keys() +
+                       self._l_prmtr_y_scale.keys()):
             if key == 4142:
                 for newkey in range(41, 43):
                     scale = self._l_prmtr_y_scale[newkey]
@@ -1024,8 +1026,10 @@ class MassScan(PdgParticle):
         plots.set_axis(self._prmtr_id_x, self._prmtr_id_y)
 
         # Set the text describing the different parameter values
-        plots.set_text(self._prmtr_id_x, self._l_prmtr_x_add)
-        plots.set_text(self._prmtr_id_y, self._l_prmtr_y_add)
+        plots.set_text(self._prmtr_id_x, self._l_prmtr_x_add,
+                       self._l_prmtr_x_scale)
+        plots.set_text(self._prmtr_id_y, self._l_prmtr_y_add,
+                       self._l_prmtr_y_scale)
 
         for prmtr_x in self.l_prmtr_x:
             for prmtr_y in self.l_prmtr_y:

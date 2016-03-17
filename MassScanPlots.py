@@ -479,26 +479,33 @@ class MassScanPlots(object):
             return 'm_{q_{12R}}'
         return str(axis)
 
-    def set_text(self, axis, axis_add):
+    def set_text(self, prmtr_id, l_prmtr_add, l_prmtr_scale):
 
         """ Set text describing the different values of the parameters. """
 
         # Only add text if there is at least one additional variable
-        if len(axis_add) == 0:
+        if len(l_prmtr_add) == 0:
             return
 
-        text = self._get_axis_label(axis)
+        text = self._get_axis_label(prmtr_id)
 
         # Add all additional labels from the dictionaries
-        for key, value in axis_add.iteritems():
-            if value == 0:
-                text += ' = {}'.format(self._get_axis_label(key))
-            elif value > 0:
-                text += ' = {} - {} GeV'.format(self._get_axis_label(key),
-                                                  value)
+        for key in set(l_prmtr_add.keys() + l_prmtr_scale.keys()):
+            shift = l_prmtr_add[key]
+            scale = l_prmtr_scale[key]
+            # If the scale is 1, we don't want to plot it
+            if scale == 1:
+                scale_str = ''
             else:
-                text += ' = {} + {} GeV'.format(self._get_axis_label(key),
-                                                  abs(value))
+                scale_str = '{0:.2f} * '.format(scale)
+            if shift == 0:
+                text += ' = {}{}'.format(scale_str, self._get_axis_label(key))
+            elif shift > 0:
+                text += ' = {}{} - {} GeV'.format(scale_str, self._get_axis_label(key),
+                                                     shift)
+            else:
+                text += ' = {}{} + {} GeV'.format(scale_str, self._get_axis_label(key),
+                                                     abs(shift))
 
         self._text.append(text)
 

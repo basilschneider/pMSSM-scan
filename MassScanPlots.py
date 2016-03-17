@@ -479,20 +479,20 @@ class MassScanPlots(object):
             return 'm_{q_{12R}}'
         return str(axis)
 
-    def set_text(self, prmtr_id, l_prmtr_add, l_prmtr_scale):
+    def set_text(self, prmtr_id, d_prmtr_add, d_prmtr_scale):
 
         """ Set text describing the different values of the parameters. """
 
         # Only add text if there is at least one additional variable
-        if len(l_prmtr_add) == 0:
+        if len(d_prmtr_add) == 0:
             return
 
         text = self._get_axis_label(prmtr_id)
 
         # Add all additional labels from the dictionaries
-        for key in set(l_prmtr_add.keys() + l_prmtr_scale.keys()):
-            shift = l_prmtr_add[key]
-            scale = l_prmtr_scale[key]
+        for key in set(d_prmtr_add.keys() + d_prmtr_scale.keys()):
+            shift = d_prmtr_add[key]
+            scale = d_prmtr_scale[key]
             # If the scale is 1, we don't want to plot it
             if scale == 1:
                 scale_str = ''

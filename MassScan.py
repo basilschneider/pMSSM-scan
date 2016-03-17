@@ -1021,8 +1021,11 @@ class MassScan(PdgParticle):
         plots = MassScanPlots()
 
         # Set the plot axis labels
-        plots.set_axis(self._prmtr_id_x, self._prmtr_id_y,
-                       self._l_prmtr_x_add, self._l_prmtr_y_add)
+        plots.set_axis(self._prmtr_id_x, self._prmtr_id_y)
+
+        # Set the text describing the different parameter values
+        plots.set_text(self._prmtr_id_x, self._l_prmtr_x_add)
+        plots.set_text(self._prmtr_id_y, self._l_prmtr_y_add)
 
         for prmtr_x in self.l_prmtr_x:
             for prmtr_y in self.l_prmtr_y:

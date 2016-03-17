@@ -87,6 +87,9 @@ class MassScanPlots(object):
         # Star to be plotted on all TH2's
         self._star = [0, 0]
 
+        # Text which explains parameter values
+        self._text = []
+
         self._toolbox = ToolboxTH2()
 
     def plot(self):
@@ -388,6 +391,7 @@ class MassScanPlots(object):
         self._toolbox.plot_numbers(self.coordinate_x, self.coordinate_y,
                                    coordinate_z, scale, decimals)
         self._toolbox.plot_star(self._star)
+        self._toolbox.plot_text([.15, .81], self._text)
         self._toolbox.plot_diagonal()
         self._toolbox.save()
 
@@ -409,7 +413,7 @@ class MassScanPlots(object):
         self._toolbox.plot_diagonal()
         self._toolbox.save()
 
-    def set_axis(self, axis_x, axis_y, axis_x_add, axis_y_add):
+    def set_axis(self, axis_x, axis_y):
 
         """ Set axis labels. """
 
@@ -417,27 +421,27 @@ class MassScanPlots(object):
         axis_x = self._get_axis_label(axis_x)
         axis_y = self._get_axis_label(axis_y)
 
-        # Add all additional labels from the dictionaries
-        for key, value in axis_x_add.iteritems():
-            if value == 0:
-                axis_x += ' = {}'.format(self._get_axis_label(key))
-            elif value > 0:
-                axis_x += ' = {} - {}'.format(self._get_axis_label(key), value)
-            else:
-                axis_x += ' = {} + {}'.format(self._get_axis_label(key),
-                                              abs(value))
-        for key, value in axis_y_add.iteritems():
-            if value == 0:
-                axis_y += ' = {}'.format(self._get_axis_label(key))
-            elif value > 0:
-                axis_y += ' = {} - {}'.format(self._get_axis_label(key), value)
-            else:
-                axis_y += ' = {} + {}'.format(self._get_axis_label(key),
-                                              abs(value))
+        ## Add all additional labels from the dictionaries
+        #for key, value in axis_x_add.iteritems():
+        #    if value == 0:
+        #        axis_x += ' = {}'.format(self._get_axis_label(key))
+        #    elif value > 0:
+        #        axis_x += ' = {} - {}'.format(self._get_axis_label(key), value)
+        #    else:
+        #        axis_x += ' = {} + {}'.format(self._get_axis_label(key),
+        #                                      abs(value))
+        #for key, value in axis_y_add.iteritems():
+        #    if value == 0:
+        #        axis_y += ' = {}'.format(self._get_axis_label(key))
+        #    elif value > 0:
+        #        axis_y += ' = {} - {}'.format(self._get_axis_label(key), value)
+        #    else:
+        #        axis_y += ' = {} + {}'.format(self._get_axis_label(key),
+        #                                      abs(value))
 
-        # Add unit
-        axis_x += ' [GeV]'
-        axis_y += ' [GeV]'
+        ## Add unit
+        #axis_x += ' [GeV]'
+        #axis_y += ' [GeV]'
 
         self.set_axis_x(axis_x)
         self.set_axis_y(axis_y)
@@ -474,6 +478,29 @@ class MassScanPlots(object):
         if axis == 44454748:
             return 'm_{q_{12R}}'
         return str(axis)
+
+    def set_text(self, axis, axis_add):
+
+        """ Set text describing the different values of the parameters. """
+
+        # Only add text if there is at least one additional variable
+        if len(axis_add) == 0:
+            return
+
+        text = self._get_axis_label(axis)
+
+        # Add all additional labels from the dictionaries
+        for key, value in axis_add.iteritems():
+            if value == 0:
+                text += ' = {}'.format(self._get_axis_label(key))
+            elif value > 0:
+                text += ' = {} - {} GeV'.format(self._get_axis_label(key),
+                                                  value)
+            else:
+                text += ' = {} + {} GeV'.format(self._get_axis_label(key),
+                                                  abs(value))
+
+        self._text.append(text)
 
     def set_rootfile(self, s_rootfile_name):
 

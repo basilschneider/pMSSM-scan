@@ -36,7 +36,7 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output57_for-slides'
+            output = 'output58_new-shift'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:
@@ -74,7 +74,7 @@ if __name__ == "__main__":
                 MY_SCAN.set_parameter(3, 1)
                 MY_SCAN.set_parameter_add_x(4142, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
-                MY_SCAN.set_parameter_add_y(23, 100)
+                MY_SCAN.set_parameter_add_scale_y(23, 10./3)
             elif grid == 6:
                 MY_SCAN.set_parameter(3, 23)
                 MY_SCAN.set_parameter_add_x(4142, 0)

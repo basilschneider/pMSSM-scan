@@ -9,6 +9,7 @@ from itertools import dropwhile, takewhile, ifilterfalse, tee, product
 from functools import reduce
 from cmath import isnan
 from fileinput import input
+from collections import defaultdict
 from Logger import LGR
 from ToolboxHelper import get_lst_entry_default
 from PdgParticle import PdgParticle
@@ -51,12 +52,14 @@ class MassScan(PdgParticle):
         # Define parameter x
         self.l_prmtr_x = [200., 350.]
         self._prmtr_id_x = 3
-        self._l_prmtr_x_add = {}
+        self._l_prmtr_x_add = defaultdict(lambda: 0)
+        self._l_prmtr_x_scale = defaultdict(lambda: 1)
 
         # Define parameter y
         self.l_prmtr_y = [300.]
         self._prmtr_id_y = 23
-        self._l_prmtr_y_add = {}
+        self._l_prmtr_y_add = defaultdict(lambda: 0)
+        self._l_prmtr_y_scale = defaultdict(lambda: 1)
 
         # Branching ratios below this threshold are skipped (to save time)
         self._threshold = 0.05
@@ -155,6 +158,20 @@ class MassScan(PdgParticle):
 
         self._l_prmtr_y_add[prmtr_id_x] = offset
 
+    def set_parameter_add_scale_x(self, prmtr_id_x, scale):
+
+        """ Set additional parameters to the same value as x but scaled by a
+        factor. """
+
+        self._l_prmtr_x_scale[prmtr_id_x] = scale
+
+    def set_parameter_add_scale_y(self, prmtr_id_y, scale):
+
+        """ Set additional parameters to the same value as y but scaled by a
+        factor. """
+
+        self._l_prmtr_y_scale[prmtr_id_y] = scale
+
     def _get_susyhit_filename(self):
 
         """ Get SUSYHIT filename as hardcoded in SUSYHIT. """
@@ -170,6 +187,7 @@ class MassScan(PdgParticle):
 
         """ Set all parameters in the SLHA file. """
 
+        # Set main parameter in x
         # Some combinations are concatenated for axis labeling
         if self._prmtr_id_x == 4142:
             for newprmtr in range(41, 43):
@@ -180,6 +198,7 @@ class MassScan(PdgParticle):
         else:
             self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
 
+        # Set main parameter in y
         if self._prmtr_id_y == 4142:
             for newprmtr in range(41, 43):
                 self._set_parameter_slha(newprmtr, prmtr_y)
@@ -189,27 +208,39 @@ class MassScan(PdgParticle):
         else:
             self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
 
-        for key, value in self._l_prmtr_x_add.iteritems():
+        # Set additional parameters in x (with possibly scale and offset)
+        for key in self._l_prmtr_x_add.keys() + self._l_prmtr_x_scale.keys():
             if key == 4142:
                 for newkey in range(41, 43):
-                    self._set_parameter_slha(newkey, prmtr_x+value)
+                    scale = self._l_prmtr_x_scale[newkey]
+                    value = self._l_prmtr_x_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_x+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
-                    self._set_parameter_slha(newkey, prmtr_x+value)
+                    scale = self._l_prmtr_x_scale[newkey]
+                    value = self._l_prmtr_x_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_x+value)
             else:
-                self._set_parameter_slha(key, prmtr_x+value)
+                scale = self._l_prmtr_x_scale[key]
+                value = self._l_prmtr_x_add[key]
+                self._set_parameter_slha(key, scale*prmtr_x+value)
 
-        for key, value in self._l_prmtr_y_add.iteritems():
-            # Some combinations are concatenated for axis labeling
+        # Set additional parameters in y (with possibly scale and offset)
+        for key in self._l_prmtr_y_add.keys() + self._l_prmtr_y_scale.keys():
             if key == 4142:
                 for newkey in range(41, 43):
-                    self._set_parameter_slha(newkey, prmtr_y+value)
+                    scale = self._l_prmtr_y_scale[newkey]
+                    value = self._l_prmtr_y_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_y+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
-                    self._set_parameter_slha(newkey, prmtr_y+value)
+                    scale = self._l_prmtr_y_scale[newkey]
+                    value = self._l_prmtr_y_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_y+value)
             else:
-                self._set_parameter_slha(key, prmtr_y+value)
-
+                scale = self._l_prmtr_y_scale[key]
+                value = self._l_prmtr_y_add[key]
+                self._set_parameter_slha(key, scale*prmtr_y+value)
 
     def _set_parameter_slha(self, idx, parameter):
 

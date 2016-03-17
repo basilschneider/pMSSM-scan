@@ -474,9 +474,9 @@ class MassScanPlots(object):
         if axis == 23:
             return '#mu'
         if axis == 4142:
-            return 'm_{q_{12L}}'
+            return 'm_{#tilde{q}_{12L}}'
         if axis == 44454748:
-            return 'm_{q_{12R}}'
+            return 'm_{#tilde{q}_{12R}}'
         return str(axis)
 
     def set_text(self, prmtr_id, d_prmtr_add, d_prmtr_scale):
@@ -491,23 +491,39 @@ class MassScanPlots(object):
 
         # Add all additional labels from the dictionaries
         for key in set(d_prmtr_add.keys() + d_prmtr_scale.keys()):
-            shift = d_prmtr_add[key]
-            scale = d_prmtr_scale[key]
-            # If the scale is 1, we don't want to plot it
-            if scale == 1:
-                scale_str = ''
-            else:
-                scale_str = '{0:.2f} * '.format(scale)
-            if shift == 0:
-                text += ' = {}{}'.format(scale_str, self._get_axis_label(key))
-            elif shift > 0:
-                text += ' = {}{} - {} GeV'.format(scale_str, self._get_axis_label(key),
-                                                     shift)
-            else:
-                text += ' = {}{} + {} GeV'.format(scale_str, self._get_axis_label(key),
-                                                     abs(shift))
 
-        self._text.append(text)
+            # Get string for scaled parameter
+            if d_prmtr_scale[key] == 1:
+                scale = ''
+            else:
+                scale = '{0:.2f} * '.format(d_prmtr_scale[key])
+
+            # Get string for shifted parameter
+            if d_prmtr_add[key] == 0:
+                shift = ''
+            elif d_prmtr_add[key] > 0:
+                shift = ' + {}'.format(d_prmtr_add[key])
+            else:
+                shift = ' - {}'.format(abs(d_prmtr_add[key]))
+
+            self._text.append('{} = {}{}{}'
+                              .format(self._get_axis_label(key), scale,
+                                      self._get_axis_label(prmtr_id), shift))
+            ## If the scale is 1, we don't want to plot it
+            #if scale == 1:
+            #    scale_str = ''
+            #else:
+            #    scale_str = '{0:.2f} * '.format(scale)
+            #if shift == 0:
+            #    text += ' = {}{}'.format(scale_str, self._get_axis_label(key))
+            #elif shift > 0:
+            #    text += ' = {}{} - {} GeV'.format(scale_str, self._get_axis_label(key),
+            #                                      shift)
+            #else:
+            #    text += ' = {}{} + {} GeV'.format(scale_str, self._get_axis_label(key),
+            #                                      abs(shift))
+
+        #self._text.append(text)
 
     def set_rootfile(self, s_rootfile_name):
 

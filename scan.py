@@ -24,9 +24,8 @@ if __name__ == "__main__":
     for grid in range(1, 14):
         for limit in ['a', 'b', 'c']:
 
-            if not grid in [2, 5]:
-                continue
-            if limit != 'a':
+            if not (grid == 2 and limit == 'a') and \
+               not (grid == 5 and limit == 'b'):
                 continue
 
             print('Processing grid{}{}'.format(grid, limit))
@@ -36,7 +35,7 @@ if __name__ == "__main__":
             MY_SCAN.l_prmtr_x = X
             MY_SCAN.l_prmtr_y = Y
 
-            output = 'output58_new-shift'
+            output = 'output61_full-scan'
             name = 'grid{}{}'.format(grid, limit)
 
             if grid % 2 == 1:
@@ -74,7 +73,7 @@ if __name__ == "__main__":
                 MY_SCAN.set_parameter(3, 1)
                 MY_SCAN.set_parameter_add_x(4142, 0)
                 MY_SCAN.set_parameter_add_y(2, shift)
-                MY_SCAN.set_parameter_add_scale_y(23, 10./3)
+                MY_SCAN.set_parameter_add_scale_y(23, -20./9)
             elif grid == 6:
                 MY_SCAN.set_parameter(3, 23)
                 MY_SCAN.set_parameter_add_x(4142, 0)

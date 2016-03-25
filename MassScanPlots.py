@@ -477,6 +477,8 @@ class MassScanPlots(object):
             return 'm_{#tilde{q}_{12L}}'
         if axis == 44454748:
             return 'm_{#tilde{q}_{12R}}'
+        if axis == 313233343536:
+            return 'm_{#tilde{l}}'
         return str(axis)
 
     def set_text(self, prmtr_id, d_prmtr_add, d_prmtr_scale):

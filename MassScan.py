@@ -195,6 +195,9 @@ class MassScan(PdgParticle):
         elif self._prmtr_id_x == 44454748:
             for newprmtr in [44, 45, 47, 48]:
                 self._set_parameter_slha(newprmtr, prmtr_x)
+        elif self._prmtr_id_x == 313233343536:
+            for newprmtr in range(31, 37):
+                self._set_parameter_slha(newprmtr, prmtr_x)
         else:
             self._set_parameter_slha(self._prmtr_id_x, prmtr_x)
 
@@ -204,6 +207,9 @@ class MassScan(PdgParticle):
                 self._set_parameter_slha(newprmtr, prmtr_y)
         elif self._prmtr_id_y == 44454748:
             for newprmtr in [44, 45, 47, 48]:
+                self._set_parameter_slha(newprmtr, prmtr_y)
+        elif self._prmtr_id_y == 313233343536:
+            for newprmtr in range(31, 37):
                 self._set_parameter_slha(newprmtr, prmtr_y)
         else:
             self._set_parameter_slha(self._prmtr_id_y, prmtr_y)
@@ -218,6 +224,11 @@ class MassScan(PdgParticle):
                     self._set_parameter_slha(newkey, scale*prmtr_x+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
+                    scale = self._d_prmtr_x_scale[newkey]
+                    value = self._d_prmtr_x_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_x+value)
+            elif key == 313233343536:
+                for newkey in range(31, 37):
                     scale = self._d_prmtr_x_scale[newkey]
                     value = self._d_prmtr_x_add[newkey]
                     self._set_parameter_slha(newkey, scale*prmtr_x+value)
@@ -236,6 +247,11 @@ class MassScan(PdgParticle):
                     self._set_parameter_slha(newkey, scale*prmtr_y+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
+                    scale = self._d_prmtr_y_scale[newkey]
+                    value = self._d_prmtr_y_add[newkey]
+                    self._set_parameter_slha(newkey, scale*prmtr_y+value)
+            elif key == 313233343536:
+                for newkey in range(31, 37):
                     scale = self._d_prmtr_y_scale[newkey]
                     value = self._d_prmtr_y_add[newkey]
                     self._set_parameter_slha(newkey, scale*prmtr_y+value)

@@ -219,18 +219,18 @@ class MassScan(PdgParticle):
                        self._d_prmtr_x_scale.keys()):
             if key == 4142:
                 for newkey in range(41, 43):
-                    scale = self._d_prmtr_x_scale[newkey]
-                    value = self._d_prmtr_x_add[newkey]
+                    scale = self._d_prmtr_x_scale[key]
+                    value = self._d_prmtr_x_add[key]
                     self._set_parameter_slha(newkey, scale*prmtr_x+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
-                    scale = self._d_prmtr_x_scale[newkey]
-                    value = self._d_prmtr_x_add[newkey]
+                    scale = self._d_prmtr_x_scale[key]
+                    value = self._d_prmtr_x_add[key]
                     self._set_parameter_slha(newkey, scale*prmtr_x+value)
             elif key == 313233343536:
                 for newkey in range(31, 37):
-                    scale = self._d_prmtr_x_scale[newkey]
-                    value = self._d_prmtr_x_add[newkey]
+                    scale = self._d_prmtr_x_scale[key]
+                    value = self._d_prmtr_x_add[key]
                     self._set_parameter_slha(newkey, scale*prmtr_x+value)
             else:
                 scale = self._d_prmtr_x_scale[key]
@@ -242,18 +242,19 @@ class MassScan(PdgParticle):
                        self._d_prmtr_y_scale.keys()):
             if key == 4142:
                 for newkey in range(41, 43):
-                    scale = self._d_prmtr_y_scale[newkey]
-                    value = self._d_prmtr_y_add[newkey]
+                    scale = self._d_prmtr_y_scale[key]
+                    value = self._d_prmtr_y_add[key]
                     self._set_parameter_slha(newkey, scale*prmtr_y+value)
             elif key == 44454748:
                 for newkey in [44, 45, 47, 48]:
-                    scale = self._d_prmtr_y_scale[newkey]
-                    value = self._d_prmtr_y_add[newkey]
+                    scale = self._d_prmtr_y_scale[key]
+                    value = self._d_prmtr_y_add[key]
+                    LGR.warning(self._d_prmtr_y_add)
                     self._set_parameter_slha(newkey, scale*prmtr_y+value)
             elif key == 313233343536:
                 for newkey in range(31, 37):
-                    scale = self._d_prmtr_y_scale[newkey]
-                    value = self._d_prmtr_y_add[newkey]
+                    scale = self._d_prmtr_y_scale[key]
+                    value = self._d_prmtr_y_add[key]
                     self._set_parameter_slha(newkey, scale*prmtr_y+value)
             else:
                 scale = self._d_prmtr_y_scale[key]

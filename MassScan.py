@@ -1127,6 +1127,7 @@ class MassScan(PdgParticle):
                     if not self._br_leptons or \
                        not self._br_jets or \
                        not self._br_photons:
+                        LGR.warning('Some branching ratios are empty.')
                         self._skip_point(prmtr_x, prmtr_y)
 
 

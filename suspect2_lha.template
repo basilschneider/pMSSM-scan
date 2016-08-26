@@ -35,7 +35,7 @@ BLOCK SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
 #          POLE          Higgs masses at loop-level at mZ             : 1
 #
 BLOCK MINPAR  # Input parameters
-         3     1.00000000E+00   #  tanbeta(mZ)
+         3     10.0
 BLOCK EXTPAR  # Input parameters
  0 2.46000000E+02   # EWSB scale
  1 8.00000000E+03   #  M_1

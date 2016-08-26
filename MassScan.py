@@ -1062,7 +1062,7 @@ class MassScan(PdgParticle):
                 LGR.info('Processing mass combination %3d of %3d: (%4d/%4d).',
                          counter, total, prmtr_x, prmtr_y)
 
-                LGR.debug('prmtr_x = %4d  -  mu = %4d', prmtr_x, prmtr_y)
+                LGR.debug('prmtr_x = %4d  -  prmtr_y = %4d', prmtr_x, prmtr_y)
 
                 self._set_parameter_all(prmtr_x, prmtr_y)
 

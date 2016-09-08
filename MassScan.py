@@ -388,7 +388,8 @@ class MassScan(PdgParticle):
                                             search('^DECAY *{}'.format
                                                    (abs(id_particle)), l),
                                             f_susyhit_out)
-            f_susyhit_out_range = takewhile(lambda l: not search('^# *PDG', l),
+            f_susyhit_out_range = takewhile(lambda l: not search('^# *PDG', l)
+                                            and not search('^XSECTION', l),
                                             f_susyhit_out_start)
 
             # LGR.debug('Range selected from SUSYHIT output file for particle '
@@ -405,6 +406,10 @@ class MassScan(PdgParticle):
                 # [prob., # of childs, child1, child2, ..., comments]
                 list_line_str_comments = line.rstrip().split()
                 # LGR.debug('list: %s', list_line_str_comments)
+
+                # Skip empty lines
+                if len(list_line_str_comments) == 0:
+                    continue
 
                 # Strip all comments from list_line_comments
                 list_line_str = list(takewhile(lambda m:

@@ -839,7 +839,10 @@ class MassScan(PdgParticle):
                   .format(self._dir_susyhit), 'r') as f_susyhit:
             for line in f_susyhit:
                 if search('^DECAY *{}'.format(id_particle), line):
-                    lifetime = 1./(float((line.split())[2])*1.51926778e24)
+                    try:
+                        lifetime = 1./(float((line.split())[2])*1.51926778e24)
+                    except ZeroDivisionError:
+                        lifetime = 0.
                     return lifetime
 
     def _check_lsp(self):

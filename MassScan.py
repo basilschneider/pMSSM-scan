@@ -816,7 +816,9 @@ class MassScan(PdgParticle):
 
         with open('{}/susyhit_slha.out'
                   .format(self._dir_susyhit), 'r') as f_susyhit:
-            for line in f_susyhit:
+            f_susyhit_mass = dropwhile(lambda l: not search('^BLOCK MASS', l),
+                                       f_susyhit)
+            for line in f_susyhit_mass:
                 if search('^ *{}'.format(id_particle), line):
                     mass = float((line.split())[1])
                     LGR.debug('Found mass %s for particle %s from line %s.',

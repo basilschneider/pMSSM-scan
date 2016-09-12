@@ -1,19 +1,13 @@
-BLOCK SPINFO  # Spectrum Program information
-     1   SuSpect     # RGE +Spectrum calculator
-     2   2.43         # version number
-# Caution: warning or error message follows
-     3   Pb: non-convergent spectrum after 50 iter.!
-#
-BLOCK MODSEL  # Select model (with the second parameter):
+Block MODSEL  # Select model (with the second parameter):
 #            General MSSM (arbitrary soft terms) at low scale input:    0
 #            SUGRA (!includes non-univ. soft terms, def. in block EXTPAR):  1
 #            GMSB                                     : 2
 #            AMSB                                    :  3
 #            Bottom-up RGE for general MSSM input at EWSB scale: -1
 #            (a specific SuSpect option)
-    1    0
+    1    0   #  mSUGRA
 #
-BLOCK SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
+Block SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
 # !IF block absent (or if any parameter undefined), defaut values are taken
      2    21  # 2-loop RGE (defaut, 1-loop RGE is: 11 instead)
      3    1   # 1: g_1(gut) = g_2(gut) consistently calculated from input
@@ -21,10 +15,10 @@ BLOCK SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
      4    2   # RGE accuracy: 1: moderate, 2: accurate (but slower)
      6    0   #  1: M_Hu, M_Hd input (default in constrained models)
 #        (other possibility 0: MA_pole, MU(EWSB) input instead)
-     7    0   #  choice for sparticles masses rad. corr. (=/= h):
+     7    2   #  choice for sparticles masses rad. corr. (=/= h):
 #               2 ->all (recommended, defaut); 1->no R.C. in squarks & gauginos.
      8    1   # 1 (defaut): EWSB scale=(mt_L*mt_R)^(1/2)
-#         (Or = 0: arbitrary EWSB scale: give EWSB in BLOCK EXTPAR below)
+#         (Or = 0: arbitrary EWSB scale: give EWSB in Block EXTPAR below)
      9    2   # Final spectrum accuracy: 1 -> 1% acc.; 2 -> 0.01 % acc.(defaut)
      10   2   # Higgs boson masses rad. corr. calculation options:
 #             A simple (but very good) approximation (advantage=fast)  : 0
@@ -34,195 +28,68 @@ BLOCK SU_ALGO  # !Optional SUSPECT v>=2.3* block: algorithm control parameters
 #          RUNNING DRbar Higgs masses at loop-level at mZ (defaut)    : 0
 #          POLE          Higgs masses at loop-level at mZ             : 1
 #
-BLOCK MINPAR  # Input parameters
-         3     1.00000000E+01   #  tanbeta(mZ)
-BLOCK EXTPAR  # Input parameters
- 0 8.00000000E+04   # EWSB scale
- 1 8.00000000E+03   #  M_1
- 2 8.00000000E+03   #  M_2
- 3 8.00000000E+04   #  M_3
- 11 0.00000000E+00   #  A_t
- 12 0.00000000E+00   #  A_b
- 13 0.00000000E+00   #  A_tau
- 23 8.00000000E+04   #  mu(EWSB)
- 26 8.00000000E+04   #  MA_pole
- 31 8.00000000E+04   #  M_eL
- 32 8.00000000E+04   #  M_muL
- 33 8.00000000E+04   #  M_tauL
- 34 8.00000000E+04   #  M_eR
- 35 8.00000000E+04   #  M_muR
- 36 8.00000000E+04   #  M_tauR
- 41 8.00000000E+04   #  M_q1L
- 42 8.00000000E+04   #  M_q2L
- 43 8.00000000E+04   #  M_q3L
- 44 8.00000000E+04   #  M_uR
- 45 8.00000000E+04   #  M_cR
- 46 8.00000000E+04   #  M_tR
- 47 8.00000000E+04   #  M_dR
- 48 8.00000000E+04   #  M_sR
- 49 8.00000000E+04   #  M_bR
+Block SMINPUTS   # Standard Model inputs (if any undefined, defaut values taken)
+     1     127.934  # alpha_em^(-1)(MZ) SM MSbar
+#     2     1.16639d-5  # G_F
+     3      0.1172  # alpha_s(mZ) SM, MSbar
+#     4     91.187   # mZ pole mass
+     5      4.25    # Mb(mb) SM MSbar
+     6      172.5      # Mtop(pole)
+     7    1.7771     # Mtau(pole)
 #
-BLOCK SMINPUTS  # Standard Model inputs
-         1     1.27908970E+02   # alpha_em^-1(M_Z)^MSbar
-         2     1.16637000E-05   # G_F [GeV^-2]
-         3     1.18400000E-01   # alpha_S(M_Z)^MSbar
-         4     9.11870000E+01   # M_Z pole mass
-         5     4.23000000E+00   # mb(mb)^MSbar
-         6     1.73070000E+02   # mt pole mass
-         7     1.77700000E+00   # mtau pole mass
+Block MINPAR  # specific model input parameters
+#   input for SUGRA models (! comment (#) all other (GMSB,AMSB) lines):
+     1    100.    # m0
+     2    250.    # m1%2
+     5   -100.      # A0
+     3    10.    # tanbeta(MZ)
+     4      1.0   # sign(mu)
+#   input for GMSB models (! comment (#) all other (mSUGRA,AMSB) lines):
+#     1    100.d3  # Lambda_susy
+#     2    200.d3  # Lambda_mess
+#     3    10     # tanbeta(MZ)
+#     4    1.      # sign(MU)
+#     5    1       # Nl_mes
+#     6    1       # Nq_mes
+#   input for AMSB models (! comment (#) all other (mSUGRA,GMSB) lines):
+#     1    450.    # m0
+#     2    60.d3   # M_3%2 gravitino mass
+#     3    10.     # tanbeta(MZ)
+#     4    1.      # sign(MU)
+#     5    1.      # cQ  : weight of m0 for Q_L (3rd gen.) doublet
+#     6    1.      # cuR : weight of m0 for u_R
+#     7    1.      # cdR : weight of m0 for d_R
+#     8    1.      # cL  : weight of m0 for L (1st, 2d gen.) doublet
+#     9    1.      # ceR : weight of m0 for e_R (1st, 2d gen.)
+#     10   1.      # cHu : weight of m0 for Hu
+#     11   1.      # cHd : weight of m0 for Hd
 #
-BLOCK MASS  # Mass Spectrum
-# PDG code           mass       particle
-        24     8.04256934E+01   # W+
-        25     1.29920442E+02   # h
-        35     8.01163254E+03   # H
-        36     8.00000000E+03   # A
-        37     8.00978589E+03   # H+
-         5     4.87369513E+00   # b pole mass calculated from mb(mb)_MSbar
-   1000001     8.00021480E+03   # ~d_L
-   2000001     8.00003915E+03   # ~d_R
-   1000002     7.99982435E+03   # ~u_L
-   2000002     7.99992170E+03   # ~u_R
-   1000003     8.00021480E+03   # ~s_L
-   2000003     8.00003915E+03   # ~s_R
-   1000004     7.99982435E+03   # ~c_L
-   2000004     7.99992170E+03   # ~c_R
-   1000005     7.99872023E+03   # ~b_1
-   2000005     8.00153420E+03   # ~b_2
-   1000006     8.00015483E+03   # ~t_1
-   2000006     8.00202469E+03   # ~t_2
-   1000011     8.00013650E+03   # ~e_L
-   2000011     8.00011745E+03   # ~e_R
-   1000012     7.99974604E+03   # ~nu_eL
-   1000013     8.00013650E+03   # ~mu_L
-   2000013     8.00011745E+03   # ~mu_R
-   1000014     7.99974604E+03   # ~nu_muL
-   1000015     7.99908980E+03   # ~tau_1
-   2000015     8.00116441E+03   # ~tau_2
-   1000016     7.99974604E+03   # ~nu_tauL
-   1000021     8.00000000E+03   # ~g
-   1000022     9.44766209E+02   # ~chi_10
-   1000023    -1.00153572E+03   # ~chi_20
-   1000025     1.00520777E+03   # ~chi_30
-   1000035     1.13156175E+03   # ~chi_40
-   1000024     9.72379451E+02         # ~chi_1+
-   1000037     1.13046121E+03         # ~chi_2+
-#
-BLOCK SU_LOWPAR  # Values constrained by exp data
-         1     3.37497361E-07   # Delta rho parameter
-         2     5.51785467E-12   # g_mu -2
-         3     3.25920889E-04   # Br(b -> s gamma)
-#
-BLOCK SU_FINETUNE  # Fine-tuning info: fine-tuned if >>1
-         1     2.50344924E+02   # delta mZ^2/mZ^2 (mu^2)
-         2     3.03378397E+02   # delta mZ^2/mZ^2 (B.mu)
-         3     1.25172770E+02   # delta mt/mt (mu^2)
-         4     1.51679098E+02   # delta mt/mt  (B.mu)
-#
-BLOCK NMIX  # Neutralino Mixing Matrix
-  1  1     6.57646318E-01   # N_11
-  1  2    -2.72155976E-01   # N_12
-  1  3     5.07950335E-01   # N_13
-  1  4    -4.85199859E-01   # N_14
-  2  1     1.36942361E-02   # N_21
-  2  2    -2.35426479E-02   # N_22
-  2  3    -7.06171740E-01   # N_23
-  2  4    -7.07516562E-01   # N_24
-  3  1     7.46291091E-01   # N_31
-  3  2     3.61844715E-01   # N_32
-  3  3    -3.94214664E-01   # N_33
-  3  4     3.95869686E-01   # N_34
-  4  1     1.01800767E-01   # N_41
-  4  2    -8.91316594E-01   # N_42
-  4  3    -2.96483944E-01   # N_43
-  4  4     3.27549392E-01   # N_44
-#
-BLOCK UMIX  # Chargino Mixing Matrix U
-  1  1    -4.07517339E-01   # U_11
-  1  2     9.13197470E-01   # U_12
-  2  1     9.13197470E-01   # U_21
-  2  2     4.07517339E-01   # U_22
-#
-BLOCK VMIX  # Chargino Mixing Matrix V
-  1  1    -4.50013741E-01   # V_11
-  1  2     8.93021631E-01   # V_12
-  2  1     8.93021631E-01   # V_21
-  2  2     4.50013741E-01   # V_22
-#
-BLOCK STOPMIX  # Stop Mixing Matrix
-  1  1     7.25277730E-01   # cos(theta_t)
-  1  2     6.88456400E-01   # sin(theta_t)
-  2  1    -6.88456400E-01   # -sin(theta_t)
-  2  2     7.25277730E-01   # cos(theta_t)
-#
-BLOCK SBOTMIX  # Sbottom Mixing Matrix
-  1  1     6.84682230E-01   # cos(theta_b)
-  1  2     7.28841714E-01   # sin(theta_b)
-  2  1    -7.28841714E-01   # -sin(theta_b)
-  2  2     6.84682230E-01   # cos(theta_b)
-#
-BLOCK STAUMIX  # Stau Mixing Matrix
-  1  1     7.03853330E-01   # cos(theta_tau)
-  1  2     7.10345331E-01   # sin(theta_tau)
-  2  1    -7.10345331E-01   # -sin(theta_tau)
-  2  2     7.03853330E-01   # cos(theta_tau)
-#
-BLOCK ALPHA  # Higgs mixing
-          -1.06715845E-01   # Mixing angle in the neutral Higgs boson sector
-#
-BLOCK HMIX Q=  8.00000000E+03  # DRbar Higgs Parameters
-     1     1.00000000E+03   # mu(Q)
-     2     9.33926500E+00   # tanbeta(Q)
-     3     2.33011502E+02   # vev(Q)
-     4     6.38313752E+07   # MA^2(Q)
-#
-BLOCK GAUGE Q=  8.00000000E+03  # The gauge couplings
-     1     3.70695336E-01   # gprime(Q) DRbar
-     2     6.75879836E-01   # g(Q) DRbar
-     3     1.09859565E+00   # g_3(Q) DRbar
-#
-BLOCK Au Q=  8.00000000E+03  # The trilinear couplings
-  1  1     0.00000000E+00   # A_u(Q) DRbar
-  2  2     0.00000000E+00   # A_c(Q) DRbar
-  3  3     0.00000000E+00   # A_t(Q) DRbar
-#
-BLOCK Ad Q=  8.00000000E+03  # The trilinear couplings
-  1  1     0.00000000E+00   # A_d(Q) DRbar
-  2  2     0.00000000E+00   # A_s(Q) DRbar
-  3  3     0.00000000E+00   # A_b(Q) DRbar
-#
-BLOCK Ae Q=  8.00000000E+03  # The trilinear couplings
-  1  1     0.00000000E+00   # A_e(Q) DRbar
-  2  2     0.00000000E+00   # A_mu(Q) DRbar
-  3  3     0.00000000E+00   # A_tau(Q) DRbar
-#
-BLOCK Yu Q=  8.00000000E+03  # The Yukawa couplings
-  3  3     8.38852966E-01   # y_top(Q) DRbar
-#
-BLOCK Yd Q=  8.00000000E+03  # The Yukawa couplings
-  3  3     1.35074615E-01   # y_b(Q) DRbar
-#
-BLOCK Ye Q=  8.00000000E+03  # The Yukawa couplings
-  3  3     9.97741502E-02   # y_tau(Q) DRbar
-#
-BLOCK MSOFT Q=  8.00000000E+03  # soft SUSY breaking masses at the scale Q
-         1     9.80000000E+02   # M_1
-         2     1.10000000E+03   # M_2
-         3     8.00000000E+03   # M_3
-        21     6.20293825E+07   # M^2_Hd
-        22     1.44304119E+06   # M^2_Hu
-        31     8.00000000E+03   # M_eL
-        32     8.00000000E+03   # M_muL
-        33     8.00000000E+03   # M_tauL
-        34     8.00000000E+03   # M_eR
-        35     8.00000000E+03   # M_muR
-        36     8.00000000E+03   # M_tauR
-        41     8.00000000E+03   # M_q1L
-        42     8.00000000E+03   # M_q2L
-        43     8.00000000E+03   # M_q3L
-        44     8.00000000E+03   # M_uR
-        45     8.00000000E+03   # M_cR
-        46     8.00000000E+03   # M_tR
-        47     8.00000000E+03   # M_dR
-        48     8.00000000E+03   # M_sR
-        49     8.00000000E+03   # M_bR
+Block EXTPAR  # general MSSM input (! IF uncommented, values replace MINPAR ones)
+ 0      4.65294922E+02   # EWSB_scale
+ 1     2.5E+02   # M_1
+ 2     2.5E+02   # M_2
+ 3     1.E+04   # M_3
+ 11    -1E+02   # A_t
+ 12    -1E+02   # A_b
+ 13    -2.51737263E+02   # A_tau
+ 14    -6.77437438E+02   # A_u
+ 15    -8.59633345E+02   # A_d
+ 16    -2.53493493E+02   # A_e
+ 23     1.1E+02   # mu(EWSB)
+ 26     1.E+04   # MA_pole
+ 25     1.00000000E+01   # tanbeta(MZ)
+ 31     1.E+04   # M_eL
+ 32     1.E+04   # M_muL
+ 33     1.E+04   # M_tauL
+ 34     1.E+04   # M_eR
+ 35     1.E+04   # M_muR
+ 36     1.E+04   # M_tauR
+ 41     1.E+04   # M_q1L
+ 42     1.E+04   # M_q2L
+ 43     1.E+04   # M_q3L
+ 44     1.E+04   # M_uR
+ 45     1.E+04   # M_cR
+ 46     1.E+04   # M_tR
+ 47     1.E+04   # M_dR
+ 48     1.E+04   # M_sR
+ 49     1.E+04   # M_bR

@@ -607,6 +607,8 @@ class MassScan(PdgParticle):
         #                'ratio of %s. You might want to consider lowering the '
         #                'threshold.', sum(br_leptons_2leg))
 
+        LGR.debug('Parent particle (1st leg): %s', id_parent_1)
+        LGR.debug('Parent particle (2nd leg): %s', id_parent_2)
         LGR.debug('Branching ratios into leptons (1st leg): %s',
                   br_leptons_1leg_1)
         LGR.debug('Branching ratios into leptons (2nd leg): %s',
@@ -677,6 +679,12 @@ class MassScan(PdgParticle):
             br_leptons_1leg[no_leptons] += br_single
             br_jets_1leg[no_jets] += br_single
             br_photons_1leg[no_photons] += br_single
+
+        # If all lists are empty, we don't get any particles (LSP production)
+        if not (br_leptons_1leg and br_jets_1leg and br_photons_1leg):
+            br_leptons_1leg = [1]
+            br_jets_1leg = [1]
+            br_photons_1leg = [1]
 
         LGR.debug('Branching ratios into leptons: %s', br_leptons_1leg)
         LGR.debug('Branching ratios into jets: %s', br_jets_1leg)

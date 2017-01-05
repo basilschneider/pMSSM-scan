@@ -5,8 +5,8 @@
 from MassScan import MassScan
 
 if __name__ == "__main__":
-    X = [100*i for i in range(2, 9)]
-    Y = [10*i for i in range(9, 17)]
+    X = [100*i for i in range(2, 10)]
+    Y = [10*i for i in range(10, 18)]
 
     MY_SCAN = MassScan()
     MY_SCAN.set_threshold(1.)
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     MY_SCAN.set_parameter(1, 23)
 
     output = 'output80_higgsino'
-    name = 'final-try01'
+    name = 'final-try02'
 
     PLOTS = MY_SCAN.do_scan()
     PLOTS.set_rootfile('{}/{}.root'.format(output, name))

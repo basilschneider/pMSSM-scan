@@ -5,19 +5,19 @@
 from MassScan import MassScan
 
 if __name__ == "__main__":
-    X = [100*i for i in range(2, 10)]
-    Y = [10*i for i in range(10, 18)]
+    X = [10*i for i in range(10, 18)]
+    Y = [100*i for i in range(2, 10)]
 
     MY_SCAN = MassScan()
     MY_SCAN.set_threshold(1.)
     MY_SCAN.l_prmtr_x = X
     MY_SCAN.l_prmtr_y = Y
-    MY_SCAN.set_parameter_add_scale_x(2, 2.)
+    MY_SCAN.set_parameter_add_scale_y(2, 2.)
 
-    MY_SCAN.set_parameter(1, 23)
+    MY_SCAN.set_parameter(23, 1)
 
     output = 'output80_higgsino'
-    name = 'final-try02'
+    name = 'final-try03'
 
     PLOTS = MY_SCAN.do_scan()
     PLOTS.set_rootfile('{}/{}.root'.format(output, name))

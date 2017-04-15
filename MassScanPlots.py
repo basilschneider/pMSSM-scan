@@ -424,7 +424,7 @@ class MassScanPlots(object):
         self._toolbox.plot_star(self._star)
         self._toolbox.plot_text([.15, .81], self._text)
         #self._toolbox.plot_diagonal()
-        self._toolbox.save()
+        self._toolbox.save(['pdf', 'png'])
 
     def _make_plot_dc(self, name, title, dcs):
 
@@ -442,7 +442,7 @@ class MassScanPlots(object):
         # Fill numbers
         self._toolbox.plot_dcs(self.coordinate_x, self.coordinate_y, dcs)
         #self._toolbox.plot_diagonal()
-        self._toolbox.save()
+        self._toolbox.save(['pdf', 'png'])
 
     def set_axis(self, axis_x, axis_y):
 

@@ -69,7 +69,9 @@ class MassScan(PdgParticle):
         self._m_neutralino1 = -1.
         self._m_neutralino2 = -1.
         self._m_neutralino3 = -1.
+        self._m_neutralino4 = -1.
         self._m_chargino1 = -1.
+        self._m_chargino2 = -1.
         self._m_stop1 = -1.
         self._m_stop2 = -1.
         self._m_smhiggs = -1.
@@ -358,6 +360,7 @@ class MassScan(PdgParticle):
                           [.1520, [-211, -211, 211, 16]],
                           [.1783, [11, -12, 16]],
                           [.1741, [13, -14, 16]]]
+        #self._d_sm[15] = [[1., [11]]]
         # Z
         self._d_sm[23] = [[.03363, [11, -11]],
                           [.03366, [13, -13]],
@@ -805,7 +808,9 @@ class MassScan(PdgParticle):
         self._m_neutralino1 = self._get_m(self._id_neutralino1)
         self._m_neutralino2 = self._get_m(self._id_neutralino2)
         self._m_neutralino3 = self._get_m(self._id_neutralino3)
+        self._m_neutralino4 = self._get_m(self._id_neutralino4)
         self._m_chargino1 = self._get_m(self._id_chargino1)
+        self._m_chargino2 = self._get_m(self._id_chargino2)
         self._m_stop1 = self._get_m(self._id_stop1)
         self._m_stop2 = self._get_m(self._id_stop2)
         self._m_smhiggs = self._get_m(self._id_smhiggs)
@@ -897,7 +902,9 @@ class MassScan(PdgParticle):
         self._m_neutralino1 = 0.
         self._m_neutralino2 = 0.
         self._m_neutralino3 = 0.
+        self._m_neutralino4 = 0.
         self._m_chargino1 = 0.
+        self._m_chargino2 = 0.
         self._m_stop1 = 0.
         self._m_stop2 = 0.
         self._m_smhiggs = 0.
@@ -966,7 +973,9 @@ class MassScan(PdgParticle):
             plots.m_neutralino1.append(self._m_neutralino1)
             plots.m_neutralino2.append(self._m_neutralino2)
             plots.m_neutralino3.append(self._m_neutralino3)
+            plots.m_neutralino4.append(self._m_neutralino4)
             plots.m_chargino1.append(self._m_chargino1)
+            plots.m_chargino2.append(self._m_chargino2)
             plots.m_stop1.append(self._m_stop1)
             plots.m_stop2.append(self._m_stop2)
             plots.m_smhiggs.append(self._m_smhiggs)

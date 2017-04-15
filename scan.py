@@ -17,7 +17,7 @@ if __name__ == "__main__":
     MY_SCAN.set_parameter(23, 1)
 
     output = 'output80_higgsino'
-    name = 'final-try09'
+    name = 'final-try13'
 
     PLOTS = MY_SCAN.do_scan()
     PLOTS.set_rootfile('{}/{}.root'.format(output, name))
